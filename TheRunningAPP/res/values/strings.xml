@@ -19,5 +19,6 @@
     <string name="title_activity_trapp_dbhelper">TrappDBHelper</string>
     <string name="title_activity_trapp_contract">TrappContract</string>
     <string name="title_activity_workout_start">WorkoutStart</string>
+    <string name="T_test">This is supposed to be here</string>
 
 </resources>

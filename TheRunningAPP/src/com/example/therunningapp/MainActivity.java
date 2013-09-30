@@ -33,12 +33,12 @@ public class MainActivity extends Activity {
 
 	}
 	
-	/*
-	 * public void workout (View view) {
-		Intent intent = new Intent(this, Workout.class);
+	
+	public void workoutStart (View view) {
+		Intent intent = new Intent(this, WorkoutStart.class);
 		startActivity(intent);
 
-	}*/
+	}
 	public void stigaasen(){
 		
 	}

@@ -53,15 +53,13 @@
             android:name="com.example.therunningapp.TrappContract"
             android:label="@string/title_activity_trapp_contract" >
         </activity>
-
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
-
         <activity
             android:name="com.example.therunningapp.WorkoutStart"
             android:label="@string/title_activity_workout_start" >
         </activity>
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
     </application>
 
 </manifest>

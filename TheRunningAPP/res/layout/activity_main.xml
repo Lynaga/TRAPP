@@ -40,7 +40,7 @@
         android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:onClick="workout"
+        android:onClick="workoutStart"
         android:text="@string/S_workout" />
 
     <TextView
