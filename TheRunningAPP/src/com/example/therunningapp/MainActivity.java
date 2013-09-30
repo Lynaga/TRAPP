@@ -39,6 +39,9 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 
 	}*/
+	public void stigaasen(){
+		
+	}
 	
 	public void andersnyen(){
 		

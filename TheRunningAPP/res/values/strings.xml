@@ -18,5 +18,6 @@
     <string name="title_activity_workout_end">WorkoutEnd</string>
     <string name="title_activity_trapp_dbhelper">TrappDBHelper</string>
     <string name="title_activity_trapp_contract">TrappContract</string>
+    <string name="title_activity_workout_start">WorkoutStart</string>
 
 </resources>
