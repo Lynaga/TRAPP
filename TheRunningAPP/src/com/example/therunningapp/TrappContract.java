@@ -12,10 +12,15 @@ public class TrappContract extends Activity {
 	public static abstract class TrappEntry implements BaseColumns {
 		
 		public static final String TABLE_NAME = "entry";
+		public static final String TABLE_NAMEPREF = "pref";
 		public static final String COLUMN_NAME_DATE = "date";
 		public static final String COLUMN_NAME_DISTANCE = "distance";
 		public static final String COLUMN_NAME_TIME = "time";
 		public static final String COLUMN_NAME_CALORIES = "calories";
+		public static final String COLUMN_NAME_HEIGHT = "height";
+		public static final String COLUMN_NAME_WEIGHT = "weight";
+		public static final String COLUMN_NAME_NAME = "name";
+
 		
 	}
 
