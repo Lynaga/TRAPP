@@ -16,13 +16,7 @@ import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class History extends Activity {
 
-	 PopupWindow popUp;
-     LinearLayout layout;
-     TextView tv;
-     LayoutParams params;
-     LinearLayout mainLayout;
-     Button but;
-     boolean click = true;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

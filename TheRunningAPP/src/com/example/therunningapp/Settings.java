@@ -2,27 +2,55 @@ package com.example.therunningapp;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class Settings extends Activity {
 	
-	/*TrappDBHelper mDBsHelper = new TrappDBHelper(this);
-	SQLiteDatabase dbs = mDBsHelper.getWritableDatabase();
-*/
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, TrappEntry.COLUMN_NAME_HEIGHT};
+		
+		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
+
+
+		if(c.moveToFirst()){
+				String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
+				String weight = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+				String height = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_HEIGHT));
+				EditText name1 = (EditText) findViewById(R.id.editText1);
+				EditText height1 = (EditText) findViewById(R.id.editText2);
+				EditText weight1 = (EditText) findViewById(R.id.editText3);
+				name1.setHint(name);
+				height1.setHint(height);
+				weight1.setHint(weight);
+				
+				
+	            
+		}
+
 
 		
 	}
 
+
+
+
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -32,8 +60,8 @@ public class Settings extends Activity {
 	
 	public void save(View view){
 		
-		TrappDBHelper mDBsHelper = new TrappDBHelper(this);
-		SQLiteDatabase dbs = mDBsHelper.getWritableDatabase();
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
 		
 		EditText name = (EditText) findViewById(R.id.editText1);
@@ -52,10 +80,11 @@ public class Settings extends Activity {
 		String selection = TrappEntry.COLUMN_NAME_NAME + " LIKE ?";
 		//String[] selectionArgs = { String.valueOf(rowId) };
 		
-		dbs.update(TrappEntry.TABLE_NAMEPREF, values, "_id "+"="+0, null);
+		db.insert(TrappEntry.TABLE_NAMEPREF, null, values);
+		//dbs.update(TrappEntry.TABLE_NAMEPREF, values, "_id "+"="+0, null);
 		
 		//db.update(TrappEntry.TABLE_NAMEPREF, values, selection, selectionArgs);
-		dbs.close();
+		db.close();
 		finish();
 
 		
