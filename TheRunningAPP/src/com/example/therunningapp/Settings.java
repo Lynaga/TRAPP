@@ -101,22 +101,21 @@ public class Settings extends Activity {
 	}
 	
 	public void norwegian(View view){
-		Locale mLocale = new Locale("no");
-	    Locale.setDefault(mLocale); 
-	    Configuration config = getBaseContext().getResources().getConfiguration(); 
-	    if (!config.locale.equals(mLocale)) 
-	    { 
-	        config.locale = mLocale; 
-	        getBaseContext().getResources().updateConfiguration(config, null);  
-	    }
-	 
-	    Intent intent = new Intent(this, MainActivity.class);
-	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		language("no");
 	}
 	
 	public void english(View view){
-		Locale mLocale = new Locale("");
+		language("en");
+	}
+	
+	public void language(String ch){
+		Locale mLocale = null;
+		
+		if(ch == "en")
+			mLocale = new Locale("");
+		else if(ch == "no")
+			mLocale = new Locale("no");
+		
 	    Locale.setDefault(mLocale); 
 	    Configuration config = getBaseContext().getResources().getConfiguration(); 
 	    if (!config.locale.equals(mLocale)) 
@@ -127,7 +126,8 @@ public class Settings extends Activity {
 	    
 	    Intent intent = new Intent(this, MainActivity.class);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    startActivity(intent);
+	    startActivity(intent);	
 	}
+	
 
 }
