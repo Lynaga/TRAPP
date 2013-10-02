@@ -8,11 +8,11 @@ import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class TrappDBHelper extends SQLiteOpenHelper {
 	
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "TRAPP.db";
 	
 	//table for each workout
-	private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " 
+	private static final String SQL_CREATE_WORKOUTLOG = "CREATE TABLE " 
 				+ TrappEntry.TABLE_NAME +
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_DATE + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_TIME + " INTEGER, " + TrappEntry.COLUMN_NAME_DISTANCE + " INTEGER, " 
@@ -20,7 +20,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	
 	
 	//table for storing preferances
-	private static final String SQL_CREATE_ENTRIES1 = "CREATE TABLE " 
+	private static final String SQL_CREATE_PREF = "CREATE TABLE " 
 			+ TrappEntry.TABLE_NAMEPREF +
 			" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_NAME + " TEXT, "
 			+ TrappEntry.COLUMN_NAME_WEIGHT + " INTEGER, " + TrappEntry.COLUMN_NAME_HEIGHT + " INTEGER)";
@@ -31,8 +31,8 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_ENTRIES1 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAMEPREF;
 	
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(SQL_CREATE_ENTRIES);
-		db.execSQL(SQL_CREATE_ENTRIES1);
+		db.execSQL(SQL_CREATE_WORKOUTLOG);
+		db.execSQL(SQL_CREATE_PREF);
 	}
 	
 	public TrappDBHelper(Context context) {
