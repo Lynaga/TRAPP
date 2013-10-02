@@ -1,7 +1,11 @@
 package com.example.therunningapp;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -94,6 +98,36 @@ public class Settings extends Activity {
 		finish();
 		
 		
+	}
+	
+	public void norwegian(View view){
+		Locale mLocale = new Locale("no");
+	    Locale.setDefault(mLocale); 
+	    Configuration config = getBaseContext().getResources().getConfiguration(); 
+	    if (!config.locale.equals(mLocale)) 
+	    { 
+	        config.locale = mLocale; 
+	        getBaseContext().getResources().updateConfiguration(config, null);  
+	    }
+	 
+	    Intent intent = new Intent(this, MainActivity.class);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+	
+	public void english(View view){
+		Locale mLocale = new Locale("");
+	    Locale.setDefault(mLocale); 
+	    Configuration config = getBaseContext().getResources().getConfiguration(); 
+	    if (!config.locale.equals(mLocale)) 
+	    { 
+	        config.locale = mLocale; 
+	        getBaseContext().getResources().updateConfiguration(config, null);
+	    }
+	    
+	    Intent intent = new Intent(this, MainActivity.class);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    startActivity(intent);
 	}
 
 }
