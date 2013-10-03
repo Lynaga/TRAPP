@@ -1,5 +1,6 @@
 package com.example.therunningapp;
 
+import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutStart extends FragmentActivity implements
@@ -31,7 +32,7 @@ LocationListener {
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
 	private final static int MILLISECONDS_PER_SECOND = 1000;
-	private final static int UPDATE_INTERVAL_IN_SECONDS = 2;
+	private final static int UPDATE_INTERVAL_IN_SECONDS = 1;
 	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
@@ -100,7 +101,8 @@ LocationListener {
         
 		myStartLocation = myLocationClient.getLastLocation();
 		setCamera(myStartLocation);
-		    
+		setText();
+		
 		myLocationClient.requestLocationUpdates(myLocationRequest, this);
 	}
 	
@@ -150,6 +152,8 @@ LocationListener {
 			prevLocation = myStartLocation;
 		
 		setCamera(newLocation);
+		setText();
+		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
 		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
 		
@@ -170,10 +174,19 @@ LocationListener {
 
 		myMap.moveCamera(center);
 		myMap.animateCamera(zoom);
-
+	}
+	
+	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_testView);
 		/*textView.setText("Current location: " + camLocation.getLatitude() +
 						 " / " + camLocation.getLongitude()); */
-		textView.setText("Distance: " + myDistance + " meters");
+		int tempDistance = (int) myDistance;
+		textView.setText("Distance: " + tempDistance + " meters");
+	}
+	
+	public void workoutEnd (View view) {
+		Intent intent = new Intent(this, WorkoutEnd.class);
+		startActivity(intent);
+		finish();
 	}
 }
