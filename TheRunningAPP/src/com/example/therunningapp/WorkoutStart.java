@@ -13,6 +13,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,10 +25,17 @@ GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 LocationListener {
 
-	private final static int
-    CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+	
+	private final static int MILLISECONDS_PER_SECOND = 1000;
+	private final static int UPDATE_INTERVAL_IN_SECONDS = 5;
+	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
+	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
+	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
+	
 	LocationClient myLocationClient;
 	GoogleMap myMap;
+	LocationRequest myLocationRequest;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,11 @@ LocationListener {
 		mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
 		myMap = mySupportMapFragment.getMap();
 		myMap.setMyLocationEnabled(true);
+		
+		myLocationRequest = LocationRequest.create();
+		myLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		myLocationRequest.setInterval(UPDATE_INTERVAL);
+		myLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 	}
 
 	@Override
@@ -65,6 +78,8 @@ LocationListener {
 	@Override
     protected void onStop() {
         // Disconnecting the client invalidates it.
+		if (myLocationClient.isConnected())
+        	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
         super.onStop();
     }
@@ -88,6 +103,8 @@ LocationListener {
 		    TextView textView = (TextView) findViewById(R.id.T_testView);
 		    textView.setText("Current location: " + myCurrentLocation.getLatitude() +
 		    				 " / " + myCurrentLocation.getLongitude());
+		    
+		    myLocationClient.requestLocationUpdates(myLocationRequest, this);
 	}
 	
 	@Override
