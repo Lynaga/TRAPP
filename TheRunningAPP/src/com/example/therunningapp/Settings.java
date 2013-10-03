@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
@@ -79,9 +78,17 @@ public class Settings extends Activity {
 		values.put(TrappEntry.COLUMN_NAME_WEIGHT, weightstring);
 		String selection = TrappEntry.COLUMN_NAME_NAME + " LIKE ?";
 		//String[] selectionArgs = { String.valueOf(rowId) };
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, TrappEntry.COLUMN_NAME_HEIGHT};
+		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
 		
+		int test = c.getCount();
+		
+		if(test >= 1){
+			db.update(TrappEntry.TABLE_NAMEPREF, values, "_id "+"="+1, null);
+		}
+		else
 		db.insert(TrappEntry.TABLE_NAMEPREF, null, values);
-		//dbs.update(TrappEntry.TABLE_NAMEPREF, values, "_id "+"="+0, null);
+
 		
 		//db.update(TrappEntry.TABLE_NAMEPREF, values, selection, selectionArgs);
 		db.close();

@@ -1,16 +1,12 @@
 package com.example.therunningapp;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
 
@@ -68,6 +64,12 @@ public class History extends Activity {
 */
 		db.close();
 	}
+	
+	public void back(View view){
+		finish();
+	}
+	
+	
 	}
 /*
 	  public void onItemClick(AdapterView<?> l, View v, int position, long id) {
