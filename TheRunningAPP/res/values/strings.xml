@@ -20,5 +20,8 @@
     <string name="title_activity_trapp_contract">TrappContract</string>
     <string name="title_activity_workout_start">WorkoutStart</string>
     <string name="T_test">This is supposed to be here</string>
+    <string name="A_norwegian">Norwegian</string>
+    <string name="A_english">English</string>
+    <string name="A_last_session">Last Session</string>
 
 </resources>

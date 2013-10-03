@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The Running App</string>
+    <string name="action_settings">Innstillinger</string>
+    <string name="S_workout">Start Ny Økt</string>
+    <string name="S_settings">Innstillinger</string>
+    <string name="S_history">Historie</string>
+    <string name="title_activity_settings">Innstilinnger</string>
+    <string name="S_name">Navn:</string>
+    <string name="S_height">Høyde:</string>
+    <string name="S_weight">Vekt:</string>
+    <string name="S_sex">Kjønn:</string>
+    <string name="S_save">Lagre</string>
+    <string name="S_cancel">Avbryt</string>
+    <string name="title_activity_history">Historie</string>
+    <string name="hello_world">Hei Verden!</string>
+    <string name="title_activity_workout_end">Avslutt økt</string>
+    <string name="title_activity_trapp_dbhelper">TrappDBHjelper</string>
+    <string name="title_activity_trapp_contract">TrappKontakter</string>
+    <string name="title_activity_workout_start">Start økt</string>
+    <string name="T_test">Dette skal være her</string>
+    <string name="A_norwegian">Norsk</string>
+    <string name="A_english">Engelsk</string>
+    <string name="A_last_session">Sist Økt</string>
+
+</resources>

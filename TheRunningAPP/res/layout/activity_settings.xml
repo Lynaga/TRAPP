@@ -93,5 +93,22 @@
 	    android:onClick="cancel"
 	    android:text="@string/S_cancel" />
 
+	<Button
+	    android:id="@+id/button_norwegian"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/button1"
+	    android:layout_toLeftOf="@+id/textView5"
+	    android:onClick="norwegian"
+	    android:text="@string/A_norwegian" />
+	
+	<Button
+	    android:id="@+id/button_english"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/button2"
+	    android:layout_toRightOf="@+id/textView5"
+	    android:onClick="english"
+	    android:text="@string/A_english" />
 
 </RelativeLayout>
