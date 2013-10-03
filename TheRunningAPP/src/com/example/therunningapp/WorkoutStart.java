@@ -31,7 +31,7 @@ LocationListener {
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
 	private final static int MILLISECONDS_PER_SECOND = 1000;
-	private final static int UPDATE_INTERVAL_IN_SECONDS = 2;
+	private final static int UPDATE_INTERVAL_IN_SECONDS = 1;
 	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
