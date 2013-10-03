@@ -43,6 +43,9 @@ LocationListener {
 	GoogleMap myMap;
 	LocationRequest myLocationRequest;
 	
+	double myDistance = 0;
+	int caloriesBurned;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,14 +149,17 @@ LocationListener {
 		if (prevLocation == null)
 			prevLocation = myStartLocation;
 		
+		setCamera(newLocation);
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
 		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
-		Polyline line = myMap.addPolyline(new PolylineOptions()
+		
+		myMap.addPolyline(new PolylineOptions()
 	     .add(prevLatLng, newLatLng)
 	     .width(5)
 	     .color(Color.RED));
 		
-		setCamera(newLocation);
+		myDistance = myDistance + prevLocation.distanceTo(newLocation);
+		
 		prevLocation = newLocation;
 	}
 	
@@ -166,7 +172,8 @@ LocationListener {
 		myMap.animateCamera(zoom);
 
 		TextView textView = (TextView) findViewById(R.id.T_testView);
-		textView.setText("Current location: " + camLocation.getLatitude() +
-						 " / " + camLocation.getLongitude());
+		/*textView.setText("Current location: " + camLocation.getLatitude() +
+						 " / " + camLocation.getLongitude()); */
+		textView.setText("Distance: " + myDistance + " meters");
 	}
 }
