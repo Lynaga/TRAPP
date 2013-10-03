@@ -20,8 +20,9 @@
     <string name="title_activity_trapp_contract">TrappKontakter</string>
     <string name="title_activity_workout_start">Start økt</string>
     <string name="T_test">Dette skal være her</string>
-    <string name="A_norwegian">Norsk</string>
-    <string name="A_english">Engelsk</string>
+    <string name="A_norwegian">Nor</string>
+    <string name="A_english">Eng</string>
     <string name="A_last_session">Sist Økt</string>
+    <string name="A_language">Språk</string>
 
 </resources>
