@@ -57,12 +57,18 @@
             android:name="com.example.therunningapp.WorkoutStart"
             android:label="@string/title_activity_workout_start" >
         </activity>
+      	<!-- Tron -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
+        <!-- Anders -->
          <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAYZwb5y6Ls_mfmaCOzjQ0E_-M9LZKgE1w" />
+         <!-- Stig -->
+         <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
     </application>
 
 </manifest>
