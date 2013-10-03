@@ -1,6 +1,7 @@
 package com.example.therunningapp;
 
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutStart extends FragmentActivity implements
 GooglePlayServicesClient.ConnectionCallbacks,
@@ -28,10 +31,13 @@ LocationListener {
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
 	private final static int MILLISECONDS_PER_SECOND = 1000;
-	private final static int UPDATE_INTERVAL_IN_SECONDS = 5;
+	private final static int UPDATE_INTERVAL_IN_SECONDS = 2;
 	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
+	
+	private Location prevLocation = null;
+	private Location myStartLocation;
 	
 	LocationClient myLocationClient;
 	GoogleMap myMap;
@@ -89,22 +95,10 @@ LocationListener {
         // Display the connection status
         Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         
-        Location myCurrentLocation;
-		myCurrentLocation = myLocationClient.getLastLocation();
-		
-		CameraUpdate center =
-		        CameraUpdateFactory.newLatLng(new LatLng(myCurrentLocation.getLatitude(),
-		                                                 myCurrentLocation.getLongitude()));
-		    CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-
-		    myMap.moveCamera(center);
-		    myMap.animateCamera(zoom);
+		myStartLocation = myLocationClient.getLastLocation();
+		setCamera(myStartLocation);
 		    
-		    TextView textView = (TextView) findViewById(R.id.T_testView);
-		    textView.setText("Current location: " + myCurrentLocation.getLatitude() +
-		    				 " / " + myCurrentLocation.getLongitude());
-		    
-		    myLocationClient.requestLocationUpdates(myLocationRequest, this);
+		myLocationClient.requestLocationUpdates(myLocationRequest, this);
 	}
 	
 	@Override
@@ -148,8 +142,31 @@ LocationListener {
         }
     }
 	
-	public void onLocationChanged(Location location) {
+	public void onLocationChanged(Location newLocation) {
+		if (prevLocation == null)
+			prevLocation = myStartLocation;
 		
+		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
+		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+		Polyline line = myMap.addPolyline(new PolylineOptions()
+	     .add(prevLatLng, newLatLng)
+	     .width(5)
+	     .color(Color.RED));
+		
+		setCamera(newLocation);
+		prevLocation = newLocation;
 	}
 	
+	public void setCamera(Location camLocation) {
+		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
+                												camLocation.getLongitude()));
+		CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);
+
+		myMap.moveCamera(center);
+		myMap.animateCamera(zoom);
+
+		TextView textView = (TextView) findViewById(R.id.T_testView);
+		textView.setText("Current location: " + camLocation.getLatitude() +
+						 " / " + camLocation.getLongitude());
+	}
 }
