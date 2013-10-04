@@ -36,7 +36,13 @@ public class History extends Activity {
 		if(c.moveToFirst()){
 			do{
 				String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
+				String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
+				String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
+				String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 				adapter.add(date);
+				adapter.add(distance);
+				adapter.add(time);
+				adapter.add(calories);
 			
 			}while(c.moveToNext());
 			list.setAdapter(adapter);

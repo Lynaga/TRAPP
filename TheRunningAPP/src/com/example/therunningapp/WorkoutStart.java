@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -199,12 +200,12 @@ LocationListener {
 		
 		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
 		int weight = c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-		int time;
+		Float time;
 		int calories;
 		calories = weight * 9;
-		
-		time = myTime;
-		calories = calories * time;
+		long myTime = SystemClock.elapsedRealtime() + myTimer.getBase();
+		time = (float) myTime / 3600000;
+		calories = (int) (calories * time);
 		
 		ContentValues values = new ContentValues();
 		
