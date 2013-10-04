@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +46,8 @@ LocationListener {
 	LocationRequest myLocationRequest;
 	
 	double myDistance = 0;
-	int caloriesBurned;
+	int myCaloriesBurned;
+	Chronometer myTimer;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ LocationListener {
 		setContentView(R.layout.activity_workout_start);
 		
 		myLocationClient = new LocationClient(this, this, this);
+		myTimer = (Chronometer) findViewById(R.id.T_timerView);
 		
 		FragmentManager myFragmentManager = getSupportFragmentManager();
 		SupportMapFragment mySupportMapFragment;
@@ -102,7 +105,7 @@ LocationListener {
 		myStartLocation = myLocationClient.getLastLocation();
 		setCamera(myStartLocation);
 		setText();
-		
+		myTimer.start();
 		myLocationClient.requestLocationUpdates(myLocationRequest, this);
 	}
 	

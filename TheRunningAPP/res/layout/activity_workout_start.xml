@@ -14,11 +14,17 @@
    		android:layout_height="wrap_content"
     	class="com.google.android.gms.maps.SupportMapFragment" />
 	
+	<Chronometer 
+	    android:id="@+id/T_timerView"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+	
 	<TextView
 	    android:id="@+id/T_testView"
 	    android:text="@string/T_test"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/T_timerView" />
 	
 	<Button 
 	    android:id="@+id/T_end_workout_button"
