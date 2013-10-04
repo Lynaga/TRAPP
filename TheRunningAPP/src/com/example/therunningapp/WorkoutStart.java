@@ -1,7 +1,9 @@
 package com.example.therunningapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -10,9 +12,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.therunningapp.TrappContract.TrappEntry;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -188,6 +192,17 @@ LocationListener {
 	}
 	
 	public void workoutEnd (View view) {
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		
+		values.put(TrappEntry.COLUMN_NAME_DISTANCE, myDistance);
+		values.put(TrappEntry.COLUMN_NAME_TIME, myTime);
+		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+		
+		db.insert(TrappEntry.TABLE_NAMEPREF, null, values);
+		
 		Intent intent = new Intent(this, WorkoutEnd.class);
 		startActivity(intent);
 		finish();
