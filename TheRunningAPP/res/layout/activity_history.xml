@@ -6,27 +6,29 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".History" >
 
-<ListView
+	<ListView
         android:id="@+id/listViewHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="94dp" 
-        android:clickable="true">
-    </ListView>
+        android:clickable="true" />
 
-<Button
-    android:id="@+id/back"
-    style="?android:attr/buttonStyleSmall"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignLeft="@+id/listViewHistory"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="15dp"
-    android:onClick="back"
-    android:text="Back" />
+	<Button
+    	android:id="@+id/back"
+    	style="?android:attr/buttonStyleSmall"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/listViewHistory"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="15dp"
+	    android:background="#FF808080"
+		android:textColor="#FFFFFF00"
+	    android:onClick="back"
+	    android:text="@string/A_back" />
 
 </RelativeLayout>

@@ -25,5 +25,6 @@
     <string name="A_last_session">Last Session</string>
     <string name="A_language">Language</string>
 	<string name="T_end_workout_button_string">End workout</string>
+	<string name="A_back">Back</string>
 	
 </resources>

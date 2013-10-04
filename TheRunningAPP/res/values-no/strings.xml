@@ -25,5 +25,5 @@
     <string name="A_last_session">Sist Økt</string>
     <string name="A_language">Språk</string>
     <string name="T_end_workout_button_string">Avslut trening</string>
-
+	<string name="A_back">Tilbake</string>
 </resources>

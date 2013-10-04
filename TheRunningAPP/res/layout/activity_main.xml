@@ -6,12 +6,24 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".MainActivity" >
 
       <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF" />
+      
+      <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:text="Last Session"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/button3"
@@ -20,6 +32,8 @@
         android:layout_alignLeft="@+id/button2"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
+        android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
         android:onClick="settings"
         android:text="@string/S_settings" />
 
@@ -30,6 +44,8 @@
         android:layout_above="@+id/button3"
         android:layout_alignLeft="@+id/button1"
         android:layout_marginBottom="20dp"
+        android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
         android:onClick="history"
         android:text="@string/S_history" />
 
@@ -40,16 +56,9 @@
         android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
         android:onClick="workoutStart"
         android:text="@string/S_workout" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:text="Last Session"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
