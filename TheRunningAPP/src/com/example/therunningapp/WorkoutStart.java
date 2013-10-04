@@ -196,10 +196,11 @@ LocationListener {
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, TrappEntry.COLUMN_NAME_HEIGHT};
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
 		
-		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-		int weight = c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
+		if(w.moveToFirst()){
+		int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 		Float time;
 		int calories;
 		calories = weight * 9;
@@ -212,10 +213,10 @@ LocationListener {
 		values.put(TrappEntry.COLUMN_NAME_DISTANCE, myDistance);
 		values.put(TrappEntry.COLUMN_NAME_TIME, myTime);
 		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-		db.insert(TrappEntry.TABLE_NAMEPREF, null, values);
-		
-		Intent intent = new Intent(this, WorkoutEnd.class);
-		startActivity(intent);
+		db.insert(TrappEntry.TABLE_NAME, null, values);
+		}
+		//Intent intent = new Intent(this, WorkoutEnd.class);
+		//startActivity(intent);
 		finish();
 	}
 }
