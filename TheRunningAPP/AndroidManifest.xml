@@ -26,7 +26,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.therunningapp.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,15 +36,18 @@
         </activity>
         <activity
             android:name="com.example.therunningapp.Settings"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.History"
-            android:label="@string/title_activity_history" >
+            android:label="@string/title_activity_history"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutEnd"
-            android:label="@string/title_activity_workout_end" >
+            android:label="@string/title_activity_workout_end"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.TrappDBHelper"
@@ -55,7 +59,8 @@
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutStart"
-            android:label="@string/title_activity_workout_start" >
+            android:label="@string/title_activity_workout_start"
+            android:screenOrientation="portrait" >
         </activity>
       	<!-- Tron -->
         <meta-data
