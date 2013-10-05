@@ -29,7 +29,7 @@ public class History extends Activity {
 		
 		Cursor c = db.query(TrappEntry.TABLE_NAME, projection, null, null,null,null,sortOrder);
 		ListView list = (ListView) findViewById(R.id.listViewHistory);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.list_content);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
 		if(c.moveToFirst()){
 			do{

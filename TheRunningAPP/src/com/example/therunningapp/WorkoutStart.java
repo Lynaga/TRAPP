@@ -1,7 +1,6 @@
 package com.example.therunningapp;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +53,6 @@ LocationListener {
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
-	int myCaloriesBurned;
 	Chronometer myTimer;
 	
 	@Override
@@ -193,20 +192,29 @@ LocationListener {
 	}
 	
 	public void workoutStartPause(View view) {
+		String tempString;
+		Button tempButton;
+		
 		if(workoutStatus == false) {
 			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);
 			myTimer.start();
 			if(myLocationClient.isConnected() == false)
 				myLocationClient.requestLocationUpdates(myLocationRequest, this);
 			workoutStatus = true;
+			tempString = getString(R.string.T_pause_workout_button_string);
 		}
+		
 		else {
 			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
 			myTimer.stop();
 			if (myLocationClient.isConnected())
 	        	myLocationClient.removeLocationUpdates(this);
 			workoutStatus = false;
+			tempString = getString(R.string.T_start_workout_button_string);
 		}
+		
+		tempButton = (Button) findViewById(R.id.T_pause_workout_button);
+		tempButton.setText(tempString);
 	}
 	
 	public void workoutEnd (View view) {
@@ -221,14 +229,14 @@ LocationListener {
 		Float time;
 		int calories;
 		calories = weight * 9;
-		long myTime = SystemClock.elapsedRealtime() + myTimer.getBase();
-		time = (float) myTime / 3600000;
+		pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
+		time = (float) pauseTime / 3600000;
 		calories = (int) (calories * time);
 		
 		ContentValues values = new ContentValues();
 		
 		values.put(TrappEntry.COLUMN_NAME_DISTANCE, myDistance);
-		values.put(TrappEntry.COLUMN_NAME_TIME, myTime);
+		values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 		db.insert(TrappEntry.TABLE_NAME, null, values);
 		}
