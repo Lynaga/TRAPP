@@ -15,7 +15,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_WORKOUTLOG = "CREATE TABLE " 
 				+ TrappEntry.TABLE_NAME +
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_DATE + " TEXT, "
-				+ TrappEntry.COLUMN_NAME_TIME + " INTEGER, " + TrappEntry.COLUMN_NAME_DISTANCE + " INTEGER, " 
+				+ TrappEntry.COLUMN_NAME_TIME + " FLOAT, " + TrappEntry.COLUMN_NAME_DISTANCE + " DOUBLE, " 
 				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER)";
 	
 	
