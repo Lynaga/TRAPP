@@ -1,5 +1,8 @@
 package com.example.therunningapp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.ContentValues;
 import android.content.IntentSender;
 import android.database.Cursor;
@@ -50,6 +53,7 @@ LocationListener {
 	GoogleMap myMap;
 	LocationRequest myLocationRequest;
 	
+	long startTime = SystemClock.elapsedRealtime();
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
@@ -220,6 +224,7 @@ LocationListener {
 	public void workoutEnd (View view) {
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		myTimer.stop();
 		
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
 		
@@ -229,13 +234,16 @@ LocationListener {
 		Float time;
 		int calories;
 		calories = weight * 9;
-		pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
+		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
 		time = (float) pauseTime / 3600000;
 		calories = (int) (calories * time);
+		Date cDate = new Date();
+		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
 		
 		ContentValues values = new ContentValues();
 		
-		values.put(TrappEntry.COLUMN_NAME_DISTANCE, myDistance);
+		values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+		values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 		values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 		db.insert(TrappEntry.TABLE_NAME, null, values);
