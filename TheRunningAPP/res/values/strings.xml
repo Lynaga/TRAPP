@@ -28,10 +28,10 @@
     <string name="A_back">Back</string>
     <string name="T_start_workout_button_string">Start</string>
     <string name="T_pause_workout_button_string">Pause</string>
-    <string name="A_time">Time:</string>
-    <string name="A_distance">Distance:</string>
     <string name="title_activity_workout_display">WorkoutDisplay</string>
-    <string name="date">Date:</string>
-    <string name="calories">Calories:</string>
+    <string name="A_time_display_string">Time:</string>
+    <string name="A_distance_display_string">Distance:</string>
+    <string name="A_date_display_string">Date:</string>
+    <string name="A_calories_display_string">Calories:</string>
 
 </resources>

@@ -49,7 +49,7 @@ public class MainActivity extends FragmentActivity {
 		}
 		else {
 			String T_Errortext = "Google Play services are not available";
-			TextView T_textView = (TextView) findViewById(R.id.textView1);
+			TextView T_textView = (TextView) findViewById(R.id.date);
 			T_textView.setText(T_Errortext);
 		}
 
