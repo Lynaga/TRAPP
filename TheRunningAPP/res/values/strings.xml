@@ -24,11 +24,12 @@
     <string name="A_english">Eng</string>
     <string name="A_last_session">Last session</string>
     <string name="A_language">Language</string>
-	<string name="T_end_workout_button_string">End workout</string>
-	<string name="A_back">Back</string>
-	<string name="T_start_workout_button_string">Start</string>
-	<string name="T_pause_workout_button_string">Pause</string>
-	<string name="A_time">Time:</string>
-	<string name="A_distance">Distance:</string>
-	
+    <string name="T_end_workout_button_string">End workout</string>
+    <string name="A_back">Back</string>
+    <string name="T_start_workout_button_string">Start</string>
+    <string name="T_pause_workout_button_string">Pause</string>
+    <string name="A_time">Time:</string>
+    <string name="A_distance">Distance:</string>
+    <string name="title_activity_workout_display">WorkoutDisplay</string>
+
 </resources>
