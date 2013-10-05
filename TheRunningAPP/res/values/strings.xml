@@ -31,5 +31,7 @@
     <string name="A_time">Time:</string>
     <string name="A_distance">Distance:</string>
     <string name="title_activity_workout_display">WorkoutDisplay</string>
+    <string name="date">Date:</string>
+    <string name="calories">Calories:</string>
 
 </resources>

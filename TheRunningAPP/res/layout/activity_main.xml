@@ -10,16 +10,16 @@
     tools:context=".MainActivity" >
 
       <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF" />
       
       <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/calories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/date"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"
         android:text="@string/A_last_session"

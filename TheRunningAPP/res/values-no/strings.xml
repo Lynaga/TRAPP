@@ -30,5 +30,7 @@
 	<string name="T_pause_workout_button_string">Pause</string>
 	<string name="A_time">Tid:</string>
 	<string name="A_distance">Distanse:</string>
+	<string name="date">Dato:</string>
+	<string name="calories">Kalorier:</string>
 	
 </resources>
