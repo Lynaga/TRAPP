@@ -38,9 +38,9 @@ public class Settings extends Activity {
 				EditText name1 = (EditText) findViewById(R.id.editText1);
 				EditText height1 = (EditText) findViewById(R.id.editText2);
 				EditText weight1 = (EditText) findViewById(R.id.editText3);
-				name1.setHint(name);
-				height1.setHint(height);
-				weight1.setHint(weight);
+				name1.setText(name);
+				height1.setText(height);
+				weight1.setText(weight);
 				
 				
 	            

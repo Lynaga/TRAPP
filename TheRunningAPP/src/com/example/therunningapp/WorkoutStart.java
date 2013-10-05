@@ -198,15 +198,15 @@ LocationListener {
 		if(workoutStatus == false) {
 			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);
 			myTimer.start();
-			if(myLocationClient.isConnected() == false)
 				myLocationClient.requestLocationUpdates(myLocationRequest, this);
 			workoutStatus = true;
 			tempString = getString(R.string.T_pause_workout_button_string);
 		}
 		
 		else {
-			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
 			myTimer.stop();
+			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
+			
 			if (myLocationClient.isConnected())
 	        	myLocationClient.removeLocationUpdates(this);
 			workoutStatus = false;
