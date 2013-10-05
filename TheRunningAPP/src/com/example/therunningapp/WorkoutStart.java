@@ -50,6 +50,8 @@ LocationListener {
 	GoogleMap myMap;
 	LocationRequest myLocationRequest;
 	
+	long pauseTime = 0;
+	boolean workoutStatus = false;
 	double myDistance = 0;
 	int myCaloriesBurned;
 	Chronometer myTimer;
@@ -60,7 +62,7 @@ LocationListener {
 		setContentView(R.layout.activity_workout_start);
 		
 		myLocationClient = new LocationClient(this, this, this);
-		myTimer = (Chronometer) findViewById(R.id.T_timerView);
+		myTimer = (Chronometer) findViewById(R.id.T_timer);
 		
 		FragmentManager myFragmentManager = getSupportFragmentManager();
 		SupportMapFragment mySupportMapFragment;
@@ -110,8 +112,6 @@ LocationListener {
 		myStartLocation = myLocationClient.getLastLocation();
 		setCamera(myStartLocation);
 		setText();
-		myTimer.start();
-		myLocationClient.requestLocationUpdates(myLocationRequest, this);
 	}
 	
 	@Override
@@ -150,7 +150,7 @@ LocationListener {
              * user.
              */
         	String T_Errortext = "Google Play services could not resolve the connection problem.";
-			TextView T_textView = (TextView) findViewById(R.id.T_testView);
+			TextView T_textView = (TextView) findViewById(R.id.T_distance);
 			T_textView.setText(T_Errortext);
         }
     }
@@ -185,11 +185,28 @@ LocationListener {
 	}
 	
 	public void setText() {
-		TextView textView = (TextView) findViewById(R.id.T_testView);
+		TextView textView = (TextView) findViewById(R.id.T_distance);
 		/*textView.setText("Current location: " + camLocation.getLatitude() +
 						 " / " + camLocation.getLongitude()); */
 		int tempDistance = (int) myDistance;
 		textView.setText("Distance: " + tempDistance + " meters");
+	}
+	
+	public void workoutStartPause(View view) {
+		if(workoutStatus == false) {
+			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);
+			myTimer.start();
+			if(myLocationClient.isConnected() == false)
+				myLocationClient.requestLocationUpdates(myLocationRequest, this);
+			workoutStatus = true;
+		}
+		else {
+			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
+			myTimer.stop();
+			if (myLocationClient.isConnected())
+	        	myLocationClient.removeLocationUpdates(this);
+			workoutStatus = false;
+		}
 	}
 	
 	public void workoutEnd (View view) {

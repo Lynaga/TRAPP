@@ -26,5 +26,7 @@
     <string name="A_language">Language</string>
 	<string name="T_end_workout_button_string">End workout</string>
 	<string name="A_back">Back</string>
+	<string name="T_start_workout_button_string">Start</string>
+	<string name="T_pause_workout_button_string">Pause</string>
 	
 </resources>

@@ -16,26 +16,39 @@
     	class="com.google.android.gms.maps.SupportMapFragment" />
 	
 	<Chronometer 
-	    android:id="@+id/T_timerView"
+	    android:id="@+id/T_timer"
 	    android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 	
 	<TextView
-	    android:id="@+id/T_testView"
+	    android:id="@+id/T_distance"
 	    android:text="@string/T_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/T_timerView" />
+        android:layout_below="@id/T_timer" />
 	
-	<Button 
-	    android:id="@+id/T_end_workout_button"
-	    android:text="@string/T_end_workout_button_string"
-	    android:layout_width="wrap_content"
+	<Button
+	    android:id="@+id/T_pause_workout_button"
+	    android:text="@string/T_start_workout_button_string"
+	    android:layout_width="120dp"
 	    android:layout_height="wrap_content"
-	    android:layout_centerHorizontal="true"
+	    android:layout_marginRight="10dp"
+	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentBottom="true"
 	    android:background="#FF808080"
 		android:textColor="#FFFFFF00"
-	    android:onClick="workoutEnd" />
+	    android:onClick="workoutStartPause" />
+
+	<Button
+	    android:id="@+id/T_end_workout_button"
+	    android:layout_width="120dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/T_pause_workout_button"
+	    android:layout_alignBottom="@+id/T_pause_workout_button"
+	    android:layout_toRightOf="@+id/T_pause_workout_button"
+	    android:background="#FF808080"
+	    android:onClick="workoutEnd"
+	    android:text="@string/T_end_workout_button_string"
+	    android:textColor="#FFFFFF00" />
 
 </RelativeLayout>
