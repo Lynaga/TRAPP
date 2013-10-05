@@ -62,6 +62,11 @@
             android:label="@string/title_activity_workout_start"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.example.therunningapp.WorkoutDisplay"
+            android:label="@string/title_activity_workout_display"
+            android:screenOrientation="portrait" >
+        </activity>
       	<!-- Tron -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
