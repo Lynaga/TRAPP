@@ -23,15 +23,13 @@ public class History extends Activity {
 
 		
 		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE };
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE , TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME, TrappEntry.COLUMN_NAME_CALORIES};
 		
 		String sortOrder = TrappEntry.COLUMN_NAME_DATE + " DESC";
 		
 		Cursor c = db.query(TrappEntry.TABLE_NAME, projection, null, null,null,null,sortOrder);
 		ListView list = (ListView) findViewById(R.id.listViewHistory);
-		list.setClickable(true);
-	
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.list_content);
 
 		if(c.moveToFirst()){
 			do{
@@ -47,27 +45,7 @@ public class History extends Activity {
 			}while(c.moveToNext());
 			list.setAdapter(adapter);
 		}
-
-	
 		
-/*
-		 list.setOnItemClickListener(new OnItemClickListener() {
-	          public void onItemClick(AdapterView<?> parent, View view,
-	              int position, long id) {
-	               
-	              // selected item 
-	              String date = ((ListView) view).getContext().toString();
-	              
-	              
-	              // Launching new Activity on selecting single List Item
-	              Intent i = new Intent(getApplicationContext(), SingleListItem.class);
-	              // sending data to new activity
-	              i.putExtra("date", date);
-	              startActivity(i);
-	             
-	          }
-	        });
-*/
 		db.close();
 	}
 	
