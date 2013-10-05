@@ -188,7 +188,7 @@ LocationListener {
 		/*textView.setText("Current location: " + camLocation.getLatitude() +
 						 " / " + camLocation.getLongitude()); */
 		int tempDistance = (int) myDistance;
-		textView.setText("Distance: " + tempDistance + " meters");
+		textView.setText(tempDistance + " meters");
 	}
 	
 	public void workoutStartPause(View view) {
