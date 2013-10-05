@@ -3,7 +3,7 @@
 
     <string name="app_name">The Running App</string>
     <string name="action_settings">Innstillinger</string>
-    <string name="S_workout">Start Ny Økt</string>
+    <string name="S_workout">Start øy økt</string>
     <string name="S_settings">Innstillinger</string>
     <string name="S_history">Historie</string>
     <string name="title_activity_settings">Innstilinnger</string>
@@ -14,7 +14,7 @@
     <string name="S_save">Lagre</string>
     <string name="S_cancel">Avbryt</string>
     <string name="title_activity_history">Historie</string>
-    <string name="hello_world">Hei Verden!</string>
+    <string name="hello_world">Hei verden!</string>
     <string name="title_activity_workout_end">Avslutt økt</string>
     <string name="title_activity_trapp_dbhelper">TrappDBHjelper</string>
     <string name="title_activity_trapp_contract">TrappKontakter</string>
@@ -22,11 +22,13 @@
     <string name="T_test">Dette skal være her</string>
     <string name="A_norwegian">Nor</string>
     <string name="A_english">Eng</string>
-    <string name="A_last_session">Sist Økt</string>
+    <string name="A_last_session">Sist økt</string>
     <string name="A_language">Språk</string>
-    <string name="T_end_workout_button_string">Avslut trening</string>
+    <string name="T_end_workout_button_string">Avslutt trening</string>
 	<string name="A_back">Tilbake</string>
 	<string name="T_start_workout_button_string">Start</string>
 	<string name="T_pause_workout_button_string">Pause</string>
+	<string name="A_time">Tid:</string>
+	<string name="A_distance">Distanse:</string>
 	
 </resources>

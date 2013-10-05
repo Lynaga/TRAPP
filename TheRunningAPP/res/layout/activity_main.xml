@@ -22,7 +22,7 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"
-        android:text="Last Session"
+        android:text="@string/A_last_session"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button

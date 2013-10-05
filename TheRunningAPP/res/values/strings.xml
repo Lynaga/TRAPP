@@ -3,7 +3,7 @@
 
     <string name="app_name">The Running App</string>
     <string name="action_settings">Settings</string>
-    <string name="S_workout">Start New Workout</string>
+    <string name="S_workout">Start new workout</string>
     <string name="S_settings">Settings</string>
     <string name="S_history">History</string>
     <string name="title_activity_settings">Settings</string>
@@ -22,11 +22,13 @@
     <string name="T_test">This is supposed to be here</string>
     <string name="A_norwegian">Nor</string>
     <string name="A_english">Eng</string>
-    <string name="A_last_session">Last Session</string>
+    <string name="A_last_session">Last session</string>
     <string name="A_language">Language</string>
 	<string name="T_end_workout_button_string">End workout</string>
 	<string name="A_back">Back</string>
 	<string name="T_start_workout_button_string">Start</string>
 	<string name="T_pause_workout_button_string">Pause</string>
+	<string name="A_time">Time:</string>
+	<string name="A_distance">Distance:</string>
 	
 </resources>

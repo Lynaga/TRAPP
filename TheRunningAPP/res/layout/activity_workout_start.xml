@@ -15,17 +15,34 @@
    		android:layout_height="wrap_content"
     	class="com.google.android.gms.maps.SupportMapFragment" />
 	
+	<TextView 
+	    android:id="@+id/A_time_on_map"
+	    android:text="@string/A_time"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginRight="3dp" />
+	
 	<Chronometer 
 	    android:id="@+id/T_timer"
 	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/A_time_on_map"
+        android:layout_alignBaseline="@id/A_time_on_map" />
+	
+	<TextView 
+	    android:id="@+id/A_distance_on_map"
+	    android:text="@string/A_distance"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginRight="3dp"
+	    android:layout_below="@id/A_time_on_map" />
 	
 	<TextView
 	    android:id="@+id/T_distance"
-	    android:text="@string/T_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/T_timer" />
+        android:layout_toRightOf="@id/A_distance_on_map"
+        android:layout_alignBaseline="@id/A_distance_on_map" />
 	
 	<Button
 	    android:id="@+id/T_pause_workout_button"
@@ -43,9 +60,9 @@
 	    android:id="@+id/T_end_workout_button"
 	    android:layout_width="120dp"
 	    android:layout_height="wrap_content"
-	    android:layout_alignBaseline="@+id/T_pause_workout_button"
-	    android:layout_alignBottom="@+id/T_pause_workout_button"
-	    android:layout_toRightOf="@+id/T_pause_workout_button"
+	    android:layout_alignBaseline="@id/T_pause_workout_button"
+	    android:layout_alignBottom="@id/T_pause_workout_button"
+	    android:layout_toRightOf="@id/T_pause_workout_button"
 	    android:background="#FF808080"
 	    android:onClick="workoutEnd"
 	    android:text="@string/T_end_workout_button_string"
