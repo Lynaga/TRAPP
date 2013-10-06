@@ -35,9 +35,9 @@ public class Settings extends Activity {
 				String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
 				String weight = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				String height = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_HEIGHT));
-				EditText name1 = (EditText) findViewById(R.id.editText1);
-				EditText height1 = (EditText) findViewById(R.id.editText2);
-				EditText weight1 = (EditText) findViewById(R.id.editText3);
+				EditText name1 = (EditText) findViewById(R.id.editText_name);
+				EditText height1 = (EditText) findViewById(R.id.editText_height);
+				EditText weight1 = (EditText) findViewById(R.id.editText_weight);
 				name1.setText(name);
 				height1.setText(height);
 				weight1.setText(weight);
@@ -67,9 +67,9 @@ public class Settings extends Activity {
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
 		
-		EditText name = (EditText) findViewById(R.id.editText1);
-		EditText height = (EditText) findViewById(R.id.editText2);
-		EditText weight = (EditText) findViewById(R.id.editText3);
+		EditText name = (EditText) findViewById(R.id.editText_name);
+		EditText height = (EditText) findViewById(R.id.editText_height);
+		EditText weight = (EditText) findViewById(R.id.editText_weight);
 		
 		String namestring = name.getText().toString();
 		String heightstring = height.getText().toString();

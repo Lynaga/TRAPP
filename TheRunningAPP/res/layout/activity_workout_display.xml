@@ -6,78 +6,101 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".WorkoutDisplay" >
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/date_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="56dp"
-        android:text="@string/date"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/A_date_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/calories"
+        android:id="@+id/time_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/date"
-        android:layout_below="@+id/date"
-        android:layout_marginTop="16dp"
-        android:text="@string/calories"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/date_display"
+        android:layout_marginTop="20dp"
+        android:text="@string/A_time_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
     <TextView
-        android:id="@+id/distance"
+        android:id="@+id/distance_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/calories"
-        android:layout_below="@+id/calories"
-        android:layout_marginTop="21dp"
-        android:text="@string/A_distance"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/time_display"
+        android:layout_marginTop="20dp"
+        android:text="@string/A_distance_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
     <TextView
-        android:id="@+id/textdate"
+        android:id="@+id/calories_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/date"
-        android:layout_alignBottom="@+id/date"
-        android:layout_marginLeft="35dp"
-        android:layout_toRightOf="@+id/date"/>
-
-    <TextView
-        android:id="@+id/textcalories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/calories"
-        android:layout_alignBottom="@+id/calories"
-        android:layout_alignRight="@+id/textdate"/>
-
-    <TextView
-        android:id="@+id/textdistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textcalories"
-        android:layout_alignTop="@+id/distance"/>
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/distance"
-        android:layout_below="@+id/distance"
-        android:layout_marginTop="22dp"
-        android:text="@string/A_time"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/distance_display"
+        android:layout_marginTop="20dp"
+        android:text="@string/A_calories_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
     <TextView
-        android:id="@+id/texttime"
+        android:id="@+id/textdate_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textdistance"
-        android:layout_alignTop="@+id/time"/>
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/date_display"
+        android:layout_alignBaseline="@id/date_display"
+        android:textColor="#FFFFFFFF" />
+
+    <TextView
+        android:id="@+id/textcalories_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/calories_display"
+        android:layout_alignBaseline="@id/calories_display"
+        android:textColor="#FFFFFFFF" />
+
+    <TextView
+        android:id="@+id/textdistance_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/distance_display"
+        android:layout_alignBaseline="@id/distance_display"
+        android:textColor="#FFFFFFFF" />
+
+    <TextView
+        android:id="@+id/texttime_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/time_display"
+        android:layout_alignBaseline="@id/time_display"
+        android:textColor="#FFFFFFFF" />
+    
+    <Button 
+        android:id="@+id/button_cancel"
+        style="?android:attr/buttonStyleSmall"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/date_display"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="15dp"
+	    android:background="#FF808080"
+		android:textColor="#FFFFFF00"
+	    android:onClick="back"
+	    android:text="@string/A_back" />
 
 </RelativeLayout>

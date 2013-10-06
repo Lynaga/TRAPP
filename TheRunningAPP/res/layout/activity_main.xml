@@ -7,29 +7,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#FF000000"
-    tools:context=".MainActivity" >
-
-      <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF" />
-      
-      <TextView
-        android:id="@+id/calories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/date"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:text="@string/A_last_session"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    tools:context=".MainActivity" >    
+    
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button_settings"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
+        android:layout_alignLeft="@+id/button_history"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         android:background="#FF808080"
@@ -38,11 +22,11 @@
         android:text="@string/S_settings" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_history"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button3"
-        android:layout_alignLeft="@+id/button1"
+        android:layout_above="@+id/button_settings"
+        android:layout_alignLeft="@+id/button_workout_start"
         android:layout_marginBottom="20dp"
         android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
@@ -50,15 +34,23 @@
         android:text="@string/S_history" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button_workout_start"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
+        android:layout_above="@+id/button_history"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
         android:onClick="workoutStart"
         android:text="@string/S_workout" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/icon_running_man" />
 
 </RelativeLayout>

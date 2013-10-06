@@ -17,7 +17,7 @@
 	
 	<TextView 
 	    android:id="@+id/A_time_on_map"
-	    android:text="@string/A_time"
+	    android:text="@string/A_time_display_string"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginRight="3dp" />
@@ -31,7 +31,7 @@
 	
 	<TextView 
 	    android:id="@+id/A_distance_on_map"
-	    android:text="@string/A_distance"
+	    android:text="@string/A_distance_display_string"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_marginRight="3dp"

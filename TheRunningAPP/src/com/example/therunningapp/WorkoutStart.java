@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -189,10 +190,8 @@ LocationListener {
 	
 	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_distance);
-		/*textView.setText("Current location: " + camLocation.getLatitude() +
-						 " / " + camLocation.getLongitude()); */
 		int tempDistance = (int) myDistance;
-		textView.setText(tempDistance + " meters");
+		textView.setText(tempDistance + " m");
 	}
 	
 	public void workoutStartPause(View view) {
@@ -229,27 +228,36 @@ LocationListener {
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
 		
 		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-		if(w.moveToFirst()){
-		int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+		
+		int calories = 0;
 		Float time;
-		int calories;
-		calories = weight * 9;
 		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
 		time = (float) pauseTime / 3600000;
-		calories = (int) (calories * time);
+		
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
+			
+		if(w.moveToFirst()){
+			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+			
+			calories = weight * 9;
+			calories = (int) (calories * time);
+			}
+			
+		if(time != 0 && myDistance != 0) {
+				
+			ContentValues values = new ContentValues();
 		
-		ContentValues values = new ContentValues();
+			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
+			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
+			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
-		values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-		values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-		values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-		db.insert(TrappEntry.TABLE_NAME, null, values);
-		}
-		//Intent intent = new Intent(this, WorkoutEnd.class);
-		//startActivity(intent);
+			Intent intent = new Intent(this, WorkoutEnd.class);
+			startActivity(intent);
+			}
+		
 		finish();
 	}
 }
