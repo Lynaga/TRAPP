@@ -58,9 +58,9 @@ public class WorkoutEnd extends Activity {
 			time = sb.toString();
 			
 			viewDate.setText(date);
-			viewCalories.setText(calories);
-			viewDistance.setText(distance);
+			viewDistance.setText(distance + "m");
 			viewTime.setText(time);
+			viewCalories.setText(calories);
 			
 		}
 		
