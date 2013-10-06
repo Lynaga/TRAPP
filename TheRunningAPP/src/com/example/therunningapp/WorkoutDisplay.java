@@ -44,6 +44,7 @@ public class WorkoutDisplay extends Activity {
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 			
+			//Formatting time from milliseconds to hh:mm:ss
 			int tempTime = Integer.parseInt(time);
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
@@ -51,8 +52,10 @@ public class WorkoutDisplay extends Activity {
 			String tempHours = Integer.toString(hours);
 			String tempMinutes = Integer.toString(minutes);
 			String tempSeconds = Integer.toString(seconds);
+			
 			StringBuilder sb = new StringBuilder();
 			
+			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
 			sb.append(tempHours + ":");
@@ -106,7 +109,7 @@ public class WorkoutDisplay extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void back(View view){
+	public void back(View view){	//Back button to exit activity
 		finish();
 	}
 

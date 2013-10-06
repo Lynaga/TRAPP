@@ -35,6 +35,7 @@ public class WorkoutEnd extends Activity {
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 
+			//Formatting time from milliseconds to hh:mm:ss
 			int tempTime = Integer.parseInt(time);
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
@@ -44,6 +45,7 @@ public class WorkoutEnd extends Activity {
 			String tempSeconds = Integer.toString(seconds);
 			StringBuilder sb = new StringBuilder();
 			
+			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
 			sb.append(tempHours + ":");

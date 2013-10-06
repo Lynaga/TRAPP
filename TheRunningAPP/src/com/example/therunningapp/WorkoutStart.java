@@ -41,20 +41,22 @@ LocationListener {
 
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
+	//Constants to set the update intervals
 	private final static int MILLISECONDS_PER_SECOND = 1000;
 	private final static int UPDATE_INTERVAL_IN_SECONDS = 1;
 	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
 	
+	//Location variables to store user locations
 	private Location prevLocation = null;
 	private Location myStartLocation;
 	
-	LocationClient myLocationClient;
-	GoogleMap myMap;
-	LocationRequest myLocationRequest;
+	LocationClient myLocationClient;	//Object to connect to Google location services and request location update callbacks
+	GoogleMap myMap;					//Object to get map from fragment
+	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
-	long startTime = SystemClock.elapsedRealtime();
+	//Variables used to pause / restart workout and store to database.
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
@@ -65,15 +67,17 @@ LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
 		
-		myLocationClient = new LocationClient(this, this, this);
-		myTimer = (Chronometer) findViewById(R.id.T_timer);
+		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
+		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
 		
+		//Get map from the fragment
 		FragmentManager myFragmentManager = getSupportFragmentManager();
 		SupportMapFragment mySupportMapFragment;
 		mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
 		myMap = mySupportMapFragment.getMap();
-		myMap.setMyLocationEnabled(true);
+		myMap.setMyLocationEnabled(true);	//Enable the my locaton button
 		
+		//Set parameters for the location updates
 		myLocationRequest = LocationRequest.create();
 		myLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		myLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -101,7 +105,7 @@ LocationListener {
 	
 	@Override
     protected void onStop() {
-        // Disconnecting the client invalidates it.
+        // Disconnecting the client if connected
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
@@ -113,6 +117,7 @@ LocationListener {
         // Display the connection status
         Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         
+        //Set map to users location and set initial text
 		myStartLocation = myLocationClient.getLastLocation();
 		setCamera(myStartLocation);
 		setText();
@@ -159,26 +164,29 @@ LocationListener {
         }
     }
 	
+	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-		if (prevLocation == null)
-			prevLocation = myStartLocation;
+		if (prevLocation == null)	//Check if last location is set
+			prevLocation = myStartLocation;	//if not set -> last location == start location
 		
-		setCamera(newLocation);
-		setText();
+		setCamera(newLocation);		//Update map to new location
+		setText();					//Update distance
 		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
 		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
 		
+		//Drawing on the map from last location to new location
 		myMap.addPolyline(new PolylineOptions()
 	     .add(prevLatLng, newLatLng)
 	     .width(5)
 	     .color(Color.RED));
 		
-		myDistance = myDistance + prevLocation.distanceTo(newLocation);
+		myDistance = myDistance + prevLocation.distanceTo(newLocation);	//Updating total distance
 		
-		prevLocation = newLocation;
+		prevLocation = newLocation;	//Update last location for next update
 	}
 	
+	//Function to center map on user
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
                 												camLocation.getLongitude()));
@@ -188,39 +196,43 @@ LocationListener {
 		myMap.animateCamera(zoom);
 	}
 	
+	//Function to set and update current distance
 	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
 		textView.setText(tempDistance + " m");
 	}
 	
+	//Onclick function for the start / pause workout button
 	public void workoutStartPause(View view) {
-		String tempString;
-		Button tempButton;
+		String tempString;	//String to change the text on button
+		Button tempButton;	//Object to change the text on button
 		
-		if(workoutStatus == false) {
-			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);
+		if(workoutStatus == false) {	//If workout is not started, or paused
+			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);	//Sets timer to right start value
 			myTimer.start();
-				myLocationClient.requestLocationUpdates(myLocationRequest, this);
-			workoutStatus = true;
-			tempString = getString(R.string.T_pause_workout_button_string);
+				myLocationClient.requestLocationUpdates(myLocationRequest, this);	//Starts location updates
+			workoutStatus = true;											//Change workout status
+			tempString = getString(R.string.T_pause_workout_button_string);	//Get text for button
 		}
 		
 		else {
 			myTimer.stop();
-			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();
+			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();	//Stores value of the timer
 			
-			if (myLocationClient.isConnected())
-	        	myLocationClient.removeLocationUpdates(this);
-			workoutStatus = false;
-			tempString = getString(R.string.T_start_workout_button_string);
+			if (myLocationClient.isConnected())		//If client is connected
+	        	myLocationClient.removeLocationUpdates(this);	//remove location updates
+			workoutStatus = false;								//Change workout status
+			tempString = getString(R.string.T_start_workout_button_string);	//Get text for button
 		}
 		
+		//Set new text for button
 		tempButton = (Button) findViewById(R.id.T_pause_workout_button);
 		tempButton.setText(tempString);
 	}
 	
 	public void workoutEnd (View view) {
+		//Get the database
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		myTimer.stop();
@@ -229,23 +241,24 @@ LocationListener {
 		
 		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
 		
+		//Initiate variables needed to write to the database
 		int calories = 0;
 		Float time;
 		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
 		time = (float) pauseTime / 3600000;
 		
 		Date cDate = new Date();
-		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
+		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 			
-		if(w.moveToFirst()){
+		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-			
+			//If weight is set calculate calories burnt during the workout
 			calories = weight * 9;
 			calories = (int) (calories * time);
 			}
 			
-		if(time != 0 && myDistance != 0) {
-				
+		if(time != 0 && myDistance != 0) {	//Check if users started workout
+				//If workout was started -> write to database and start new activity, WorkoutEnd
 			ContentValues values = new ContentValues();
 		
 			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);

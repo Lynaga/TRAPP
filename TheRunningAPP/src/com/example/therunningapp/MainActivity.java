@@ -32,25 +32,25 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	public void settings (View view) {
+	public void settings (View view) {	//Onclick function for the settings button
 		Intent intent = new Intent(this, Settings.class);
-		startActivity(intent);
+		startActivity(intent);			//Start Settings activity
 
 	}
 
-	public void history (View view) {
+	public void history (View view) { 	//Onclick function for the history button
 		Intent intent = new Intent(this, History.class);
-		startActivity(intent);
+		startActivity(intent);			//Start History activity
 
 	}
 	
-	
-	public void workoutStart (View view) {
-		if(servicesConnected() && haveNetworkConnection()) {
-		Intent intent = new Intent(this, WorkoutStart.class);
-		startActivity(intent);
+	//Onclick function for the start workout button
+	public void workoutStart (View view) { 
+		if(servicesConnected() && haveNetworkConnection()) { 	//If google play services are available,
+		Intent intent = new Intent(this, WorkoutStart.class);	//and device is connected to the internet.
+		startActivity(intent);									//-> Start WorkoutStart activity
 		}
-		else {
+		else { //If device not connected to the internet -> short message to the user.
 			Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
 		}
 
@@ -147,7 +147,8 @@ public class MainActivity extends FragmentActivity {
         }
 		
     }
-    
+    //Code to check if the device got internet connection active (either wifi or mobile network)
+    //This function is fetched from stackoverflow
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
