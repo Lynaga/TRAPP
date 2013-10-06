@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".WorkoutDisplay" >
 
     <TextView
@@ -17,6 +18,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="50dp"
         android:text="@string/A_date_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -27,6 +29,7 @@
         android:layout_below="@+id/date_display"
         android:layout_marginTop="20dp"
         android:text="@string/A_time_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <TextView
@@ -37,6 +40,7 @@
         android:layout_below="@+id/time_display"
         android:layout_marginTop="20dp"
         android:text="@string/A_distance_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <TextView
@@ -47,6 +51,7 @@
         android:layout_below="@id/distance_display"
         android:layout_marginTop="20dp"
         android:text="@string/A_calories_display_string"
+        android:textColor="#FFFFFFFF"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <TextView
@@ -55,7 +60,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/date_display"
-        android:layout_alignBaseline="@id/date_display" />
+        android:layout_alignBaseline="@id/date_display"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:id="@+id/textcalories_display"
@@ -63,7 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/calories_display"
-        android:layout_alignBaseline="@id/calories_display" />
+        android:layout_alignBaseline="@id/calories_display"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:id="@+id/textdistance_display"
@@ -71,7 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/distance_display"
-        android:layout_alignBaseline="@id/distance_display" />
+        android:layout_alignBaseline="@id/distance_display"
+        android:textColor="#FFFFFFFF" />
 
     <TextView
         android:id="@+id/texttime_display"
@@ -79,6 +87,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/time_display"
-        android:layout_alignBaseline="@id/time_display" />
+        android:layout_alignBaseline="@id/time_display"
+        android:textColor="#FFFFFFFF" />
+    
+    <Button 
+        android:id="@+id/button_cancel"
+        style="?android:attr/buttonStyleSmall"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/date_display"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginBottom="15dp"
+	    android:background="#FF808080"
+		android:textColor="#FFFFFF00"
+	    android:onClick="back"
+	    android:text="@string/A_back" />
 
 </RelativeLayout>
