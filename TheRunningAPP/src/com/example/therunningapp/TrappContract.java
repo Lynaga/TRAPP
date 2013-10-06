@@ -8,7 +8,7 @@ public class TrappContract extends Activity {
 	public TrappContract(){
 		
 	}
-	
+	// String for database table and columns
 	public static abstract class TrappEntry implements BaseColumns {
 		
 		public static final String TABLE_NAME = "entry";
