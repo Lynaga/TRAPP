@@ -228,31 +228,35 @@ LocationListener {
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
 		
 		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
+		
+		int calories = 0;
+		Float time;
+		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
+		time = (float) pauseTime / 3600000;
+		
+		Date cDate = new Date();
+		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
+			
 		if(w.moveToFirst()){
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-			Float time;
-			int calories;
+			
 			calories = weight * 9;
-			pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
-			time = (float) pauseTime / 3600000;
 			calories = (int) (calories * time);
-			Date cDate = new Date();
-			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
-		
-			if(time != 0 && myDistance != 0) {
-		
-				ContentValues values = new ContentValues();
-		
-				values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-				db.insert(TrappEntry.TABLE_NAME, null, values);
-		
-				Intent intent = new Intent(this, WorkoutEnd.class);
-				startActivity(intent);
 			}
-		}
+			
+		if(time != 0 && myDistance != 0) {
+				
+			ContentValues values = new ContentValues();
+		
+			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
+			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
+			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			db.insert(TrappEntry.TABLE_NAME, null, values);
+		
+			Intent intent = new Intent(this, WorkoutEnd.class);
+			startActivity(intent);
+			}
 		
 		finish();
 	}
