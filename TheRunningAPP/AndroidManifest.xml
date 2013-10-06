@@ -37,12 +37,14 @@
         <activity
             android:name="com.example.therunningapp.Settings"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.example.therunningapp.MainActivity" >
         </activity>
         <activity
             android:name="com.example.therunningapp.History"
             android:label="@string/title_activity_history"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.example.therunningapp.MainActivity" >
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutEnd"
@@ -60,12 +62,14 @@
         <activity
             android:name="com.example.therunningapp.WorkoutStart"
             android:label="@string/title_activity_workout_start"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.example.therunningapp.MainActivity" >
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutDisplay"
             android:label="@string/title_activity_workout_display"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.example.therunningapp.History" >
         </activity>
       	<!-- Tron -->
         <meta-data

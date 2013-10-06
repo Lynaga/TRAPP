@@ -25,20 +25,23 @@ public class WorkoutDisplay extends Activity {
 		setupActionBar();
 		Intent intent = getIntent();
 		String temp_2 = intent.getStringExtra("id");
-		TextView viewDate = (TextView) findViewById(R.id.date);
-		TextView viewCalories = (TextView) findViewById(R.id.calories);
-		TextView viewDistance = (TextView) findViewById(R.id.distance);
+		TextView viewDate = (TextView) findViewById(R.id.textdate_display);
+		TextView viewCalories = (TextView) findViewById(R.id.textcalories_display);
+		TextView viewDistance = (TextView) findViewById(R.id.textdistance_display);
+		TextView viewTime = (TextView) findViewById(R.id.texttime_display);
 
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE};
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME};
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { temp_2 }, null,null,null,null);
 		
 		if(c.moveToFirst()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
+			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 			viewDate.setText(date);
 			viewCalories.setText(calories);
 			viewDistance.setText(distance);
+			viewTime.setText(time);
 	}
 		
 		

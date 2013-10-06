@@ -9,10 +9,77 @@
     android:background="#FF000000"
     tools:context=".WorkoutEnd" >
 
-    <TextView
+       <TextView
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFFFF"
-        android:text="@string/hello_world" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="56dp"
+        android:text="@string/A_date_display_string"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <TextView
+        android:id="@+id/calories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/date"
+        android:layout_below="@+id/date"
+        android:layout_marginTop="16dp"
+        android:text="@string/A_calories_display_string"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/calories"
+        android:layout_below="@+id/calories"
+        android:layout_marginTop="21dp"
+        android:text="@string/A_distance_display_string"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/distance"
+        android:layout_below="@+id/distance"
+        android:layout_marginTop="22dp"
+        android:text="@string/A_time_display_string"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/textdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/date"
+        android:layout_alignBottom="@+id/date"
+        android:layout_marginLeft="35dp"
+        android:layout_toRightOf="@+id/date"/>
+
+    <TextView
+        android:id="@+id/textcalories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/calories"
+        android:layout_alignBottom="@+id/calories"
+        android:layout_alignRight="@+id/textdate"/>
+
+    <TextView
+        android:id="@+id/textdistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textcalories"
+        android:layout_alignTop="@+id/distance"/>
+
+    <TextView
+        android:id="@+id/texttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textdistance"
+        android:layout_alignTop="@+id/time"/>
+    
+    
 </RelativeLayout>
