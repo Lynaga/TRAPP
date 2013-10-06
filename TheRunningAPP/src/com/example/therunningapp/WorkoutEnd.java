@@ -14,18 +14,21 @@ public class WorkoutEnd extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Get the DB
 		setContentView(R.layout.activity_workout_end);
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		
+		//Set the TextView
 		TextView viewDate = (TextView) findViewById(R.id.textdate_display);
 		TextView viewCalories = (TextView) findViewById(R.id.textcalories_display);
 		TextView viewDistance = (TextView) findViewById(R.id.textdistance_display);
 		TextView viewTime = (TextView) findViewById(R.id.texttime_display);
-
+		//Query the DB
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME};
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, null, null,null,null,null);
 		
+		//Display the last workout
 		if(c.moveToLast()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));

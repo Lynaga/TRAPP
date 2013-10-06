@@ -21,6 +21,7 @@ public class History extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_history);
+		//Get the DB
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -29,10 +30,10 @@ public class History extends Activity {
 		
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE};
 		String sortOrder = TrappEntry._ID + " DESC";
-		
+		//Query the DB
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, null, null,null,null,sortOrder);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-
+		//Display the date of each workout
 		if(c.moveToFirst()){
 			do{
 				String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
