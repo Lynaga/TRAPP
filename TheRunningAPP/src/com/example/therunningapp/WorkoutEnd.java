@@ -18,10 +18,10 @@ public class WorkoutEnd extends Activity {
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		
-		TextView viewDate = (TextView) findViewById(R.id.date);
-		TextView viewCalories = (TextView) findViewById(R.id.calories);
-		TextView viewDistance = (TextView) findViewById(R.id.distance);
-		TextView viewTime = (TextView) findViewById(R.id.time);
+		TextView viewDate = (TextView) findViewById(R.id.textdate_display);
+		TextView viewCalories = (TextView) findViewById(R.id.textcalories_display);
+		TextView viewDistance = (TextView) findViewById(R.id.textdistance_display);
+		TextView viewTime = (TextView) findViewById(R.id.texttime_display);
 
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME};
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, null, null,null,null,null);
