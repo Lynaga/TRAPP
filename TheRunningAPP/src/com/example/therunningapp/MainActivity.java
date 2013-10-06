@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -53,9 +52,6 @@ public class MainActivity extends FragmentActivity {
 		}
 		else {
 			Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show();
-			/*String T_Errortext = "Google Play services are not available";
-			TextView T_textView = (TextView) findViewById(R.id.text_error);
-			T_textView.setText(T_Errortext);*/
 		}
 
 	}
