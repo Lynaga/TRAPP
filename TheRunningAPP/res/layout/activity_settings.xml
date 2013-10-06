@@ -10,71 +10,71 @@
     tools:context=".Settings" >
  
 	<EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editText_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/date"
-        android:layout_alignBaseline="@+id/date"
-        android:layout_alignLeft="@+id/editText2"
+        android:layout_toRightOf="@+id/textView_name"
+        android:layout_alignBaseline="@+id/textView_name"
+        android:layout_alignLeft="@+id/editText_height"
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp"
         android:background="#FFFFFF"
         android:ems="10" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editText_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/calories"
-        android:layout_alignBaseline="@+id/calories"
+        android:layout_toRightOf="@+id/textView_height"
+        android:layout_alignBaseline="@+id/textView_height"
         android:background="#FFFFFF"
         android:ems="10" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editText_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/distance"
-        android:layout_alignBaseline="@+id/distance"
-        android:layout_alignLeft="@+id/editText2"
+        android:layout_toRightOf="@+id/textView_weight"
+        android:layout_alignBaseline="@+id/textView_weight"
+        android:layout_alignLeft="@+id/editText_height"
         android:background="#FFFFFF"
         android:ems="10" />
  
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textcalories"
+        android:layout_below="@+id/title_settings"
         android:layout_marginTop="25dp"
         android:textColor="#FFFFFF"
         android:text="@string/S_name" />
 
     <TextView
-        android:id="@+id/calories"
+        android:id="@+id/textView_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/date"
-        android:layout_below="@+id/date"
+        android:layout_alignLeft="@+id/textView_name"
+        android:layout_below="@+id/textView_name"
         android:layout_marginRight="5dp"
         android:layout_marginTop="15dp"
         android:textColor="#FFFFFF"
         android:text="@string/S_height" />
     
     <TextView
-        android:id="@+id/distance"
+        android:id="@+id/textView_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/date"
-        android:layout_below="@+id/calories"
+        android:layout_alignLeft="@+id/textView_name"
+        android:layout_below="@+id/textView_height"
         android:layout_marginTop="15dp"
         android:textColor="#FFFFFF"
         android:text="@string/S_weight" />
     
 	<TextView
-	    android:id="@+id/textdate"
+	    android:id="@+id/title_language"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/button1"
+	    android:layout_below="@+id/button_save"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="50dp"
 	    android:textColor="#FFFFFF"
@@ -82,7 +82,7 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<TextView
-	    android:id="@+id/textcalories"
+	    android:id="@+id/title_settings"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerHorizontal="true"
@@ -92,12 +92,12 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
 	<Button
-	    android:id="@+id/button1"
+	    android:id="@+id/button_save"
 	    android:layout_width="75dp"
 	    android:layout_height="50dp"
-	    android:layout_below="@+id/distance"
+	    android:layout_below="@+id/textView_weight"
 	    android:layout_marginTop="54dp"
-	    android:layout_toLeftOf="@+id/textcalories"
+	    android:layout_toLeftOf="@+id/title_settings"
 	    android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
 	    android:onClick="save"
@@ -105,11 +105,11 @@
 	    android:textSize="20sp" />
 
 	<Button
-	    android:id="@+id/button2"
+	    android:id="@+id/button_cancel"
 	    android:layout_width="95dp"
 	    android:layout_height="50dp"
-	    android:layout_alignBottom="@+id/button1"
-	    android:layout_toRightOf="@+id/textcalories"
+	    android:layout_alignBottom="@+id/button_save"
+	    android:layout_toRightOf="@+id/title_settings"
 	    android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
 	    android:onClick="cancel"
@@ -120,7 +120,7 @@
 	    android:id="@+id/button_norwegian"
 	    android:layout_width="70dp"
 	    android:layout_height="50dp"
-	    android:layout_below="@+id/textdate"
+	    android:layout_below="@+id/title_language"
 	    android:layout_marginTop="20dp"
 	    android:layout_centerHorizontal="true"
 	    android:background="#FF808080"
@@ -141,6 +141,5 @@
 	    android:onClick="english"
 	    android:text="@string/A_english"
 	    android:textSize="20sp" />
-
-
+	
 </RelativeLayout>
