@@ -28,9 +28,9 @@
 	<string name="A_back">Tilbake</string>
 	<string name="T_start_workout_button_string">Start</string>
 	<string name="T_pause_workout_button_string">Pause</string>
-	<string name="A_time">Tid:</string>
-	<string name="A_distance">Distanse:</string>
-	<string name="date">Dato:</string>
-	<string name="calories">Kalorier:</string>
+	<string name="A_time_display_string">Tid:</string>
+	<string name="A_distance_display_string">Distanse:</string>
+	<string name="A_date_display_string">Dato:</string>
+	<string name="A_calories_display_string">Kalorier:</string>
 	
 </resources>
