@@ -56,9 +56,14 @@ public class SetupWorkout extends Activity {
 		Intent intent = new Intent(this, WorkoutStart.class);	
 		startActivity(intent);									
 	}
+	public void testStart (View view){
+		Intent intent = new Intent(this, TestSetup.class);
+		startActivity(intent);
+	}
 	
 	public void cancel(View view){
 		finish();	
 	}
+	
 
 }

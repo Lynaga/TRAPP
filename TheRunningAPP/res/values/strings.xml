@@ -35,5 +35,10 @@
     <string name="A_calories_display_string">Calories:</string>
     <string name="title_activity_setup_workout">SetupWorkout</string>
     <string name="A_Setup_workout">Workout</string>
-
+    <string name="title_activity_test_setup">TestSetup</string>
+    <string name="S_Time">Time</string>
+    <string name="S_Distance">Distance</string>
+    <string name="S_test">Start new test</string>
+    <string name="S_Value">Value:</string>
+    
 </resources>
