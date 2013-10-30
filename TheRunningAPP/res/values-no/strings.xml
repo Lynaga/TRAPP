@@ -33,6 +33,13 @@
 	<string name="A_date_display_string">Dato:</string>
 	<string name="A_calories_display_string">Kalorier:</string>
 	<string name="A_Setup_workout">Trening</string>
+<<<<<<< HEAD
 	<string name="A_interval">Interval</string>
+=======
+	<string name="S_test">Start ny test</string>
+	<string name="S_Time">Tid</string>
+    <string name="S_Distance">Distanse</string>
+    <string name="S_Value">Verdi:</string>
+>>>>>>> 81b99de2a72544871bfb4e5f8dea3bc2cf50107c
 	
 </resources>
