@@ -62,10 +62,19 @@ LocationListener {
 	double myDistance = 0;
 	Chronometer myTimer;
 	
+	//getting extras
+	Bundle extras = getIntent().getExtras();
+	String test = extras.getString("test");
+	int testValue = extras.getInt("testValue");
+	String testType = extras.getString("testType");
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
+		
+
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
@@ -184,6 +193,24 @@ LocationListener {
 		myDistance = myDistance + prevLocation.distanceTo(newLocation);	//Updating total distance
 		
 		prevLocation = newLocation;	//Update last location for next update
+		if(test!= null){
+		test_check();
+		}
+		
+	}
+	
+	public void test_check(){
+		int value;
+		if(testType == "distance"){
+			value = (int) myDistance;
+		}
+		else {
+			value = (int) (myTimer.getBase() - SystemClock.elapsedRealtime());
+		}
+		if(value >= testValue){
+			end();
+			
+		}
 	}
 	
 	//Function to center map on user
@@ -273,4 +300,48 @@ LocationListener {
 		
 		finish();
 	}
+
+
+public void end(){
+	TrappDBHelper mDBHelper = new TrappDBHelper(this);
+	SQLiteDatabase db = mDBHelper.getWritableDatabase();
+	myTimer.stop();
+	
+	String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
+	
+	Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
+	
+	//Initiate variables needed to write to the database
+	int calories = 0;
+	Float time;
+	pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
+	time = (float) pauseTime / 3600000;
+	
+	Date cDate = new Date();
+	String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
+		
+	if(w.moveToFirst()){	//Checks if the user has set the weight 
+		int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+		//If weight is set calculate calories burnt during the workout
+		calories = weight * 9;
+		calories = (int) (calories * time);
+		}
+		
+	if(time != 0 && myDistance != 0) {	//Check if users started workout
+			//If workout was started -> write to database and start new activity, WorkoutEnd
+		ContentValues values = new ContentValues();
+	
+		values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+		values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
+		values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
+		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+		db.insert(TrappEntry.TABLE_NAME, null, values);
+	
+		Intent intent = new Intent(this, WorkoutEnd.class);
+		startActivity(intent);
+		}
+	
+	finish();
+	
+}
 }
