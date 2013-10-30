@@ -71,10 +71,6 @@
             android:screenOrientation="portrait"
             android:parentActivityName="com.example.therunningapp.History" >
         </activity>
-      	<!-- Tron -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
         <!-- Anders -->
          <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -83,6 +79,10 @@
          <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
+         <!-- Tron -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
     </application>
 
 </manifest>
