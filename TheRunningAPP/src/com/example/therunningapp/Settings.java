@@ -104,9 +104,7 @@ public class Settings extends Activity {
 	}
 	
 	public void cancel(View view){
-		finish();
-		
-		
+		finish();	
 	}
 	
 	public void norwegian(View view){
