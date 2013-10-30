@@ -7,11 +7,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Interval" >
+    
+    <RadioButton
+        android:id="@+id/radiobutton_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/A_time_display_string" />
+    
+    <RadioButton
+        android:id="@+id/radiobutton_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/radiobutton_time"
+        android:text="@string/A_distance_display_string" />
 
     <TextView 
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/radiobutton_time"
         android:layout_marginTop="25dp"
         android:text="@string/S_name"/>
     
@@ -64,16 +78,17 @@
         android:id="@+id/button_save"
         android:layout_width="75dp"
 	    android:layout_height="50dp"
+	    android:layout_alignParentBottom="true"
 	    android:text="@string/S_save"
-	    android:textSize="20sp"
-        />
+	    android:textSize="20sp" />
     
     <Button 
         android:id="@+id/button_cancel"
-        android:layout_width="75dp"
+        android:layout_width="wrap_content"
 	    android:layout_height="50dp"
+	    android:layout_toRightOf="@id/button_save"
+        android:layout_alignBaseline="@id/button_save"
 	    android:text="@string/S_cancel"
-	    android:textSize="20sp"
-        />"
-
+	    android:textSize="20sp" />
+    
 </RelativeLayout>
