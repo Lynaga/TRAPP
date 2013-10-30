@@ -3,7 +3,7 @@
 
     <string name="app_name">The Running App</string>
     <string name="action_settings">Innstillinger</string>
-    <string name="S_workout">Start øy økt</string>
+    <string name="S_workout">Start ny økt</string>
     <string name="S_settings">Innstillinger</string>
     <string name="S_history">Historie</string>
     <string name="title_activity_settings">Innstilinnger</string>
@@ -32,5 +32,6 @@
 	<string name="A_distance_display_string">Distanse:</string>
 	<string name="A_date_display_string">Dato:</string>
 	<string name="A_calories_display_string">Kalorier:</string>
+	<string name="A_Setup_workout">Trening</string>
 	
 </resources>

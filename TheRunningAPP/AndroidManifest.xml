@@ -26,7 +26,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.therunningapp.MainActivity"
-            android:label="@string/app_name" 
+            android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,14 +37,14 @@
         <activity
             android:name="com.example.therunningapp.Settings"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.example.therunningapp.MainActivity" >
+            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.History"
             android:label="@string/title_activity_history"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.example.therunningapp.MainActivity" >
+            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutEnd"
@@ -62,27 +62,36 @@
         <activity
             android:name="com.example.therunningapp.WorkoutStart"
             android:label="@string/title_activity_workout_start"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.example.therunningapp.MainActivity" >
+            android:parentActivityName="com.example.therunningapp.SetupWorkout"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.therunningapp.WorkoutDisplay"
             android:label="@string/title_activity_workout_display"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.example.therunningapp.History" >
+            android:parentActivityName="com.example.therunningapp.History"
+            android:screenOrientation="portrait" >
         </activity>
-      	<!-- Tron -->
+        <!-- Tron -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
+            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" /> 
         <!-- Anders -->
-         <meta-data
+        <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAYZwb5y6Ls_mfmaCOzjQ0E_-M9LZKgE1w" />
-         <!-- Stig -->
-         <meta-data
+        <!-- Stig -->
+        <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
+            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" /> 
+
+        <activity
+            android:name="com.example.therunningapp.SetupWorkout"
+            android:label="@string/title_activity_setup_workout"
+            android:parentActivityName="com.example.therunningapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.therunningapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
