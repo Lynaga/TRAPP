@@ -4,9 +4,11 @@ import com.example.therunningapp.TrappContract.TrappEntry;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 
 public class WorkoutEnd extends Activity {
@@ -71,6 +73,12 @@ public class WorkoutEnd extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.workout_end, menu);
 		return true;
+	}
+	
+	public void cancel(View view){
+		Intent intent = new Intent(this, MainActivity.class);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	    startActivity(intent);	
 	}
 
 }

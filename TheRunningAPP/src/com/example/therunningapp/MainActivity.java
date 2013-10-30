@@ -45,9 +45,9 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	//Onclick function for the start workout button
-	public void workoutStart (View view) { 
+	public void StartSetupWorkout (View view) { 
 		if(servicesConnected() && haveNetworkConnection()) { 	//If google play services are available,
-		Intent intent = new Intent(this, WorkoutStart.class);	//and device is connected to the internet.
+		Intent intent = new Intent(this, SetupWorkout.class);	//and device is connected to the internet.
 		startActivity(intent);									//-> Start WorkoutStart activity
 		}
 		else { //If device not connected to the internet -> short message to the user.
