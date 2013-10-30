@@ -84,12 +84,6 @@
             android:parentActivityName="com.example.therunningapp.History"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name="com.example.therunningapp.SetupWorkout"
-            android:label="@string/title_activity_setup_workout"
-            android:parentActivityName="com.example.therunningapp.MainActivity" 
-            android:screenOrientation="portrait">
-        </activity>
         
         <!-- Tron -->
         <meta-data
@@ -103,11 +97,6 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
-<<<<<<< HEAD
-=======
-         
-        
->>>>>>> 81b99de2a72544871bfb4e5f8dea3bc2cf50107c
     </application>
 
 </manifest>
