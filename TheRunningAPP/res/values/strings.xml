@@ -35,5 +35,7 @@
     <string name="A_calories_display_string">Calories:</string>
     <string name="title_activity_setup_workout">SetupWorkout</string>
     <string name="A_Setup_workout">Workout</string>
+    <string name="A_interval">Interval</string>
+    <string name="title_activity_interval">Interval</string>
 
 </resources>

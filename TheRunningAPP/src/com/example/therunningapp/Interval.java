@@ -2,19 +2,16 @@ package com.example.therunningapp;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
-public class SetupWorkout extends Activity {
+public class Interval extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_setup_workout);
+		setContentView(R.layout.activity_interval);
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -31,7 +28,7 @@ public class SetupWorkout extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.setup_workout, menu);
+		getMenuInflater().inflate(R.menu.interval, menu);
 		return true;
 	}
 
@@ -50,20 +47,6 @@ public class SetupWorkout extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-	
-	public void workoutStart (View view) { 
-		Intent intent = new Intent(this, WorkoutStart.class);	
-		startActivity(intent);									
-	}
-	
-	public void intervalSetup (View view){
-		Intent intent = new Intent(this, Interval.class);
-		startActivity(intent);
-	}
-	
-	public void cancel(View view){
-		finish();	
 	}
 
 }

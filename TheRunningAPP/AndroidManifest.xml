@@ -66,6 +66,19 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.example.therunningapp.SetupWorkout"
+            android:label="@string/title_activity_setup_workout"
+            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <activity
+            android:name="com.example.therunningapp.Interval"
+            android:label="@string/title_activity_interval"
+            android:parentActivityName="com.example.therunningapp.SetupWorkout"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.example.therunningapp.WorkoutDisplay"
             android:label="@string/title_activity_workout_display"
             android:parentActivityName="com.example.therunningapp.History"
@@ -74,7 +87,7 @@
         <!-- Tron -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" /> 
+            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
         <!-- Anders -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -82,16 +95,7 @@
         <!-- Stig -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" /> 
-
-        <activity
-            android:name="com.example.therunningapp.SetupWorkout"
-            android:label="@string/title_activity_setup_workout"
-            android:parentActivityName="com.example.therunningapp.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.therunningapp.MainActivity" />
-        </activity>
+            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
     </application>
 
 </manifest>
