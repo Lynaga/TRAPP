@@ -1,7 +1,9 @@
 package com.example.therunningapp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -50,16 +52,18 @@ LocationListener {
 	
 	//Location variables to store user locations
 	private Location prevLocation = null;
-	private Location myStartLocation;
 	
 	LocationClient myLocationClient;	//Object to connect to Google location services and request location update callbacks
 	GoogleMap myMap;					//Object to get map from fragment
 	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
+	private List<Location> locations = new ArrayList<Location>();
+	
 	//Variables used to pause / restart workout and store to database.
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
+	float prevSpeed = 0;
 	Chronometer myTimer;
 	
 	//getting extras
@@ -127,8 +131,9 @@ LocationListener {
         Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
         
         //Set map to users location and set initial text
-		myStartLocation = myLocationClient.getLastLocation();
-		setCamera(myStartLocation);
+		setCamera(myLocationClient.getLastLocation());
+		CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);	
+		myMap.animateCamera(zoom);	//Set zoom
 		setText();
 	}
 	
@@ -175,8 +180,9 @@ LocationListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
+			
 		if (prevLocation == null)	//Check if last location is set
-			prevLocation = myStartLocation;	//if not set -> last location == start location
+			prevLocation = myLocationClient.getLastLocation();	//if not set -> last location == start location
 		
 		setCamera(newLocation);		//Update map to new location
 		setText();					//Update distance
@@ -192,6 +198,7 @@ LocationListener {
 		
 		myDistance = myDistance + prevLocation.distanceTo(newLocation);	//Updating total distance
 		
+		locations.add(prevLocation);
 		prevLocation = newLocation;	//Update last location for next update
 		if(test!= null){
 		test_check();
@@ -217,17 +224,20 @@ LocationListener {
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
                 												camLocation.getLongitude()));
-		CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);
-
+		
 		myMap.moveCamera(center);
-		myMap.animateCamera(zoom);
 	}
 	
 	//Function to set and update current distance
 	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
-		textView.setText(tempDistance + " m");
+		//textView.setText(tempDistance + " m");
+		int temp = locations.size();
+		if(temp > 0) {
+			Location tempLocation = locations.get(temp);
+			textView.setText("Current location: " + tempLocation);
+		}
 	}
 	
 	//Onclick function for the start / pause workout button
