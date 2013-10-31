@@ -18,17 +18,19 @@
         	android:id="@+id/A_radiobutton_time"
         	android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
+       		android:onClick="onRadioButtonClicked"
        	 	android:text="@string/A_time_display_string" />
     
    		 <RadioButton
         	android:id="@+id/A_radiobutton_distance"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+        	android:onClick="onRadioButtonClicked"
         	android:text="@string/A_distance_display_string" />
 	</RadioGroup>
 
     <TextView 
-        android:id="@+id/textView_name"
+        android:id="@+id/textView_name_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/A_radiogroup_interval"
@@ -36,55 +38,59 @@
         android:text="@string/S_name"/>
     
     <TextView 
-        android:id="@+id/textView_time"
+        android:id="@+id/textView_time_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_name"
+        android:layout_below="@id/textView_name_interval"
         android:layout_marginTop="25dp"
+        android:visibility="gone"
         android:text="@string/A_time_display_string" />
     
     <TextView 
-        android:id="@+id/textView_distance"
+        android:id="@+id/textView_distance_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_time"
+        android:layout_below="@id/textView_name_interval"
         android:layout_marginTop="25dp"
+        android:visibility="gone"
         android:text="@string/A_distance_display_string" />
     
     <EditText
-        android:id="@+id/editText_name"
-        android:layout_width="wrap_content"
+        android:id="@+id/editText_name_interval"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:layout_toRightOf="@id/textView_name"
-        android:layout_alignBaseline="@id/textView_name"
+        android:layout_toRightOf="@id/textView_name_interval"
+        android:layout_alignBaseline="@id/textView_name_interval"
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp"
         android:ems="10" />
     
     <EditText
-        android:id="@+id/editText_time"
-        android:layout_width="wrap_content"
+        android:id="@+id/editText_time_interval"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_toRightOf="@id/textView_time"
-        android:layout_alignBaseline="@id/textView_time"
+        android:visibility="gone"
+        android:layout_toRightOf="@id/textView_time_interval"
+        android:layout_alignBaseline="@id/textView_time_interval"
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp"
         android:ems="10" />
     
     <EditText 
-        android:id="@+id/editText_distance"
-        android:layout_width="wrap_content"
+        android:id="@+id/editText_distance_interval"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_toRightOf="@id/textView_distance"
-        android:layout_alignBaseline="@id/textView_distance"
+        android:visibility="gone"
+        android:layout_toRightOf="@id/textView_distance_interval"
+        android:layout_alignBaseline="@id/textView_distance_interval"
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp" />
     
     <Button 
-        android:id="@+id/button_save"
+        android:id="@+id/button_save_interval"
         android:layout_width="75dp"
 	    android:layout_height="50dp"
 	    android:layout_alignParentBottom="true"
@@ -92,11 +98,11 @@
 	    android:textSize="20sp" />
     
     <Button 
-        android:id="@+id/button_cancel"
+        android:id="@+id/button_cancel_interval"
         android:layout_width="wrap_content"
 	    android:layout_height="50dp"
-	    android:layout_toRightOf="@id/button_save"
-        android:layout_alignBaseline="@id/button_save"
+	    android:layout_toRightOf="@id/button_save_interval"
+        android:layout_alignBaseline="@id/button_save_interval"
 	    android:text="@string/S_cancel"
 	    android:textSize="20sp" />
     

@@ -56,13 +56,19 @@ public class Interval extends Activity {
 		
 		switch(view.getId()){
 			case R.id.A_radiobutton_time:
-				if(checked)
-					//shit
-				break;
+				if(checked){
+					findViewById(R.id.textView_time_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_interval).setVisibility(View.GONE);
+				}break;
 			case R.id.A_radiobutton_distance:
-				if(checked)
-					//shit
-				break;
+				if(checked){
+					findViewById(R.id.textView_time_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_interval).setVisibility(View.VISIBLE);
+				}break;
 		}
 	}
 
