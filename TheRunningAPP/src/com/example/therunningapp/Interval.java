@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
 import android.support.v4.app.NavUtils;
 
 public class Interval extends Activity {
@@ -47,6 +49,21 @@ public class Interval extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void onRadioButtonClicked(View view){
+		boolean checked = ((RadioButton) view).isChecked();
+		
+		switch(view.getId()){
+			case R.id.A_radiobutton_time:
+				if(checked)
+					//shit
+				break;
+			case R.id.A_radiobutton_distance:
+				if(checked)
+					//shit
+				break;
+		}
 	}
 
 }
