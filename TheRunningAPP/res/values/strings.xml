@@ -42,5 +42,7 @@
     <string name="S_Distance">Distance</string>
     <string name="S_test">Start new test</string>
     <string name="S_Value">Value:</string>
+    <string name="A_cm">\t\tin centimeter</string>
+    <string name="A_kilo">\t\tin kilo</string>
     
 </resources>

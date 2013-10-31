@@ -38,5 +38,7 @@
 	<string name="S_Time">Tid</string>
     <string name="S_Distance">Distanse</string>
     <string name="S_Value">Verdi:</string>
+    <string name="A_cm">\t\ti centimeter</string>
+    <string name="A_kilo">\t\ti kilo</string>
 	
 </resources>
