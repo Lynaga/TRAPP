@@ -51,6 +51,8 @@ public class Interval extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	//switch for radiobuttons, which only hide/show elements on the screen 
+	// based on what radiobutton is checked.
 	public void onRadioButtonClicked(View view){
 		boolean checked = ((RadioButton) view).isChecked();
 		
@@ -70,6 +72,30 @@ public class Interval extends Activity {
 					findViewById(R.id.editText_distance_interval).setVisibility(View.VISIBLE);
 				}break;
 		}
+	}
+	
+	//function for intervals. With run-time, pause-time and repetitions
+	public void Delay(int run, int pause, int rep){
+		for(int i = 0; i<rep; i++)
+		{
+			DelayTime(run);					//Run-time
+			//her skal det en lydfunksjon
+			
+			if(i < rep-1)					// if it's NOT the last rep, Pause-time
+			{	DelayTime(pause);
+				//her skal det en lydfunksjon
+			}
+			
+			if(i == rep-1)					// if it's the last rep, stop
+			{
+				//lydfunksjon for stopp
+			}
+		}
+	}
+	
+	//For handling the delay   ** DENNE ER IKKE FERDIG!!!!** 
+	public void DelayTime(final int delaytime){	
+		
 	}
 
 }
