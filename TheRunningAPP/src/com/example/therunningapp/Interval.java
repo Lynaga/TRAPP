@@ -1,21 +1,31 @@
 package com.example.therunningapp;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
-public class Interval extends Activity {
 
+public class Interval extends Activity {
+	
+	public Timer stop;
+	public Timer run;
+	public Timer pause;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_interval);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
 	}
 
 	/**
@@ -74,28 +84,78 @@ public class Interval extends Activity {
 		}
 	}
 	
-	//function for intervals. With run-time, pause-time and repetitions
-	public void Delay(int run, int pause, int rep){
-		for(int i = 0; i<rep; i++)
-		{
-			DelayTime(run);					//Run-time
-			//her skal det en lydfunksjon
-			
-			if(i < rep-1)					// if it's NOT the last rep, Pause-time
-			{	DelayTime(pause);
-				//her skal det en lydfunksjon
-			}
-			
-			if(i == rep-1)					// if it's the last rep, stop
-			{
-				//lydfunksjon for stopp
-			}
-		}
-	}
-	
-	//For handling the delay   ** DENNE ER IKKE FERDIG!!!!** 
-	public void DelayTime(final int delaytime){	
-		
+	public void cancel(View view){
+		finish();
 	}
 
+	public void IntervalThing(int RunTime, int PauseTime, int Repetition){
+		TextView tv = (TextView) findViewById(R.id.textView_test_A);
+        tv.setText("Run");
+        
+        DelayRun(RunTime, PauseTime);
+        DelayStop(RunTime, PauseTime, Repetition);
+        
+	}
+	
+	public void DelayRun(int RunTime, final int PauseTime){
+		run = new Timer();
+		run.scheduleAtFixedRate(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
+		    	        tv.setText("Pause");
+		    	        DelayPause(PauseTime);
+		    	    }
+		    	});
+		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
+		},RunTime*1000, (PauseTime+RunTime)*1000);
+	}
+	
+	public void DelayPause(int PauseTime){
+		pause = new Timer();
+		pause.schedule(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
+		    	        tv.setText("Run");
+		    	    }
+		    	});
+		    } //wait 'PauseTime*1000' before it does something (milliseconds)
+		},	PauseTime*1000);
+	}
+	
+	public void DelayStop(int RunTime, final int PauseTime, int repetition){
+		stop = new Timer();
+		stop.schedule(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	    	run.cancel();
+		    	    	TextView tv = (TextView) findViewById(R.id.textView_test_A);
+		    	        tv.setText("Stop");
+		    	        
+		    	    }
+		    	});
+		    } //wait '(PauseTime*(repetition-1))+(RunTime*repetition))*1000' before it does something (milliseconds)
+		},((PauseTime*(repetition-1))+(RunTime*repetition))*1000);
+	}
+	
+	public void test(View view){
+       IntervalThing(10,5,4);
+	}
+	
 }
