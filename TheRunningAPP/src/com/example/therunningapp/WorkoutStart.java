@@ -67,17 +67,26 @@ LocationListener {
 	Chronometer myTimer;
 	
 	//getting extras
-	Bundle extras = getIntent().getExtras();
-	String test = extras.getString("test");
-	int testValue = extras.getInt("testValue");
-	String testType = extras.getString("testType");
+	int min = 0;
+	int sec = 0;
+	int lengde = 0;
+	int test = 1;
+	String testType = "0";
+	
+
+	
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-		
+		Bundle extras = getIntent().getExtras();
+		int min = extras.getInt("min");
+		int sec = extras.getInt("sec");
+		int lengde = extras.getInt("distance");
+		int test = extras.getInt("test");
+		String testType = extras.getString("testType");
 
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
@@ -200,21 +209,31 @@ LocationListener {
 		
 		locations.add(prevLocation);
 		prevLocation = newLocation;	//Update last location for next update
-		if(test!= null){
-		test_check();
-		}
 		
+		//if(test==1){
+			test_check();
+		//}		
 	}
 	
 	public void test_check(){
+		Bundle extras = getIntent().getExtras();
+		int min = extras.getInt("min");
+		int sec = extras.getInt("sec");
+		int lengde = extras.getInt("lengder");
+		int test = extras.getInt("test");
+		String testType = extras.getString("testType");
+		
 		int value;
-		if(testType == "distance"){
+		int set = 0;
+		if(testType.equals("Distance")){
 			value = (int) myDistance;
+			set = lengde;
 		}
 		else {
-			value = (int) (myTimer.getBase() - SystemClock.elapsedRealtime());
+			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
+			set = (min * 60000) + (sec * 1000);
 		}
-		if(value >= testValue){
+		if(value >= set){
 			end();
 			
 		}
@@ -232,12 +251,12 @@ LocationListener {
 	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
-		//textView.setText(tempDistance + " m");
+		textView.setText(tempDistance + " m");
 		int temp = locations.size();
-		if(temp > 0) {
+		/*if(temp > 0) {
 			Location tempLocation = locations.get(temp);
 			textView.setText("Current location: " + tempLocation);
-		}
+		}*/
 	}
 	
 	//Onclick function for the start / pause workout button
