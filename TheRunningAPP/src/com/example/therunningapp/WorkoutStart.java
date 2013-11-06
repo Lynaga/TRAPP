@@ -1,5 +1,9 @@
 package com.example.therunningapp;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +20,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +55,8 @@ LocationListener {
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
 	
+	private final static double MAX_DISTANCE = 7;	//Max average distance pr. second when accellerating from 0 (applies for the first 3 seconds)
+	
 	//Location variables to store user locations
 	private Location prevLocation = null;
 	
@@ -57,13 +64,15 @@ LocationListener {
 	GoogleMap myMap;					//Object to get map from fragment
 	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
-	private List<Location> locations = new ArrayList<Location>();
+	private List<Location> locationList = new ArrayList<Location>();
 	
 	//Variables used to pause / restart workout and store to database.
+	int timeInterval = 1;	//Time interval between locations (Standard = 1)
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
-	float prevSpeed = 0;
+	double mySpeed = 0;
+	int tempCounter = 0;
 	Chronometer myTimer;
 	
 	@Override
@@ -131,7 +140,7 @@ LocationListener {
 	@Override
     public void onDisconnected() {
         // Display the connection status
-        Toast.makeText(this, "Disconnected. Please re-connect.",
+        Toast.makeText(this, "Disconnected. Please reconnect to continue.",
                 Toast.LENGTH_SHORT).show();
     }
 	
@@ -171,9 +180,12 @@ LocationListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-			
 		if (prevLocation == null)	//Check if last location is set
-			prevLocation = myLocationClient.getLastLocation();	//if not set -> last location == start location
+			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
+		
+		double tempDistance = prevLocation.distanceTo(newLocation);
+		
+		if(verifyLocation(tempDistance)) {	//Verify new location before updating map and list
 		
 		setCamera(newLocation);		//Update map to new location
 		setText();					//Update distance
@@ -185,19 +197,21 @@ LocationListener {
 		myMap.addPolyline(new PolylineOptions()
 	     .add(prevLatLng, newLatLng)
 	     .width(5)
-	     .color(Color.RED));
+	     .color(Color.RED).geodesic(true));
 		
-		myDistance = myDistance + prevLocation.distanceTo(newLocation);	//Updating total distance
+		myDistance = myDistance + tempDistance;	//Updating total distance
 		
-		locations.add(prevLocation);
-		prevLocation = newLocation;	//Update last location for next update
+		locationList.add(prevLocation);			//Adds the location to the Arraylist
+		prevLocation = newLocation;				//Update last location for next update
+		}
+		else
+			tempCounter += 1;
 	}
 	
 	//Function to center map on user
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
                 												camLocation.getLongitude()));
-		
 		myMap.moveCamera(center);
 	}
 	
@@ -205,12 +219,58 @@ LocationListener {
 	public void setText() {
 		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
-		//textView.setText(tempDistance + " m");
-		int temp = locations.size();
-		if(temp > 0) {
-			Location tempLocation = locations.get(temp);
-			textView.setText("Current location: " + tempLocation);
+		textView.setText(tempDistance + " m");
+		
+		TextView tempView = (TextView) findViewById(R.id.T_testtemp);
+		tempView.setText("Speed: " + mySpeed);
+		
+		TextView tempView2 = (TextView) findViewById(R.id.T_testtemp_2);
+		tempView2.setText("Antall feil lesninger: " + tempCounter);
+	}
+	
+	public boolean verifyLocation(double distance) {
+		int i = locationList.size();
+		
+		if (i < 3) {
+			if(checkLocation(distance, MAX_DISTANCE)) {
+				timeInterval = 1;
+				return true;
+			}
+			else {
+				timeInterval += 1;
+				return false;
+			}
 		}
+		else {
+			Location tempLocation1 = locationList.get(i-3);
+			Location tempLocation2 = locationList.get(i-2);
+			Location tempLocation3 = locationList.get(i-1);
+			double maxTemp = (tempLocation1.distanceTo(tempLocation2) + tempLocation2.distanceTo(tempLocation3)) / 2;
+			
+			if (distance * timeInterval > ((maxTemp * timeInterval) - 2) && distance * timeInterval < ((maxTemp * timeInterval) + 2)) {
+				timeInterval = 1;
+				return true;
+			}
+			else {
+				timeInterval += 1;
+				return false;
+			}
+			/*if (checkLocation(distance, MAX_DISTANCE)) {
+				timeInterval = 1;
+				return true;
+			}
+			else {
+				timeInterval += 1;
+				return false;
+			}*/
+		}
+	}
+	
+	public boolean checkLocation(double distance, double maxDistance) {
+		if (distance * timeInterval < maxDistance * timeInterval )
+			return true;
+		else 
+			return false;
 	}
 	
 	//Onclick function for the start / pause workout button
@@ -259,7 +319,19 @@ LocationListener {
 		
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
-			
+		
+		byte[] buffer = null;
+		try {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutput out = new ObjectOutputStream(bos);
+		out.writeObject(locationList);
+		out.close();
+		buffer = bos.toByteArray();
+		}
+		catch(IOException ioe) {
+			Log.e("serializeObject", "error", ioe);
+		}
+		
 		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 			//If weight is set calculate calories burnt during the workout
@@ -275,12 +347,12 @@ LocationListener {
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buffer);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
 			startActivity(intent);
 			}
-		
 		finish();
 	}
 }
