@@ -15,9 +15,12 @@ import android.support.v4.app.NavUtils;
 
 public class Interval extends Activity {
 	
-	public Timer stop;
 	public Timer run;
 	public Timer pause;
+	public Timer stop;
+	public boolean TimerRunStart = false;
+	public boolean TimerPauseStart = false;
+	public boolean TimerStopStart = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,19 @@ public class Interval extends Activity {
 	}
 	
 	public void cancel(View view){
+		if(TimerRunStart){
+			run.cancel();
+			TimerRunStart = false;
+		}
+		if(TimerPauseStart){
+			pause.cancel();
+			TimerPauseStart = false;
+		}
+		if(TimerStopStart)
+		{
+			stop.cancel();
+			TimerStopStart = false;
+		}
 		finish();
 	}
 
@@ -92,12 +108,13 @@ public class Interval extends Activity {
 		TextView tv = (TextView) findViewById(R.id.textView_test_A);
         tv.setText("Run");
         
-        DelayRun(RunTime, PauseTime);
-        DelayStop(RunTime, PauseTime, Repetition);
-        
+        DelayRun(RunTime,PauseTime);
+        DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
+        DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
 	}
 	
-	public void DelayRun(int RunTime, final int PauseTime){
+	public void DelayRun(final int RunTime, final int PauseTime){
+		TimerRunStart = true;
 		run = new Timer();
 		run.scheduleAtFixedRate(new TimerTask() {
 
@@ -109,14 +126,17 @@ public class Interval extends Activity {
 		    	    public void run() {
 		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
 		    	        tv.setText("Pause");
+		    	        
 		    	        DelayPause(PauseTime);
+		    	        TimerRunStart = false;
 		    	    }
 		    	});
 		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
-		},RunTime*1000, (PauseTime+RunTime)*1000);
+		},RunTime*1000 , (RunTime+PauseTime)*1000);
 	}
 	
 	public void DelayPause(int PauseTime){
+		TimerPauseStart = true;
 		pause = new Timer();
 		pause.schedule(new TimerTask() {
 
@@ -128,13 +148,15 @@ public class Interval extends Activity {
 		    	    public void run() {
 		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
 		    	        tv.setText("Run");
+		    	        TimerPauseStart = false;
 		    	    }
 		    	});
 		    } //wait 'PauseTime*1000' before it does something (milliseconds)
-		},	PauseTime*1000);
+		},PauseTime*1000);
 	}
 	
-	public void DelayStop(int RunTime, final int PauseTime, int repetition){
+	public void DelayStop(int Time, final int x){
+		TimerStopStart = true;
 		stop = new Timer();
 		stop.schedule(new TimerTask() {
 
@@ -144,18 +166,21 @@ public class Interval extends Activity {
 
 		    	    @Override
 		    	    public void run() {
-		    	    	run.cancel();
-		    	    	TextView tv = (TextView) findViewById(R.id.textView_test_A);
-		    	        tv.setText("Stop");
-		    	        
+		    	    	
+		    	    	if(x == 1)
+		    	    		run.cancel();
+		    	    	else if(x == 2){
+		    	    		TextView tv = (TextView) findViewById(R.id.textView_test_A);
+		    	    		tv.setText("Stop");
+		    	    		TimerStopStart = false;
+		    	        }
 		    	    }
 		    	});
-		    } //wait '(PauseTime*(repetition-1))+(RunTime*repetition))*1000' before it does something (milliseconds)
-		},((PauseTime*(repetition-1))+(RunTime*repetition))*1000);
+		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
+		},Time*1000);
 	}
 	
 	public void test(View view){
-       IntervalThing(10,5,4);
+       IntervalThing(10,5,4);	
 	}
-	
 }
