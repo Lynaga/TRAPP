@@ -19,6 +19,7 @@
         	android:layout_width="wrap_content"
        		android:layout_height="wrap_content"
        		android:onClick="onRadioButtonClicked"
+       		android:checked="true"
        	 	android:text="@string/A_time_display_string" />
     
    		 <RadioButton
@@ -43,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView_name_interval"
         android:layout_marginTop="25dp"
-        android:visibility="gone"
         android:text="@string/A_time_display_string" />
     
     <TextView 
@@ -54,7 +54,7 @@
         android:layout_marginTop="25dp"
         android:visibility="gone"
         android:text="@string/A_distance_display_string" />
-    
+        
     <EditText
         android:id="@+id/editText_name_interval"
         android:layout_width="150dp"
@@ -71,7 +71,6 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:visibility="gone"
         android:layout_toRightOf="@id/textView_time_interval"
         android:layout_alignBaseline="@id/textView_time_interval"
         android:layout_marginRight="14dp"
@@ -104,6 +103,24 @@
 	    android:layout_toRightOf="@id/button_save_interval"
         android:layout_alignBaseline="@id/button_save_interval"
 	    android:text="@string/S_cancel"
-	    android:textSize="20sp" />
+	    android:textSize="20sp"
+	    android:onClick="cancel" />
     
+    <Button 
+        android:id="@+id/button_test_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@id/button_cancel_interval"
+        android:layout_alignBaseline="@id/button_cancel_interval"
+        android:text="Interval"
+        android:textSize="20sp"
+        android:onClick="test"  />
+    
+    <TextView 
+        android:id="@+id/textView_test_A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_save_interval"
+        android:layout_marginTop="25dp" />
+
 </RelativeLayout>
