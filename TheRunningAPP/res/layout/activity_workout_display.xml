@@ -90,6 +90,26 @@
         android:layout_alignBaseline="@id/time_display"
         android:textColor="#FFFFFFFF" />
     
+    <TextView
+        android:id="@+id/location_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/calories_display"
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/location_test2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/location_test"
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
     <Button 
         android:id="@+id/button_cancel"
         style="?android:attr/buttonStyleSmall"
