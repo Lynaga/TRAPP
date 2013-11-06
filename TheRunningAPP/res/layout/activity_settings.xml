@@ -19,7 +19,8 @@
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp"
         android:background="#FFFFFF"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_height"
@@ -28,7 +29,9 @@
         android:layout_toRightOf="@+id/textView_height"
         android:layout_alignBaseline="@+id/textView_height"
         android:background="#FFFFFF"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/A_cm" />
 
     <EditText
         android:id="@+id/editText_weight"
@@ -38,8 +41,10 @@
         android:layout_alignBaseline="@+id/textView_weight"
         android:layout_alignLeft="@+id/editText_height"
         android:background="#FFFFFF"
-        android:ems="10" />
- 
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/A_kilo" />
+    
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"

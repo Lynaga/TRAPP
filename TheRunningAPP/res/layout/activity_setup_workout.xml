@@ -19,12 +19,35 @@
         android:onClick="workoutStart"
         android:text="@string/S_workout" />
   
+    <Button
+        android:id="@+id/button_test_start"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
+        android:onClick="testStart"
+        android:text="@string/S_test" />
+  
   <Button
+	    android:id="@+id/button_interval"
+	    android:layout_width="200dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@id/button_workout_start"
+	    android:layout_below="@id/button_workout_start"
+	    android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
+	    android:onClick="intervalSetup"
+	    android:text="@string/A_interval"
+	    android:textSize="20sp" />
+  
+   <Button
 	    android:id="@+id/button_cancel"
 	    android:layout_width="95dp"
 	    android:layout_height="50dp"
 	    android:layout_centerHorizontal="true"
-	     android:layout_alignParentBottom="true"
+	    android:layout_alignParentBottom="true"
 	    android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
 	    android:onClick="cancel"
