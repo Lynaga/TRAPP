@@ -210,15 +210,13 @@ LocationListener {
 		
 		myDistance = myDistance + tempDistance;	//Updating total distance
 		
-<<<<<<< HEAD
+
 		locationList.add(prevLocation);			//Adds the location to the Arraylist
 		prevLocation = newLocation;				//Update last location for next update
 		}
 		else
 			tempCounter += 1;
-=======
-		locations.add(prevLocation);
-		prevLocation = newLocation;	//Update last location for next update
+
 		if(test!= null){
 		test_check();
 		}
@@ -237,7 +235,6 @@ LocationListener {
 			end();
 			
 		}
->>>>>>> 6919d2a0ab583a53ce9882fc99dedcd7c62c27ad
 	}
 	
 	//Function to center map on user
@@ -352,13 +349,15 @@ LocationListener {
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 		
-		byte[] buffer = null;
+		int avgSpeed = (int) ((int) myDistance / time);			//Calculates average speed
+		
+		byte[] buffer = null;						//Serializing locationList in order to store it in database
 		try {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutput out = new ObjectOutputStream(bos);
-		out.writeObject(locationList);
-		out.close();
-		buffer = bos.toByteArray();
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutput out = new ObjectOutputStream(bos);
+			out.writeObject(locationList);
+			out.close();
+			buffer = bos.toByteArray();
 		}
 		catch(IOException ioe) {
 			Log.e("serializeObject", "error", ioe);
@@ -379,6 +378,7 @@ LocationListener {
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
 			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buffer);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
@@ -389,46 +389,61 @@ LocationListener {
 	}
 
 
-public void end(){
-	TrappDBHelper mDBHelper = new TrappDBHelper(this);
-	SQLiteDatabase db = mDBHelper.getWritableDatabase();
-	myTimer.stop();
-	
-	String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
-	
-	Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-	
-	//Initiate variables needed to write to the database
-	int calories = 0;
-	Float time;
-	pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
-	time = (float) pauseTime / 3600000;
-	
-	Date cDate = new Date();
-	String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
-		
-	if(w.moveToFirst()){	//Checks if the user has set the weight 
-		int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-		//If weight is set calculate calories burnt during the workout
-		calories = weight * 9;
-		calories = (int) (calories * time);
-		}
-		
-	if(time != 0 && myDistance != 0) {	//Check if users started workout
-			//If workout was started -> write to database and start new activity, WorkoutEnd
-		ContentValues values = new ContentValues();
-	
-		values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-		values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-		values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-		values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-		db.insert(TrappEntry.TABLE_NAME, null, values);
-	
-		Intent intent = new Intent(this, WorkoutEnd.class);
-		startActivity(intent);
-		}
-	
-	finish();
-	
-}
+	public void end() {
+			//Get the database
+			TrappDBHelper mDBHelper = new TrappDBHelper(this);
+			SQLiteDatabase db = mDBHelper.getWritableDatabase();
+			myTimer.stop();
+			
+			String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
+			
+			Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
+			
+			//Initiate variables needed to write to the database
+			int calories = 0;
+			Float time;
+			pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
+			time = (float) pauseTime / 3600000;
+			
+			Date cDate = new Date();
+			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
+			
+			int avgSpeed = (int) ((int) myDistance / time);
+			
+			byte[] buffer = null;
+			try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutput out = new ObjectOutputStream(bos);
+			out.writeObject(locationList);
+			out.close();
+			buffer = bos.toByteArray();
+			}
+			catch(IOException ioe) {
+				Log.e("serializeObject", "error", ioe);
+			}
+			
+			if(w.moveToFirst()){	//Checks if the user has set the weight 
+				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+				//If weight is set calculate calories burnt during the workout
+				calories = weight * 9;
+				calories = (int) (calories * time);
+				}
+				
+			if(time != 0 && myDistance != 0) {	//Check if users started workout
+					//If workout was started -> write to database and start new activity, WorkoutEnd
+				ContentValues values = new ContentValues();
+			
+				values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
+				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
+				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+				values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
+				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buffer);
+				db.insert(TrappEntry.TABLE_NAME, null, values);
+			
+				Intent intent = new Intent(this, WorkoutEnd.class);
+				startActivity(intent);
+				}
+			finish();
+	}
 }

@@ -1,11 +1,19 @@
 package com.example.therunningapp;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +41,8 @@ public class WorkoutDisplay extends Activity {
 		TextView viewCalories = (TextView) findViewById(R.id.textcalories_display);
 		TextView viewDistance = (TextView) findViewById(R.id.textdistance_display);
 		TextView viewTime = (TextView) findViewById(R.id.texttime_display);
+		TextView viewTest = (TextView) findViewById(R.id.location_test);
+		TextView viewTest2 = (TextView) findViewById(R.id.location_test2);
 		//query the DB
 		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME};
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
@@ -43,6 +53,20 @@ public class WorkoutDisplay extends Activity {
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
+			String avgSpeed = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_AVGSPEED));
+			byte[] buffer = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
+			List<Location> locationList = new ArrayList<Location>();
+			try {
+				ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buffer));
+				locationList = (ArrayList<Location>) in.readObject();
+			} 
+			catch(IOException ioe) {
+				Log.e("deserilizeObject", "io error", ioe);
+			} 
+			catch (ClassNotFoundException e) {
+				Log.e("deserializeObject", "class not found error", e);
+				e.printStackTrace();
+			}
 			
 			//Formatting time from milliseconds to hh:mm:ss
 			int tempTime = Integer.parseInt(time);
@@ -71,6 +95,13 @@ public class WorkoutDisplay extends Activity {
 			viewCalories.setText(calories);
 			viewDistance.setText(distance);
 			viewTime.setText(time);
+			int tempSize = locationList.size();
+			Location tempLocation = locationList.get(0);
+			double tempLat = tempLocation.getLatitude();
+			double tempLng = tempLocation.getLongitude();
+			viewTest.setText(tempSize);
+			viewTest2.setText("Pos " + tempLat + tempLng);
+			
 	}
 		
 		

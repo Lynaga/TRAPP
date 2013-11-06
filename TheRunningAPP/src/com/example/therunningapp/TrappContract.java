@@ -17,6 +17,7 @@ public class TrappContract extends Activity {
 		public static final String COLUMN_NAME_DISTANCE = "distance";
 		public static final String COLUMN_NAME_TIME = "time";
 		public static final String COLUMN_NAME_CALORIES = "calories";
+		public static final String COLUMN_NAME_AVGSPEED = "avgspeed";
 		public static final String COLUMN_NAME_LOCATIONS = "locations";
 		public static final String COLUMN_NAME_HEIGHT = "height";
 		public static final String COLUMN_NAME_WEIGHT = "weight";
