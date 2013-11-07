@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -219,6 +220,12 @@ public class Interval extends Activity {
 		rep = Integer.parseInt(repitition.getText().toString());
 		
         IntervalThing(run,pause,rep);	
-        
+/*		Intent intent = new Intent(this, WorkoutStart.class);
+		intent.putExtra("intervalType", intervalType);
+		intent.putExtra("run", run);	
+		intent.putExtra("pause", pause);
+		intent.putExtra("rep", rep);
+		intent.putExtra("isInterval", "interval");
+		startActivity(intent);  */
 	}
 }
