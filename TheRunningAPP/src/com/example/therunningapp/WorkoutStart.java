@@ -40,6 +40,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
 
 public class WorkoutStart extends FragmentActivity implements
 GooglePlayServicesClient.ConnectionCallbacks,
@@ -203,7 +204,7 @@ LocationListener {
 		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
-		if(verifyLocation(tempDistance)) {	//Verify new location before updating map and list
+		//if(verifyLocation(tempDistance)) {	//Verify new location before updating map and list
 		
 		setCamera(newLocation);		//Update map to new location
 		setText();					//Update distance
@@ -221,13 +222,13 @@ LocationListener {
 
 		locationList.add(prevLocation);			//Adds the location to the Arraylist
 		prevLocation = newLocation;				//Update last location for next update
-		}
-		else
-			tempCounter += 1;
+		//}
+		//else
+		//	tempCounter += 1;
 
-		if(test!= 0){
-		test_check();
-		}
+		//if(test!= 0){
+		//test_check();
+		//}
 		
 		//if(test==1){
 			test_check();
@@ -278,7 +279,7 @@ LocationListener {
 		tempView2.setText("Antall feil lesninger: " + tempCounter);
 	}
 	
-	public boolean verifyLocation(double distance) {
+	public boolean verifyLocation(double distance) {	//WORK IN PROGRESS
 		int i = locationList.size();
 		
 		if (i < 3) {
@@ -316,7 +317,7 @@ LocationListener {
 		}
 	}
 	
-	public boolean checkLocation(double distance, double maxDistance) {
+	public boolean checkLocation(double distance, double maxDistance) {	//WORK IN PROGRESS
 		if (distance * timeInterval < maxDistance * timeInterval )
 			return true;
 		else 
@@ -370,19 +371,10 @@ LocationListener {
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 		
-		int avgSpeed = (int) ((int) myDistance / time);			//Calculates average speed
+		int avgSpeed = (int) ((int) myDistance / (pauseTime / 1000));
 		
-		byte[] buffer = null;						//Serializing locationList in order to store it in database
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutput out = new ObjectOutputStream(bos);
-			out.writeObject(locationList);
-			out.close();
-			buffer = bos.toByteArray();
-		}
-		catch(IOException ioe) {
-			Log.e("serializeObject", "error", ioe);
-		}
+		Gson gson = new Gson();
+		String jsonLocations = gson.toJson(locationList);
 		
 		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
@@ -400,7 +392,7 @@ LocationListener {
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 			values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buffer);
+			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
@@ -429,19 +421,10 @@ LocationListener {
 			Date cDate = new Date();
 			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 			
-			int avgSpeed = (int) ((int) myDistance / time);
+			double avgSpeed = (myDistance / (pauseTime / 1000));
 			
-			byte[] buffer = null;
-			try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutput out = new ObjectOutputStream(bos);
-			out.writeObject(locationList);
-			out.close();
-			buffer = bos.toByteArray();
-			}
-			catch(IOException ioe) {
-				Log.e("serializeObject", "error", ioe);
-			}
+			Gson gson = new Gson();
+			String jsonLocations = gson.toJson(locationList);
 			
 			if(w.moveToFirst()){	//Checks if the user has set the weight 
 				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
@@ -459,7 +442,7 @@ LocationListener {
 				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 				values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buffer);
+				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 				db.insert(TrappEntry.TABLE_NAME, null, values);
 			
 				Intent intent = new Intent(this, WorkoutEnd.class);

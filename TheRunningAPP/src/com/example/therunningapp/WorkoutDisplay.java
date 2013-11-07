@@ -3,6 +3,7 @@ package com.example.therunningapp;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class WorkoutDisplay extends Activity {
 
@@ -44,9 +47,11 @@ public class WorkoutDisplay extends Activity {
 		TextView viewTest = (TextView) findViewById(R.id.location_test);
 		TextView viewTest2 = (TextView) findViewById(R.id.location_test2);
 		//query the DB
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES, TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME};
+		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
+								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME,
+								TrappEntry.COLUMN_NAME_AVGSPEED, TrappEntry.COLUMN_NAME_LOCATIONS };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
-		
+		Gson gson = new Gson();
 		//Display the workout
 		if(c.moveToFirst()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
@@ -54,19 +59,9 @@ public class WorkoutDisplay extends Activity {
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 			String avgSpeed = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_AVGSPEED));
-			byte[] buffer = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
-			List<Location> locationList = new ArrayList<Location>();
-			try {
-				ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buffer));
-				locationList = (ArrayList<Location>) in.readObject();
-			} 
-			catch(IOException ioe) {
-				Log.e("deserilizeObject", "io error", ioe);
-			} 
-			catch (ClassNotFoundException e) {
-				Log.e("deserializeObject", "class not found error", e);
-				e.printStackTrace();
-			}
+			String jsonLocations = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
+			Type type = new TypeToken<List<Location>>(){}.getType();
+			List<Location> locationList = gson.fromJson(jsonLocations, type);
 			
 			//Formatting time from milliseconds to hh:mm:ss
 			int tempTime = Integer.parseInt(time);
@@ -76,6 +71,7 @@ public class WorkoutDisplay extends Activity {
 			String tempHours = Integer.toString(hours);
 			String tempMinutes = Integer.toString(minutes);
 			String tempSeconds = Integer.toString(seconds);
+			double tempSpeed = Double.parseDouble(avgSpeed);	//Converting from string to double to format output
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -99,9 +95,8 @@ public class WorkoutDisplay extends Activity {
 			Location tempLocation = locationList.get(0);
 			double tempLat = tempLocation.getLatitude();
 			double tempLng = tempLocation.getLongitude();
-			viewTest.setText(tempSize);
+			viewTest.setText("Elements in list: " + tempSize + "speed: " + String.format("%.2f", tempSpeed));
 			viewTest2.setText("Pos " + tempLat + tempLng);
-			
 	}
 		
 		
