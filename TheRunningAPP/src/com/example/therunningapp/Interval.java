@@ -72,17 +72,25 @@ public class Interval extends Activity {
 		switch(view.getId()){
 			case R.id.A_radiobutton_time:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.GONE);
 				}break;
 			case R.id.A_radiobutton_distance:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.VISIBLE);
 				}break;
 		}
 	}

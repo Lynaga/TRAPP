@@ -2,23 +2,29 @@
 <resources>
 
     <string name="app_name">The Running App</string>
+        
+    <string name="title_activity_workout_end">Avslutt økt</string>
+    <string name="title_activity_trapp_dbhelper">TrappDBHjelper</string>
+    <string name="title_activity_trapp_contract">Trapp Kontakter</string>
+    <string name="title_activity_workout_start">Start økt</string>
+    <string name="title_activity_settings">Innstilinnger</string>
+    <string name="title_activity_workout_display">Vis Trening</string>
+    <string name="title_activity_interval">Interval</string>
+    <string name="title_activity_test_setup">Test instillinger</string>
+    <string name="title_activity_setup_workout">Trening instillinger</string>
+    <string name="title_activity_history">Historie</string>
+        
     <string name="action_settings">Innstillinger</string>
     <string name="S_workout">Start ny økt</string>
     <string name="S_settings">Innstillinger</string>
     <string name="S_history">Historie</string>
-    <string name="title_activity_settings">Innstilinnger</string>
-    <string name="S_name">Navn:</string>
-    <string name="S_height">Høyde:</string>
-    <string name="S_weight">Vekt:</string>
-    <string name="S_sex">Kjønn:</string>
+    <string name="S_name">Navn</string>
+    <string name="S_height">Høyde</string>
+    <string name="S_weight">Vekt</string>
+    <string name="S_sex">Kjønn</string>
     <string name="S_save">Lagre</string>
     <string name="S_cancel">Avbryt</string>
-    <string name="title_activity_history">Historie</string>
     <string name="hello_world">Hei verden!</string>
-    <string name="title_activity_workout_end">Avslutt økt</string>
-    <string name="title_activity_trapp_dbhelper">TrappDBHjelper</string>
-    <string name="title_activity_trapp_contract">TrappKontakter</string>
-    <string name="title_activity_workout_start">Start økt</string>
     <string name="T_test">Dette skal være her</string>
     <string name="A_norwegian">Nor</string>
     <string name="A_english">Eng</string>
@@ -28,20 +34,25 @@
 	<string name="A_back">Tilbake</string>
 	<string name="T_start_workout_button_string">Start</string>
 	<string name="T_pause_workout_button_string">Pause</string>
-	<string name="A_time_display_string">Tid:</string>
-	<string name="A_distance_display_string">Distanse:</string>
-	<string name="A_date_display_string">Dato:</string>
-	<string name="A_calories_display_string">Kalorier:</string>
+	<string name="A_time_display_string">Tid</string>
+	<string name="A_distance_display_string">Distanse</string>
+	<string name="A_date_display_string">Dato</string>
+	<string name="A_calories_display_string">Kalorier</string>
 	<string name="A_Setup_workout">Trening</string>
 	<string name="A_interval">Interval</string>
 	<string name="S_test">Start ny test</string>
 	<string name="S_Time">Tid</string>
     <string name="S_Distance">Distanse</string>
-    <string name="S_Value">Verdi:</string>
+    <string name="S_Value">Verdi</string>
     <string name="A_cm">\t\ti centimeter</string>
     <string name="A_kilo">\t\ti kilo</string>
-    <string name="S_min">Min:</string>
-    <string name="S_sec">Sec:</string>
+    <string name="S_min">Min</string>
+    <string name="S_sec">Sec</string>
     <string name="start">Start</string>
+    <string name="repetition">Repetisjon</string>
+    <string name="Run_time">Løpe tid</string>
+    <string name="Pause_time">Pause tid</string>
+    <string name="Run_distance">Løpe distanse</string>
+    <string name="Pause_distance">Pause distanse</string>
 	
 </resources>
