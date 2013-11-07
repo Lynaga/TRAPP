@@ -5,9 +5,11 @@ import java.util.TimerTask;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
@@ -15,9 +17,13 @@ import android.support.v4.app.NavUtils;
 
 public class Interval extends Activity {
 	
-	public Timer stop;
-	public Timer run;
-	public Timer pause;
+	Timer run;
+	Timer pause;
+	Timer stop;
+	boolean TimerRunStart = false;
+	boolean TimerPauseStart = false;
+	boolean TimerStopStart = false;
+	String intervalType;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,7 @@ public class Interval extends Activity {
 		setContentView(R.layout.activity_interval);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		intervalType = "time";
 		
 	}
 
@@ -69,22 +76,45 @@ public class Interval extends Activity {
 		switch(view.getId()){
 			case R.id.A_radiobutton_time:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.GONE);
+					intervalType = "time";
 				}break;
 			case R.id.A_radiobutton_distance:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.VISIBLE);
+					intervalType = "distance";
 				}break;
 		}
 	}
 	
 	public void cancel(View view){
+		if(TimerRunStart){
+			run.cancel();
+			TimerRunStart = false;
+		}
+		if(TimerPauseStart){
+			pause.cancel();
+			TimerPauseStart = false;
+		}
+		if(TimerStopStart)
+		{
+			stop.cancel();
+			TimerStopStart = false;
+		}
 		finish();
 	}
 
@@ -92,12 +122,13 @@ public class Interval extends Activity {
 		TextView tv = (TextView) findViewById(R.id.textView_test_A);
         tv.setText("Run");
         
-        DelayRun(RunTime, PauseTime);
-        DelayStop(RunTime, PauseTime, Repetition);
-        
+        DelayRun(RunTime,PauseTime);
+        DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
+        DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
 	}
 	
-	public void DelayRun(int RunTime, final int PauseTime){
+	public void DelayRun(final int RunTime, final int PauseTime){
+		TimerRunStart = true;
 		run = new Timer();
 		run.scheduleAtFixedRate(new TimerTask() {
 
@@ -109,14 +140,17 @@ public class Interval extends Activity {
 		    	    public void run() {
 		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
 		    	        tv.setText("Pause");
+		    	        
 		    	        DelayPause(PauseTime);
+		    	        TimerRunStart = false;
 		    	    }
 		    	});
 		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
-		},RunTime*1000, (PauseTime+RunTime)*1000);
+		},RunTime*1000 , (RunTime+PauseTime)*1000);
 	}
 	
 	public void DelayPause(int PauseTime){
+		TimerPauseStart = true;
 		pause = new Timer();
 		pause.schedule(new TimerTask() {
 
@@ -128,13 +162,15 @@ public class Interval extends Activity {
 		    	    public void run() {
 		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
 		    	        tv.setText("Run");
+		    	        TimerPauseStart = false;
 		    	    }
 		    	});
 		    } //wait 'PauseTime*1000' before it does something (milliseconds)
-		},	PauseTime*1000);
+		},PauseTime*1000);
 	}
 	
-	public void DelayStop(int RunTime, final int PauseTime, int repetition){
+	public void DelayStop(int Time, final int x){
+		TimerStopStart = true;
 		stop = new Timer();
 		stop.schedule(new TimerTask() {
 
@@ -144,18 +180,52 @@ public class Interval extends Activity {
 
 		    	    @Override
 		    	    public void run() {
-		    	    	run.cancel();
-		    	    	TextView tv = (TextView) findViewById(R.id.textView_test_A);
-		    	        tv.setText("Stop");
-		    	        
+		    	    	
+		    	    	if(x == 1)
+		    	    		run.cancel();
+		    	    	else if(x == 2){
+		    	    		TextView tv = (TextView) findViewById(R.id.textView_test_A);
+		    	    		tv.setText("Stop");
+		    	    		TimerStopStart = false;
+		    	        }
 		    	    }
 		    	});
-		    } //wait '(PauseTime*(repetition-1))+(RunTime*repetition))*1000' before it does something (milliseconds)
-		},((PauseTime*(repetition-1))+(RunTime*repetition))*1000);
+		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
+		},Time*1000);
 	}
 	
 	public void test(View view){
-       IntervalThing(10,5,4);
-	}
+		int run = 0;
+		int pause = 0;
+		int rep = 0;
+		
+		if(intervalType == "time")
+		{
+			EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
+			EditText pause_time = (EditText) findViewById(R.id.editText_time_pause_interval);
 	
+			run = Integer.parseInt(run_time.getText().toString());
+			pause = Integer.parseInt(pause_time.getText().toString());
+		}
+		else if(intervalType == "distance")
+		{
+			EditText run_distance = (EditText) findViewById(R.id.editText_distance_run_interval);
+			EditText pause_distance = (EditText) findViewById(R.id.editText_distance_pause_interval);
+	
+			run = Integer.parseInt(run_distance.getText().toString());
+			pause = Integer.parseInt(pause_distance.getText().toString());
+		}
+		
+		EditText repitition = (EditText) findViewById(R.id.editText_repetition_interval);
+		rep = Integer.parseInt(repitition.getText().toString());
+		
+        IntervalThing(run,pause,rep);	
+/*		Intent intent = new Intent(this, WorkoutStart.class);
+		intent.putExtra("intervalType", intervalType);
+		intent.putExtra("run", run);	
+		intent.putExtra("pause", pause);
+		intent.putExtra("rep", rep);
+		intent.putExtra("isInterval", "interval");
+		startActivity(intent);  */
+	}
 }
