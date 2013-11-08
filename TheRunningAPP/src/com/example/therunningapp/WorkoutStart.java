@@ -109,8 +109,12 @@ LocationListener {
 		int test = extras.getInt("test");
 		String testType = extras.getString("testType"); */
 
-	/*	if(extras.getInt("workoutType") == noe som helst) 
-			Interval(); */
+		if(extras.getInt("workoutType") == 1)
+			{}
+		else if(extras.getInt("workoutType") == 2)
+				Interval(); 
+		else if(extras.getInt("workoutType") == 3) 
+				{}
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view

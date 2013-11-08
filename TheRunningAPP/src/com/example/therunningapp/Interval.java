@@ -135,7 +135,7 @@ public class Interval extends Activity {
 		intent.putExtra("run", run);	
 		intent.putExtra("pause", pause);
 		intent.putExtra("rep", rep);
-		intent.putExtra("isInterval", 1337);
+		intent.putExtra("workoutType", 2);
 		startActivity(intent);  
 	}
 }

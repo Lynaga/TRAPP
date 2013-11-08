@@ -53,7 +53,8 @@ public class SetupWorkout extends Activity {
 	}
 	
 	public void workoutStart (View view) { 
-		Intent intent = new Intent(this, WorkoutStart.class);	
+		Intent intent = new Intent(this, WorkoutStart.class);
+		intent.putExtra("workoutType", 1);
 		startActivity(intent);									
 	}
 	public void testStart (View view){
