@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -83,6 +85,15 @@ LocationListener {
 	int test = 1;
 	String testType = "0";
 	
+	//intervals
+	Timer run;
+	Timer pause;
+	Timer stop;
+	boolean TimerRunStart = false;
+	boolean TimerPauseStart = false;
+	boolean TimerStopStart = false;
+	String intervalType;
+	
 
 	
 	
@@ -92,12 +103,14 @@ LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
 		Bundle extras = getIntent().getExtras();
-		int min = extras.getInt("min");
+	/*	int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("distance");
 		int test = extras.getInt("test");
-		String testType = extras.getString("testType");
+		String testType = extras.getString("testType"); */
 
+	/*	if(extras.getInt("workoutType") == noe som helst) 
+			Interval(); */
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
@@ -231,7 +244,7 @@ LocationListener {
 		//}
 		
 		//if(test==1){
-			test_check();
+		//	test_check();
 		//}		
 	}
 	
@@ -398,6 +411,20 @@ LocationListener {
 			Intent intent = new Intent(this, WorkoutEnd.class);
 			startActivity(intent);
 			}
+		
+		if(TimerRunStart){
+			run.cancel();
+			TimerRunStart = false;
+		}
+		if(TimerPauseStart){
+			pause.cancel();
+			TimerPauseStart = false;
+		}
+		if(TimerStopStart)
+		{
+			stop.cancel();
+			TimerStopStart = false;
+		}
 		finish();
 	}
 
@@ -450,4 +477,90 @@ LocationListener {
 				}
 			finish();
 	}
+	
+	public void Interval(){
+		Bundle extras = getIntent().getExtras();
+		int run = extras.getInt("run");
+		int pause = extras.getInt("pause");
+		int rep = extras.getInt("rep");
+		
+		Interval(run,pause,rep);
+	}
+	
+	public void Interval(int RunTime, int PauseTime, int Repetition){
+		TextView tv = (TextView) findViewById(R.id.A_testtemp);
+        tv.setText("Run");
+        
+        DelayRun(RunTime,PauseTime);
+        DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
+        DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
+	}
+	
+	public void DelayRun(final int RunTime, final int PauseTime){
+		TimerRunStart = true;
+		run = new Timer();
+		run.scheduleAtFixedRate(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
+		    	        tv.setText("Pause");
+		    	        
+		    	        DelayPause(PauseTime);
+		    	        TimerRunStart = false;
+		    	    }
+		    	});
+		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
+		},RunTime*1000 , (RunTime+PauseTime)*1000);
+	}
+	
+	public void DelayPause(int PauseTime){
+		TimerPauseStart = true;
+		pause = new Timer();
+		pause.schedule(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
+		    	        tv.setText("Run");
+		    	        TimerPauseStart = false;
+		    	    }
+		    	});
+		    } //wait 'PauseTime*1000' before it does something (milliseconds)
+		},PauseTime*1000);
+	}
+	
+	public void DelayStop(int Time, final int x){
+		TimerStopStart = true;
+		stop = new Timer();
+		stop.schedule(new TimerTask() {
+
+		    @Override
+		    public void run() {
+		    	runOnUiThread(new Runnable() {
+
+		    	    @Override
+		    	    public void run() {
+		    	    	
+		    	    	if(x == 1)
+		    	    		run.cancel();
+		    	    	else if(x == 2){
+		    	    		TextView tv = (TextView) findViewById(R.id.A_testtemp);
+		    	    		tv.setText("Stop");
+		    	    		TimerStopStart = false;
+		    	        }
+		    	    }
+		    	});
+		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
+		},Time*1000);
+	}
+	
 }
