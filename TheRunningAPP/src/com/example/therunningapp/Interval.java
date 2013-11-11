@@ -109,6 +109,7 @@ public class Interval extends Activity {
 		int run = 0;
 		int pause = 0;
 		int rep = 0;
+		String Interval = "Interval";
 		
 		if(intervalType == "time")
 		{
@@ -135,7 +136,7 @@ public class Interval extends Activity {
 		intent.putExtra("run", run);	
 		intent.putExtra("pause", pause);
 		intent.putExtra("rep", rep);
-		intent.putExtra("workoutType", 2);
+		intent.putExtra("workoutType", Interval);
 		startActivity(intent);  
 	}
 }
