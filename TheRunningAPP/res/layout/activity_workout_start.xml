@@ -44,6 +44,27 @@
         android:layout_toRightOf="@id/A_distance_on_map"
         android:layout_alignBaseline="@id/A_distance_on_map" />
 	
+	<TextView 
+	    android:id="@+id/T_testtemp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginRight="3dp"
+	    android:layout_below="@id/A_distance_on_map" />
+	
+	<TextView 
+	    android:id="@+id/T_testtemp_2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginRight="3dp"
+	    android:layout_below="@id/T_testtemp" />
+	
+	<TextView 
+	    android:id="@+id/A_testtemp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginRight="3dp"
+	    android:layout_below="@id/T_testtemp_2" />
+	
 	<Button
 	    android:id="@+id/T_pause_workout_button"
 	    android:text="@string/T_start_workout_button_string"

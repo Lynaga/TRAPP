@@ -16,7 +16,8 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 				+ TrappEntry.TABLE_NAME +
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_DATE + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_TIME + " FLOAT, " + TrappEntry.COLUMN_NAME_DISTANCE + " DOUBLE, " 
-				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER)";
+				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER, " + TrappEntry.COLUMN_NAME_AVGSPEED + " INTEGER, "
+				+ TrappEntry.COLUMN_NAME_LOCATIONS + " TEXT)";
 	
 	
 	//table for storing preferances

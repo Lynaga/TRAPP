@@ -5,9 +5,11 @@ import java.util.TimerTask;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
@@ -15,9 +17,13 @@ import android.support.v4.app.NavUtils;
 
 public class Interval extends Activity {
 	
-	public Timer stop;
-	public Timer run;
-	public Timer pause;
+	Timer run;
+	Timer pause;
+	Timer stop;
+	boolean TimerRunStart = false;
+	boolean TimerPauseStart = false;
+	boolean TimerStopStart = false;
+	String intervalType;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,7 @@ public class Interval extends Activity {
 		setContentView(R.layout.activity_interval);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		intervalType = "time";
 		
 	}
 
@@ -69,17 +76,27 @@ public class Interval extends Activity {
 		switch(view.getId()){
 			case R.id.A_radiobutton_time:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.GONE);
+					intervalType = "time";
 				}break;
 			case R.id.A_radiobutton_distance:
 				if(checked){
-					findViewById(R.id.textView_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.editText_time_interval).setVisibility(View.GONE);
-					findViewById(R.id.textView_distance_interval).setVisibility(View.VISIBLE);
-					findViewById(R.id.editText_distance_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.editText_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.VISIBLE);
+					intervalType = "distance";
 				}break;
 		}
 	}
@@ -87,75 +104,39 @@ public class Interval extends Activity {
 	public void cancel(View view){
 		finish();
 	}
-
-	public void IntervalThing(int RunTime, int PauseTime, int Repetition){
-		TextView tv = (TextView) findViewById(R.id.textView_test_A);
-        tv.setText("Run");
-        
-        DelayRun(RunTime, PauseTime);
-        DelayStop(RunTime, PauseTime, Repetition);
-        
-	}
 	
-	public void DelayRun(int RunTime, final int PauseTime){
-		run = new Timer();
-		run.scheduleAtFixedRate(new TimerTask() {
-
-		    @Override
-		    public void run() {
-		    	runOnUiThread(new Runnable() {
-
-		    	    @Override
-		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
-		    	        tv.setText("Pause");
-		    	        DelayPause(PauseTime);
-		    	    }
-		    	});
-		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
-		},RunTime*1000, (PauseTime+RunTime)*1000);
-	}
+	public void save(View view){
+		int run = 0;
+		int pause = 0;
+		int rep = 0;
+		String Interval = "Interval";
+		
+		if(intervalType == "time")
+		{
+			EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
+			EditText pause_time = (EditText) findViewById(R.id.editText_time_pause_interval);
 	
-	public void DelayPause(int PauseTime){
-		pause = new Timer();
-		pause.schedule(new TimerTask() {
-
-		    @Override
-		    public void run() {
-		    	runOnUiThread(new Runnable() {
-
-		    	    @Override
-		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.textView_test_A);
-		    	        tv.setText("Run");
-		    	    }
-		    	});
-		    } //wait 'PauseTime*1000' before it does something (milliseconds)
-		},	PauseTime*1000);
-	}
+			run = Integer.parseInt(run_time.getText().toString());
+			pause = Integer.parseInt(pause_time.getText().toString());
+		}
+		else if(intervalType == "distance")
+		{
+			EditText run_distance = (EditText) findViewById(R.id.editText_distance_run_interval);
+			EditText pause_distance = (EditText) findViewById(R.id.editText_distance_pause_interval);
 	
-	public void DelayStop(int RunTime, final int PauseTime, int repetition){
-		stop = new Timer();
-		stop.schedule(new TimerTask() {
-
-		    @Override
-		    public void run() {
-		    	runOnUiThread(new Runnable() {
-
-		    	    @Override
-		    	    public void run() {
-		    	    	run.cancel();
-		    	    	TextView tv = (TextView) findViewById(R.id.textView_test_A);
-		    	        tv.setText("Stop");
-		    	        
-		    	    }
-		    	});
-		    } //wait '(PauseTime*(repetition-1))+(RunTime*repetition))*1000' before it does something (milliseconds)
-		},((PauseTime*(repetition-1))+(RunTime*repetition))*1000);
+			run = Integer.parseInt(run_distance.getText().toString());
+			pause = Integer.parseInt(pause_distance.getText().toString());
+		}
+		
+		EditText repitition = (EditText) findViewById(R.id.editText_repetition_interval);
+		rep = Integer.parseInt(repitition.getText().toString());
+			
+		Intent intent = new Intent(this, WorkoutStart.class);
+	//	intent.putExtra("intervalType", intervalType);
+		intent.putExtra("run", run);	
+		intent.putExtra("pause", pause);
+		intent.putExtra("rep", rep);
+		intent.putExtra("workoutType", Interval);
+		startActivity(intent);  
 	}
-	
-	public void test(View view){
-       IntervalThing(10,5,4);
-	}
-	
 }
