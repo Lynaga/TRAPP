@@ -70,11 +70,10 @@ LocationListener {
 	private List<Location> locationList = new ArrayList<Location>();
 	
 	//Variables used to pause / restart workout and store to database.
-	int timeInterval = 1;	//Time interval between locations (Standard = 1)
+	int timeInterval = 1;	//Time interval since last verified locations (Standard = 1)
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
-	double mySpeed = 0;
 	int tempCounter = 0;
 	Chronometer myTimer;
 	
@@ -290,7 +289,7 @@ LocationListener {
 		textView.setText(tempDistance + " m");
 		
 		TextView tempView = (TextView) findViewById(R.id.T_testtemp);
-		tempView.setText("Speed: " + mySpeed);
+		tempView.setText("Speed: Later work" );
 		
 		TextView tempView2 = (TextView) findViewById(R.id.T_testtemp_2);
 		tempView2.setText("Antall feil lesninger: " + tempCounter);

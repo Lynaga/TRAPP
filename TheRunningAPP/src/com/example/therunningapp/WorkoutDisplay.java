@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +26,7 @@ import com.example.therunningapp.TrappContract.TrappEntry;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class WorkoutDisplay extends Activity {
+public class WorkoutDisplay extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +41,12 @@ public class WorkoutDisplay extends Activity {
 		Intent intent = getIntent();
 		String db_id = intent.getStringExtra("id");
 		//Setting the TextView
-		TextView viewDate = (TextView) findViewById(R.id.textdate_display);
-		TextView viewCalories = (TextView) findViewById(R.id.textcalories_display);
-		TextView viewDistance = (TextView) findViewById(R.id.textdistance_display);
-		TextView viewTime = (TextView) findViewById(R.id.texttime_display);
-		TextView viewTest = (TextView) findViewById(R.id.location_test);
-		TextView viewTest2 = (TextView) findViewById(R.id.location_test2);
+		TextView viewDate = (TextView) findViewById(R.id.date_display);
+		TextView viewTime = (TextView) findViewById(R.id.time_display);
+		TextView viewDistance = (TextView) findViewById(R.id.distance_display);
+		TextView viewCalories = (TextView) findViewById(R.id.calories_display);
+		TextView viewSpeed = (TextView) findViewById(R.id.average_speed_display);
+		
 		//query the DB
 		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
 								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME,
@@ -88,16 +89,16 @@ public class WorkoutDisplay extends Activity {
 			sb.append(tempSeconds);
 			time = sb.toString();
 			
+			String tempTimeString = getString(R.string.A_time_display_string);
+			String tempDistanceString = getString(R.string.A_distance_display_string);
+			String tempCaloriesString = getString(R.string.A_calories_display_string);
+			String tempSpeedString = getString(R.string.A_speed_display_string);
+			
 			viewDate.setText(date);
-			viewCalories.setText(calories);
-			viewDistance.setText(distance);
-			viewTime.setText(time);
-			int tempSize = locationList.size();
-			Location tempLocation = locationList.get(0);
-			double tempLat = tempLocation.getLatitude();
-			double tempLng = tempLocation.getLongitude();
-			viewTest.setText("Elements in list: " + tempSize + "speed: " + String.format("%.2f", tempSpeed));
-			viewTest2.setText("Pos: " + tempLat + " " + tempLng);
+			viewTime.setText(tempTimeString + ": " + time);
+			viewDistance.setText(tempDistanceString + ": " + distance + " m");
+			viewCalories.setText(tempCaloriesString + ": " + calories);
+			viewSpeed.setText(tempSpeedString + ": " + String.format("%.2f", tempSpeed) + " m/s");
 	}
 		
 		
