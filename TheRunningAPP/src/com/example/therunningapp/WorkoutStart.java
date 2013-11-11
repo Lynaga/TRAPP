@@ -102,7 +102,7 @@ LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
 
-		mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
+		//mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
 
 		Bundle extras = getIntent().getExtras();
 		String workoutType = extras.getString("workoutType");
@@ -239,7 +239,6 @@ LocationListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 		
-
 		locationList.add(prevLocation);
 		prevLocation = newLocation;	//Update last location for next update
 		/*Bundle extras = getIntent().getExtras();
