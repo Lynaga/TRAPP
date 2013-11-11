@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
@@ -70,9 +71,10 @@ LocationListener {
 	int min = 0;
 	int sec = 0;
 	int lengde = 0;
-	int test = 1;
+	int test = 0;
 	String testType = "0";
 	
+	MediaPlayer mediaPlayer;
 
 	
 	
@@ -81,12 +83,7 @@ LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-		Bundle extras = getIntent().getExtras();
-		int min = extras.getInt("min");
-		int sec = extras.getInt("sec");
-		int lengde = extras.getInt("distance");
-		int test = extras.getInt("test");
-		String testType = extras.getString("testType");
+		mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
 
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
@@ -209,10 +206,11 @@ LocationListener {
 		
 		locations.add(prevLocation);
 		prevLocation = newLocation;	//Update last location for next update
-		
-		//if(test==1){
-			test_check();
-		//}		
+		/*Bundle extras = getIntent().getExtras();
+		int test = extras.getInt("test");
+		if(test==1){
+			*/test_check();
+	//	}		
 	}
 	
 	public void test_check(){
@@ -220,7 +218,7 @@ LocationListener {
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
-		int test = extras.getInt("test");
+		
 		String testType = extras.getString("testType");
 		
 		int value;
@@ -232,6 +230,12 @@ LocationListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
+			if(mediaPlayer.isPlaying()) {
+
+				} else {
+					mediaPlayer.start();
+				}	
+
 		}
 		if(value >= set){
 			end();
