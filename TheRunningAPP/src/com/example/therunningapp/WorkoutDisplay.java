@@ -60,6 +60,7 @@ public class WorkoutDisplay extends Activity {
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 			String avgSpeed = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_AVGSPEED));
 			String jsonLocations = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
+			
 			Type type = new TypeToken<List<Location>>(){}.getType();
 			List<Location> locationList = gson.fromJson(jsonLocations, type);
 			
@@ -96,7 +97,7 @@ public class WorkoutDisplay extends Activity {
 			double tempLat = tempLocation.getLatitude();
 			double tempLng = tempLocation.getLongitude();
 			viewTest.setText("Elements in list: " + tempSize + "speed: " + String.format("%.2f", tempSpeed));
-			viewTest2.setText("Pos " + tempLat + tempLng);
+			viewTest2.setText("Pos: " + tempLat + " " + tempLng);
 	}
 		
 		
