@@ -91,6 +91,7 @@ public class TestSetup extends Activity {
 		int min = 0;
 		int sec = 0;
 		int distances = 0;
+		String workoutType = "Test";
 		//setup the EditText fields
 		EditText time_min = (EditText) findViewById(R.id.min);
 		EditText time_sec = (EditText) findViewById(R.id.sec);
@@ -104,7 +105,7 @@ public class TestSetup extends Activity {
 		min = Integer.parseInt(time_min.getText().toString());
 		sec = Integer.parseInt(time_sec.getText().toString());
 		}
-		test = 1;
+		
 		
 		//Intent
 		Intent intent = new Intent(this, WorkoutStart.class);
@@ -112,7 +113,7 @@ public class TestSetup extends Activity {
 		intent.putExtra("lengder", distances);	
 		intent.putExtra("min", min);
 		intent.putExtra("sec", sec);
-		intent.putExtra("test", test);
+		intent.putExtra("workoutType", workoutType);
 		startActivity(intent);
 	}
 

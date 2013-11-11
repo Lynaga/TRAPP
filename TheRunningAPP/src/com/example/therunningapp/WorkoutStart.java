@@ -1,9 +1,5 @@
 package com.example.therunningapp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,11 +14,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -81,9 +77,12 @@ LocationListener {
 	int min = 0;
 	int sec = 0;
 	int lengde = 0;
-	int test = 1;
+	int test = 0;
 	String testType = "0";
 	
+
+	MediaPlayer mediaPlayer;
+
 	//intervals
 	Timer run;
 	Timer pause;
@@ -94,6 +93,7 @@ LocationListener {
 	String intervalType;
 	
 
+
 	
 	
 	
@@ -101,19 +101,24 @@ LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-		Bundle extras = getIntent().getExtras();
-	/*	int min = extras.getInt("min");
-		int sec = extras.getInt("sec");
-		int lengde = extras.getInt("distance");
-		int test = extras.getInt("test");
-		String testType = extras.getString("testType"); */
 
-		if(extras.getInt("workoutType") == 1)
+		mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
+
+		Bundle extras = getIntent().getExtras();
+		String workoutType = extras.getString("workoutType");
+		if(workoutType.equals("Normal"))
 			{}
-		else if(extras.getInt("workoutType") == 2)
+		else if(workoutType.equals("Interval"))
 				Interval(); 
-		else if(extras.getInt("workoutType") == 3) 
-				{}
+		 else if(workoutType.equals("Test"))
+		 {
+			int min = extras.getInt("min");
+			int sec = extras.getInt("sec");
+			int lengde = extras.getInt("distance");
+			int test = extras.getInt("test");
+			String testType = extras.getString("testType");
+		 }
+
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
@@ -234,6 +239,15 @@ LocationListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 		
+
+		locationList.add(prevLocation);
+		prevLocation = newLocation;	//Update last location for next update
+		/*Bundle extras = getIntent().getExtras();
+		int test = extras.getInt("test");
+		if(test==1){
+			*/test_check();
+	//	}		
+
 		myDistance = myDistance + tempDistance;	//Updating total distance
 
 		locationList.add(prevLocation);			//Adds the location to the Arraylist
@@ -256,7 +270,7 @@ LocationListener {
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
-		int test = extras.getInt("test");
+		
 		String testType = extras.getString("testType");
 		
 		int value;
@@ -268,6 +282,12 @@ LocationListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
+			if(mediaPlayer.isPlaying()) {
+
+				} else {
+					mediaPlayer.start();
+				}	
+
 		}
 		if(value >= set){
 			end();
