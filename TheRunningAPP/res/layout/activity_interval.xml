@@ -152,7 +152,8 @@
 	    android:layout_height="50dp"
 	    android:layout_alignParentBottom="true"
 	    android:text="@string/S_save"
-	    android:textSize="20sp" />
+	    android:textSize="20sp"
+	    android:onClick="save" />
     
     <Button 
         android:id="@+id/button_cancel_interval"
@@ -163,22 +164,5 @@
 	    android:text="@string/S_cancel"
 	    android:textSize="20sp"
 	    android:onClick="cancel" />
-    
-    <Button 
-        android:id="@+id/button_test_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@id/button_cancel_interval"
-        android:layout_alignBaseline="@id/button_cancel_interval"
-        android:text="@string/A_interval"
-        android:textSize="20sp"
-        android:onClick="test"  />
-    
-    <TextView 
-        android:id="@+id/textView_test_A"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/button_save_interval"
-        android:layout_marginTop="100dp" />
 
 </RelativeLayout>
