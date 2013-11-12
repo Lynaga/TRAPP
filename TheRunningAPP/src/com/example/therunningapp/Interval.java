@@ -16,13 +16,6 @@ import android.support.v4.app.NavUtils;
 
 
 public class Interval extends Activity {
-	
-	Timer run;
-	Timer pause;
-	Timer stop;
-	boolean TimerRunStart = false;
-	boolean TimerPauseStart = false;
-	boolean TimerStopStart = false;
 	String intervalType;
 	
 	@Override
@@ -137,6 +130,7 @@ public class Interval extends Activity {
 		intent.putExtra("pause", pause);
 		intent.putExtra("rep", rep);
 		intent.putExtra("workoutType", Interval);
-		startActivity(intent);  
+		startActivity(intent); 
+		finish();
 	}
 }
