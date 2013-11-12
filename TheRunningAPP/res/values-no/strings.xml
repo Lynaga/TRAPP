@@ -38,6 +38,7 @@
 	<string name="A_distance_display_string">Distanse</string>
 	<string name="A_date_display_string">Dato</string>
 	<string name="A_calories_display_string">Kalorier</string>
+	<string name="A_speed_display_string">Fart</string>
 	<string name="A_Setup_workout">Trening</string>
 	<string name="A_interval">Interval</string>
 	<string name="S_test">Start ny test</string>

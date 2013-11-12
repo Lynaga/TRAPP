@@ -38,6 +38,7 @@
     <string name="A_distance_display_string">Distance</string>
     <string name="A_date_display_string">Date</string>
     <string name="A_calories_display_string">Calories</string>
+    <string name="A_speed_display_string">Speed</string>
     <string name="A_Setup_workout">Workout</string>
     <string name="A_interval">Interval</string>
     <string name="S_Time">Time</string>
