@@ -91,8 +91,8 @@ LocationListener {
 	boolean TimerPauseStart = false;
 	boolean TimerStopStart = false;
 	String intervalType;
-	
-
+	String workoutType;
+	Bundle extras;
 
 	
 	
@@ -102,11 +102,11 @@ LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
 
-		mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
+	//	MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.stop);
 
-		Bundle extras = getIntent().getExtras();
-		String workoutType = extras.getString("workoutType");
-		if(workoutType.equals("Normal"))
+		extras = getIntent().getExtras();
+		workoutType = extras.getString("workoutType");
+/*		if(workoutType.equals("Normal"))
 			{}
 		else if(workoutType.equals("Interval"))
 				Interval(); 
@@ -117,7 +117,7 @@ LocationListener {
 			int lengde = extras.getInt("distance");
 			int test = extras.getInt("test");
 			String testType = extras.getString("testType");
-		 }
+		 }*/
 
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
@@ -245,24 +245,24 @@ LocationListener {
 		/*Bundle extras = getIntent().getExtras();
 		int test = extras.getInt("test");
 		if(test==1){
-			*/test_check();
+			test_check(); */
 	//	}		
 
 		myDistance = myDistance + tempDistance;	//Updating total distance
 
 		locationList.add(prevLocation);			//Adds the location to the Arraylist
 		prevLocation = newLocation;				//Update last location for next update
-		//}
-		//else
-		//	tempCounter += 1;
+		/*}
+		else
+			tempCounter += 1;
 
-		//if(test!= 0){
-		//test_check();
-		//}
+		if(test!= 0){
+		test_check();
+		}
 		
-		//if(test==1){
-		//	test_check();
-		//}		
+		if(test==1){
+			test_check();
+		}*/		
 	}
 	
 	public void test_check(){
@@ -368,8 +368,17 @@ LocationListener {
 		if(workoutStatus == false) {	//If workout is not started, or paused
 			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);	//Sets timer to right start value
 			myTimer.start();
-				myLocationClient.requestLocationUpdates(myLocationRequest, this);	//Starts location updates
-			workoutStatus = true;											//Change workout status
+		    myLocationClient.requestLocationUpdates(myLocationRequest, this);	//Starts location updates
+			
+		    if(workoutType.equals("Normal"))
+			{}
+			else if(workoutType.equals("Interval"))
+				Interval(); 
+			else if(workoutType.equals("Test"))
+			{
+			}
+		    
+		    workoutStatus = true;											//Change workout status
 			tempString = getString(R.string.T_pause_workout_button_string);	//Get text for button
 		}
 		
@@ -514,6 +523,9 @@ LocationListener {
 		TextView tv = (TextView) findViewById(R.id.A_testtemp);
         tv.setText("Run");
         
+        MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
+        mediaPlayerRun.start();
+        
         DelayRun(RunTime,PauseTime);
         DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
         DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
@@ -521,6 +533,7 @@ LocationListener {
 	
 	public void DelayRun(final int RunTime, final int PauseTime){
 		TimerRunStart = true;
+		final MediaPlayer mediaPlayerPause = MediaPlayer.create(this, R.raw.pause);
 		run = new Timer();
 		run.scheduleAtFixedRate(new TimerTask() {
 
@@ -533,6 +546,8 @@ LocationListener {
 		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
 		    	        tv.setText("Pause");
 		    	        
+		    	        mediaPlayerPause.start();
+		    	        
 		    	        DelayPause(PauseTime);
 		    	        TimerRunStart = false;
 		    	    }
@@ -543,6 +558,7 @@ LocationListener {
 	
 	public void DelayPause(int PauseTime){
 		TimerPauseStart = true;
+		final MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		pause = new Timer();
 		pause.schedule(new TimerTask() {
 
@@ -554,6 +570,9 @@ LocationListener {
 		    	    public void run() {
 		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
 		    	        tv.setText("Run");
+		    	        
+		    	        mediaPlayerRun.start();
+		    	        
 		    	        TimerPauseStart = false;
 		    	    }
 		    	});
@@ -563,6 +582,7 @@ LocationListener {
 	
 	public void DelayStop(int Time, final int x){
 		TimerStopStart = true;
+		final MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
 		stop = new Timer();
 		stop.schedule(new TimerTask() {
 
@@ -578,6 +598,7 @@ LocationListener {
 		    	    	else if(x == 2){
 		    	    		TextView tv = (TextView) findViewById(R.id.A_testtemp);
 		    	    		tv.setText("Stop");
+		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
 		    	        }
 		    	    }
