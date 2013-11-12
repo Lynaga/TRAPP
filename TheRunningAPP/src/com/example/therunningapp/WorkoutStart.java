@@ -8,12 +8,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -83,7 +86,8 @@ LocationListener {
 	
 
 	MediaPlayer mediaPlayer;
-
+	AudioManager am;
+	
 	//intervals
 	Timer run;
 	Timer pause;
@@ -102,9 +106,8 @@ LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-
 		mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
-
+		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 		Bundle extras = getIntent().getExtras();
 		String workoutType = extras.getString("workoutType");
 		if(workoutType.equals("Normal"))
@@ -283,6 +286,8 @@ LocationListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
+			
+
 			if(mediaPlayer.isPlaying()) {
 
 				} else {
@@ -290,11 +295,35 @@ LocationListener {
 				}	
 
 		}
+		// Request audio focus for playback
+		int result = am.requestAudioFocus(afChangeListener,
+		                             // Use the music stream.
+		                             AudioManager.STREAM_MUSIC,
+		                             // Request permanent focus.
+		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+		   
+		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+		   mediaPlayer.start();
+		}
+		
+
+		
 		if(value >= set){
 			end();
 			
 		}
 	}
+	
+	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+	    public void onAudioFocusChange(int focusChange) {
+	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+	            // Lower the volume
+	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+	            // Raise it back to normal
+	        }
+	    }
+	};
+	
 	
 	//Function to center map on user
 	public void setCamera(Location camLocation) {
@@ -561,6 +590,9 @@ LocationListener {
 		    } //wait 'PauseTime*1000' before it does something (milliseconds)
 		},PauseTime*1000);
 	}
+
+	
+
 	
 	public void DelayStop(int Time, final int x){
 		TimerStopStart = true;
