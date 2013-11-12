@@ -285,14 +285,6 @@ LocationListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
-			
-
-			if(mediaPlayer.isPlaying()) {
-
-				} else {
-					mediaPlayer.start();
-				}	
-
 		}
 		// Request audio focus for playback
 		int result = am.requestAudioFocus(afChangeListener,
