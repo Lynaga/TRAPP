@@ -8,11 +8,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -43,7 +48,7 @@ import com.google.gson.Gson;
 public class WorkoutStart extends FragmentActivity implements
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
-LocationListener {
+LocationListener, SensorEventListener {
 
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
@@ -64,6 +69,10 @@ LocationListener {
 	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
 	private List<Location> locationList = new ArrayList<Location>();
+	
+	//Objects to access the accelerometer
+	SensorManager mySensorManager;
+	Sensor mySensor;
 	
 	//Variables used to pause / restart workout and store to database.
 	int timeInterval = 1;	//Time interval since last verified locations (Standard = 1)
@@ -92,33 +101,16 @@ LocationListener {
 	boolean TimerStopStart = false;
 	String intervalType;
 	
-
-
-	
-	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
 
-		//mediaPlayer = MediaPlayer.create(this, R.raw.milldew);
-
 		Bundle extras = getIntent().getExtras();
 		String workoutType = extras.getString("workoutType");
-		if(workoutType.equals("Normal"))
-			{}
-		else if(workoutType.equals("Interval"))
-				Interval(); 
-		 else if(workoutType.equals("Test"))
-		 {
-			int min = extras.getInt("min");
-			int sec = extras.getInt("sec");
-			int lengde = extras.getInt("distance");
-			int test = extras.getInt("test");
-			String testType = extras.getString("testType");
-		 }
 
+		mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		mySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
@@ -154,6 +146,13 @@ LocationListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mySensorManager.unregisterListener(this, mySensor);
 	}
 	
 	@Override
@@ -225,8 +224,6 @@ LocationListener {
 		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
-		//if(verifyLocation(tempDistance)) {	//Verify new location before updating map and list
-		
 		setCamera(newLocation);		//Update map to new location
 		setText();					//Update distance
 		
@@ -240,28 +237,27 @@ LocationListener {
 	     .color(Color.RED).geodesic(true));
 		
 		locationList.add(prevLocation);
-		prevLocation = newLocation;	//Update last location for next update
-		/*Bundle extras = getIntent().getExtras();
-		int test = extras.getInt("test");
-		if(test==1){
-			*/test_check();
-	//	}		
+		prevLocation = newLocation;	//Update last location for next update	
 
 		myDistance = myDistance + tempDistance;	//Updating total distance
 
 		locationList.add(prevLocation);			//Adds the location to the Arraylist
 		prevLocation = newLocation;				//Update last location for next update
-		//}
-		//else
-		//	tempCounter += 1;
+	}
+	
+	public void onSensorChanged(SensorEvent event) {
+		double x, y, z, am;
 
-		//if(test!= 0){
-		//test_check();
-		//}
+		x = event.values[0];
+		y = event.values[1];
+		z = event.values[2];
 		
-		//if(test==1){
-		//	test_check();
-		//}		
+		am = Math.sqrt((x*x)+(y*y)+(z*z));
+		
+	}
+	
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		
 	}
 	
 	public void test_check(){
@@ -312,51 +308,6 @@ LocationListener {
 		
 		TextView tempView2 = (TextView) findViewById(R.id.T_testtemp_2);
 		tempView2.setText("Antall feil lesninger: " + tempCounter);
-	}
-	
-	public boolean verifyLocation(double distance) {	//WORK IN PROGRESS
-		int i = locationList.size();
-		
-		if (i < 3) {
-			if(checkLocation(distance, MAX_DISTANCE)) {
-				timeInterval = 1;
-				return true;
-			}
-			else {
-				timeInterval += 1;
-				return false;
-			}
-		}
-		else {
-			Location tempLocation1 = locationList.get(i-3);
-			Location tempLocation2 = locationList.get(i-2);
-			Location tempLocation3 = locationList.get(i-1);
-			double maxTemp = (tempLocation1.distanceTo(tempLocation2) + tempLocation2.distanceTo(tempLocation3)) / 2;
-			
-			if (distance * timeInterval > ((maxTemp * timeInterval) - 2) && distance * timeInterval < ((maxTemp * timeInterval) + 2)) {
-				timeInterval = 1;
-				return true;
-			}
-			else {
-				timeInterval += 1;
-				return false;
-			}
-			/*if (checkLocation(distance, MAX_DISTANCE)) {
-				timeInterval = 1;
-				return true;
-			}
-			else {
-				timeInterval += 1;
-				return false;
-			}*/
-		}
-	}
-	
-	public boolean checkLocation(double distance, double maxDistance) {	//WORK IN PROGRESS
-		if (distance * timeInterval < maxDistance * timeInterval )
-			return true;
-		else 
-			return false;
 	}
 	
 	//Onclick function for the start / pause workout button
@@ -584,5 +535,4 @@ LocationListener {
 		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
 		},Time*1000);
 	}
-	
 }
