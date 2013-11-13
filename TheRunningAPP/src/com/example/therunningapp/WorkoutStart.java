@@ -91,6 +91,7 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
+	double x, y, z, amplitude;
 
 	MediaPlayer mediaPlayer;
 	AudioManager am;
@@ -259,13 +260,11 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void onSensorChanged(SensorEvent event) {
-		double x, y, z, am;
-
 		x = event.values[0];
 		y = event.values[1];
 		z = event.values[2];
 		
-		am = Math.sqrt((x*x)+(y*y)+(z*z));
+		amplitude = Math.sqrt((x*x)+(y*y)+(z*z));
 		
 	}
 	
@@ -561,9 +560,6 @@ LocationListener, SensorEventListener {
 		},PauseTime*1000);
 	}
 
-	
-
-	
 	public void DelayStop(int Time, final int x){
 		TimerStopStart = true;
 		final MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
@@ -590,4 +586,21 @@ LocationListener, SensorEventListener {
 		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
 		},Time*1000);
 	}
+	
+	public boolean verifyLocation(double distance) {
+		if(isMoving()) {
+			
+		}
+		else
+			
+	}
+	
+	public boolean isMoving() {
+		if(amplitude > TOTAL_RUNNING_ACCELERATION) {
+			return true;
+		}
+		else
+			return false;
+	}
+	
 }
