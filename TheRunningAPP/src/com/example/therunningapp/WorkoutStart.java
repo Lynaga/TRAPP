@@ -112,9 +112,6 @@ LocationListener, SensorEventListener {
 		setContentView(R.layout.activity_workout_start);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-		Bundle extras = getIntent().getExtras();
-		String workoutType = extras.getString("workoutType");
-
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
 
@@ -408,7 +405,22 @@ LocationListener, SensorEventListener {
 			calories = weight * 9;
 			calories = (int) (calories * time);
 			}
-			
+		
+		if(TimerRunStart){
+			run.cancel();
+			TimerRunStart = false;
+		}
+		if(TimerPauseStart){
+			pause.cancel();
+			TimerPauseStart = false;
+		}
+		if(TimerStopStart)
+		{
+			stop.cancel();
+			TimerStopStart = false;
+		}
+
+		
 		if(time != 0 && myDistance != 0) {	//Check if users started workout
 				//If workout was started -> write to database and start new activity, WorkoutEnd
 			ContentValues values = new ContentValues();
@@ -425,19 +437,6 @@ LocationListener, SensorEventListener {
 			startActivity(intent);
 			}
 		
-		if(TimerRunStart){
-			run.cancel();
-			TimerRunStart = false;
-		}
-		if(TimerPauseStart){
-			pause.cancel();
-			TimerPauseStart = false;
-		}
-		if(TimerStopStart)
-		{
-			stop.cancel();
-			TimerStopStart = false;
-		}
 		finish();
 	}
 
