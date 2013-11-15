@@ -13,6 +13,7 @@ public class TrappContract extends Activity {
 		
 		public static final String TABLE_NAME = "entry";
 		public static final String TABLE_NAMEPREF = "pref";
+		public static final String TABLE_NAME_INTERVAL = "interval";
 		public static final String COLUMN_NAME_DATE = "date";
 		public static final String COLUMN_NAME_DISTANCE = "distance";
 		public static final String COLUMN_NAME_TIME = "time";
@@ -28,6 +29,10 @@ public class TrappContract extends Activity {
 		public static final String COLUMN_NAME_MIN = "min";
 		public static final String COLUMN_NAME_SEC = "sec";
 		public static final String COLUMN_NAME_TEST_TYPE = "test_type";
+		public static final String COLUMN_NAME_RUN_TIME = "run";
+		public static final String COLUMN_NAME_PAUSE_TIME = "pause";
+		public static final String COLUMN_NAME_REPETITION = "repetition";
+		
 	}
 
 }
