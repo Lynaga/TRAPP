@@ -93,10 +93,9 @@
     
     <EditText
         android:id="@+id/editText_time_run_interval"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:hint="@string/S_sec"
         android:layout_toRightOf="@id/textView_time_run_interval"
         android:layout_alignBaseline="@id/textView_time_run_interval"
         android:layout_marginRight="14dp"
@@ -105,10 +104,9 @@
     
     <EditText
         android:id="@+id/editText_time_pause_interval"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:hint="@string/S_sec"
         android:layout_toRightOf="@id/textView_time_pause_interval"
         android:layout_alignBaseline="@id/textView_time_pause_interval"
         android:layout_marginRight="14dp"
@@ -117,7 +115,7 @@
     
     <EditText 
         android:id="@+id/editText_distance_run_interval"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:visibility="gone"
@@ -128,7 +126,7 @@
     
     <EditText 
         android:id="@+id/editText_distance_pause_interval"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:visibility="gone"
@@ -139,7 +137,7 @@
     
     <EditText
         android:id="@+id/editText_repetition_interval"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:layout_toRightOf="@id/textView_repetition_interval"
@@ -147,7 +145,27 @@
         android:layout_marginRight="14dp"
         android:layout_marginTop="71dp"
         android:ems="10" />
-        
+    
+    <ToggleButton 
+        android:id="@+id/ToggleButton_time_run_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/editText_time_run_interval"
+        android:layout_alignBaseline="@id/editText_time_run_interval"
+        android:background="@android:drawable/btn_default"
+        android:textOn="Min"
+        android:textOff="Sec" />
+
+    <ToggleButton 
+        android:id="@+id/ToggleButton_time_pause_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/editText_time_pause_interval"
+        android:layout_alignBaseline="@id/editText_time_pause_interval"
+        android:background="@android:drawable/btn_default"
+        android:textOn="Min"
+        android:textOff="Sec" />
+    
     <Button 
         android:id="@+id/button_save_interval"
         android:layout_width="75dp"
