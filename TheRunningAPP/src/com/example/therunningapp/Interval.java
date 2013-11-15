@@ -189,6 +189,7 @@ public class Interval extends Activity {
 		values.put(TrappEntry.COLUMN_NAME_PAUSE_TIME, pause);
 		values.put(TrappEntry.COLUMN_NAME_REPETITION, rep);
 		db.insert(TrappEntry.TABLE_NAME_INTERVAL, null, values);
+		db.close();
 		
 		Intent intent = new Intent(this, WorkoutStart.class);
 		intent.putExtra("run", run);	
