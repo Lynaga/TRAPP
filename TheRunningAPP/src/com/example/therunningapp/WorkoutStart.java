@@ -589,4 +589,22 @@ LocationListener, SensorEventListener {
 		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
 		},Time*1000);
 	}
+	
+	public int Calories(int time, int weight){
+		int caloriemath = 0;
+		if(workoutType.equals("Walk"))
+			caloriemath = 9;
+		else if(workoutType.equals("Jogging"))
+			caloriemath = (int) 9.5;
+		else if(workoutType.equals("Running"))
+			caloriemath = 10;
+		else if(workoutType.equals("Interval"))
+			caloriemath = (int) 10.5;
+		else if(workoutType.equals("Test"))
+			caloriemath = 11;
+		
+		int calories = (weight * caloriemath) * time;
+		
+		return calories;
+	}
 }
