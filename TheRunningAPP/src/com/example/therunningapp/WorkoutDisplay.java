@@ -70,9 +70,6 @@ public class WorkoutDisplay extends FragmentActivity {
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
 			int seconds = ((tempTime / 1000) % 60);
-			String tempHours = Integer.toString(hours);
-			String tempMinutes = Integer.toString(minutes);
-			String tempSeconds = Integer.toString(seconds);
 			double tempSpeed = Double.parseDouble(avgSpeed);	//Converting from string to double to format output
 			
 			StringBuilder sb = new StringBuilder();
@@ -80,13 +77,13 @@ public class WorkoutDisplay extends FragmentActivity {
 			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
-			sb.append(tempHours + ":");
-			if(minutes < 10)
+			sb.append(hours + ":");
+			if(minutes < 10)	
 				sb.append("0");
-			sb.append(tempMinutes + ":");
+			sb.append(minutes + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(tempSeconds);
+			sb.append(seconds);
 			time = sb.toString();
 			
 			String tempTimeString = getString(R.string.A_time_display_string);

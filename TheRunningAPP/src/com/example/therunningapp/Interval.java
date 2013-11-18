@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ToggleButton;
 import android.support.v4.app.NavUtils;
 
 
@@ -43,7 +44,6 @@ public class Interval extends Activity {
 		ListView workoutList = (ListView) findViewById(R.id.listViewInterval); 
 		workoutList.setClickable(true);
 		
-//		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME};
 		String sortOrder = TrappEntry._ID + " DESC";
 		
 		//Query the DB
@@ -120,6 +120,8 @@ public class Interval extends Activity {
 					findViewById(R.id.editText_time_run_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.textView_time_pause_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.editText_time_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.ToggleButton_time_run_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.ToggleButton_time_pause_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.textView_distance_run_interval).setVisibility(View.GONE);
 					findViewById(R.id.editText_distance_run_interval).setVisibility(View.GONE);
 					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.GONE);
@@ -132,6 +134,8 @@ public class Interval extends Activity {
 					findViewById(R.id.editText_time_run_interval).setVisibility(View.GONE);
 					findViewById(R.id.textView_time_pause_interval).setVisibility(View.GONE);
 					findViewById(R.id.editText_time_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.ToggleButton_time_run_interval).setVisibility(View.GONE);
+					findViewById(R.id.ToggleButton_time_pause_interval).setVisibility(View.GONE);
 					findViewById(R.id.textView_distance_run_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.editText_distance_run_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.VISIBLE);
@@ -157,9 +161,12 @@ public class Interval extends Activity {
 		{
 			EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
 			EditText pause_time = (EditText) findViewById(R.id.editText_time_pause_interval);
-	
+			
 			run = Integer.parseInt(run_time.getText().toString());
 			pause = Integer.parseInt(pause_time.getText().toString());
+
+			run = onToggleClicked(findViewById(R.id.ToggleButton_time_run_interval), run);
+			pause = onToggleClicked(findViewById(R.id.ToggleButton_time_pause_interval), pause);
 		}
 		else if(intervalType == "distance")
 		{
@@ -182,6 +189,7 @@ public class Interval extends Activity {
 		values.put(TrappEntry.COLUMN_NAME_PAUSE_TIME, pause);
 		values.put(TrappEntry.COLUMN_NAME_REPETITION, rep);
 		db.insert(TrappEntry.TABLE_NAME_INTERVAL, null, values);
+		db.close();
 		
 		Intent intent = new Intent(this, WorkoutStart.class);
 		intent.putExtra("run", run);	
@@ -190,5 +198,15 @@ public class Interval extends Activity {
 		intent.putExtra("workoutType", Interval);
 		startActivity(intent); 
 		finish(); 
+	}
+	
+	public int onToggleClicked(View view, int time) {
+	    boolean on = ((ToggleButton) view).isChecked();
+	    
+	    if (on) {
+	        return time*60; // Minutes
+	    } else {
+	        return time; // Seconds
+	    }
 	}
 }

@@ -111,6 +111,7 @@ LocationListener, SensorEventListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
+		mediaPlayer = MediaPlayer.create(this, R.raw.pause);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
 		extras = getIntent().getExtras();
@@ -267,6 +268,12 @@ LocationListener, SensorEventListener {
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
+
+		if(test==1){
+			test_check();
+		}	
+		test_check();
+
 	}
 	
 	public void test_check(){
@@ -286,18 +293,23 @@ LocationListener, SensorEventListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
+
+			
+
+
 		}
-		// Request audio focus for playback
-		int result = am.requestAudioFocus(afChangeListener,
+		if(myDistance >  0){
+	/*	int result = am.requestAudioFocus(afChangeListener,
 		                             // Use the music stream.
-		                             AudioManager.STREAM_MUSIC,
+		                             AudioManager.STREAM_NOTIFICATION,
 		                             // Request permanent focus.
 		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		   
 		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 		   mediaPlayer.start();
+		   am.abandonAudioFocus(afChangeListener);
+		}*/
 		}
-		
 
 		
 		if(value >= set){
@@ -305,13 +317,15 @@ LocationListener, SensorEventListener {
 			
 		}
 	}
+
+
 	
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
 	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-	            // Lower the volume
+	        	
 	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-	            // Raise it back to normal
+	        	
 	        }
 	    }
 	};
@@ -353,6 +367,16 @@ LocationListener, SensorEventListener {
 				Interval(); 
 			else if(workoutType.equals("Test"))
 			{
+				int result = am.requestAudioFocus(afChangeListener,
+                        // Use the music stream.
+                        AudioManager.STREAM_NOTIFICATION,
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+
+					if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+							mediaPlayer.start();
+							am.abandonAudioFocus(afChangeListener);
+					}
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -395,8 +419,8 @@ LocationListener, SensorEventListener {
 		
 		int avgSpeed = (int) ((int) myDistance / (pauseTime / 1000));
 		
-		Gson gson = new Gson();
-		String jsonLocations = gson.toJson(locationList);
+		//Gson gson = new Gson();
+		//String jsonLocations = gson.toJson(locationList);
 		
 		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
@@ -429,7 +453,7 @@ LocationListener, SensorEventListener {
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 			values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
+			//values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
@@ -590,16 +614,35 @@ LocationListener, SensorEventListener {
 		if(isMoving()) {
 			
 		}
-		else
+		else {
 			
+		}
+			return true;
 	}
 	
 	public boolean isMoving() {
-		if(amplitude > TOTAL_RUNNING_ACCELERATION) {
+		if(amplitude > 0/*TOTAL_RUNNING_ACCELERATION*/) {
 			return true;
 		}
 		else
 			return false;
 	}
 	
+	public int Calories(int time, int weight) {
+		int caloriemath = 0;
+		if(workoutType.equals("Walk"))
+			caloriemath = 9;
+		else if(workoutType.equals("Jogging"))
+			caloriemath = (int) 9.5;
+		else if(workoutType.equals("Running"))
+			caloriemath = 10;
+		else if(workoutType.equals("Interval"))
+			caloriemath = (int) 10.5;
+		else if(workoutType.equals("Test"))
+			caloriemath = 11;
+		
+		int calories = (weight * caloriemath) * time;
+		
+		return calories;
+	}
 }
