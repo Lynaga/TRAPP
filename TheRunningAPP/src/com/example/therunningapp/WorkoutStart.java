@@ -69,8 +69,6 @@ LocationListener, SensorEventListener {
 	GoogleMap myMap;					//Object to get map from fragment
 	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
-	private List<Location> locationList = new ArrayList<Location>();
-	
 	//Objects to access the accelerometer
 	SensorManager mySensorManager;
 	Sensor mySensor;
@@ -90,8 +88,9 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
-	double x, y, z, amplitude;
-
+	double x, y, z, amplitude;	//Used for accelerometer data
+	int nextWorkoutID = 0;
+	
 	MediaPlayer mediaPlayer;
 	AudioManager am;
 	
@@ -229,10 +228,6 @@ LocationListener, SensorEventListener {
 		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
 		
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		ContentValues values = new ContentValues();
-		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
 		setCamera(newLocation);		//Update map to new location
@@ -246,16 +241,9 @@ LocationListener, SensorEventListener {
 	     .add(prevLatLng, newLatLng)
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
-		
-		locationList.add(prevLocation);
-
-		prevLocation = newLocation;	//Update last location for next update	
-
-		prevLocation = newLocation;	//Update last location for next update
 	
 		myDistance = myDistance + tempDistance;	//Updating total distance
 
-		locationList.add(prevLocation);			//Adds the location to the Arraylist
 		prevLocation = newLocation;				//Update last location for next update
 
 	}
@@ -455,7 +443,7 @@ LocationListener, SensorEventListener {
 			Intent intent = new Intent(this, WorkoutEnd.class);
 			startActivity(intent);
 			}
-		
+		db.close();
 		finish();
 	}
 
@@ -499,6 +487,7 @@ LocationListener, SensorEventListener {
 				Intent intent = new Intent(this, WorkoutEnd.class);
 				startActivity(intent);
 				}
+			db.close();
 			finish();
 	}
 	
@@ -615,6 +604,18 @@ LocationListener, SensorEventListener {
 		}
 		else
 			return false;
+	}
+	
+	public void writeLocation() {
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		
+		if(nextWorkoutID == 0) {
+			nextWorkoutID = ;
+		}
+			 
+		
+		ContentValues values = new ContentValues();
 	}
 	
 	public int Calories(int time, int weight) {
