@@ -271,6 +271,11 @@ LocationListener, SensorEventListener {
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
+
+		if(test==1){
+			test_check();
+		}	
+
 	}
   
 	public void test_check(){
