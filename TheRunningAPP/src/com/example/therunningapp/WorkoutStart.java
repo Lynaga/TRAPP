@@ -348,8 +348,10 @@ LocationListener, SensorEventListener {
 			myTimer.start();
 		    myLocationClient.requestLocationUpdates(myLocationRequest, this);	//Starts location updates
 			
-		    if(workoutType.equals("Normal"))
-			{}
+		    if(workoutType.equals("Walk"))
+		    	{}
+		    else if(workoutType.equals("Running"))
+				{}
 			else if(workoutType.equals("Interval"))
 				Interval(); 
 			else if(workoutType.equals("Test"))
@@ -406,6 +408,7 @@ LocationListener, SensorEventListener {
 			calories = (int) (calories * time);
 			}
 		
+		// stop the loops if it's an Interval
 		if(TimerRunStart){
 			run.cancel();
 			TimerRunStart = false;
@@ -594,8 +597,6 @@ LocationListener, SensorEventListener {
 		int caloriemath = 0;
 		if(workoutType.equals("Walk"))
 			caloriemath = 9;
-		else if(workoutType.equals("Jogging"))
-			caloriemath = (int) 9.5;
 		else if(workoutType.equals("Running"))
 			caloriemath = 10;
 		else if(workoutType.equals("Interval"))
