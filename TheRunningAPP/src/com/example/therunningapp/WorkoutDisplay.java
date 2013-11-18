@@ -23,8 +23,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class WorkoutDisplay extends FragmentActivity {
 
@@ -49,44 +47,36 @@ public class WorkoutDisplay extends FragmentActivity {
 		
 		//query the DB
 		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
-								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME,
-								TrappEntry.COLUMN_NAME_AVGSPEED, TrappEntry.COLUMN_NAME_LOCATIONS };
+								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
-		Gson gson = new Gson();
 		//Display the workout
 		if(c.moveToFirst()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
-			String avgSpeed = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_AVGSPEED));
-			String jsonLocations = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
-			
-			Type type = new TypeToken<List<Location>>(){}.getType();
-			List<Location> locationList = gson.fromJson(jsonLocations, type);
 			
 			//Formatting time from milliseconds to hh:mm:ss
 			int tempTime = Integer.parseInt(time);
+			int tempDistance =Integer.parseInt(distance);
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
 			int seconds = ((tempTime / 1000) % 60);
-			String tempHours = Integer.toString(hours);
-			String tempMinutes = Integer.toString(minutes);
-			String tempSeconds = Integer.toString(seconds);
-			double tempSpeed = Double.parseDouble(avgSpeed);	//Converting from string to double to format output
+			
+			double tempSpeed = tempDistance / tempTime;
 			
 			StringBuilder sb = new StringBuilder();
 			
 			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
-			sb.append(tempHours + ":");
-			if(minutes < 10)
+			sb.append(hours + ":");
+			if(minutes < 10)	
 				sb.append("0");
-			sb.append(tempMinutes + ":");
+			sb.append(minutes + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(tempSeconds);
+			sb.append(seconds);
 			time = sb.toString();
 			
 			String tempTimeString = getString(R.string.A_time_display_string);

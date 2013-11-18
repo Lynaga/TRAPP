@@ -52,19 +52,27 @@ public class SetupWorkout extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void workoutStart (View view) { 
+	public void walk (View view){
 		Intent intent = new Intent(this, WorkoutStart.class);
-		String Normal = "Normal";
-		intent.putExtra("workoutType", Normal);
-		startActivity(intent);									
-	}
-	public void testStart (View view){
-		Intent intent = new Intent(this, TestSetup.class);
+		String walk = "Walk";
+		intent.putExtra("workoutType", walk);
 		startActivity(intent);
+	}
+	
+	public void running (View view) { 
+		Intent intent = new Intent(this, WorkoutStart.class);
+		String running = "Running";
+		intent.putExtra("workoutType", running);
+		startActivity(intent);									
 	}
 	
 	public void intervalSetup (View view){
 		Intent intent = new Intent(this, Interval.class);
+		startActivity(intent);
+	}
+	
+	public void testStart (View view){
+		Intent intent = new Intent(this, TestSetup.class);
 		startActivity(intent);
 	}
 	
