@@ -45,7 +45,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 
 public class WorkoutStart extends FragmentActivity implements
 GooglePlayServicesClient.ConnectionCallbacks,
@@ -91,6 +90,7 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
+	double x, y, z, amplitude;
 
 	MediaPlayer mediaPlayer;
 	AudioManager am;
@@ -110,6 +110,7 @@ LocationListener, SensorEventListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
+		mediaPlayer = MediaPlayer.create(this, R.raw.pause);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
 		extras = getIntent().getExtras();
@@ -228,6 +229,10 @@ LocationListener, SensorEventListener {
 		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
 		
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
 		setCamera(newLocation);		//Update map to new location
@@ -256,18 +261,22 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void onSensorChanged(SensorEvent event) {
-		double x, y, z, am;
-
 		x = event.values[0];
 		y = event.values[1];
 		z = event.values[2];
 		
-		am = Math.sqrt((x*x)+(y*y)+(z*z));
+		amplitude = Math.sqrt((x*x)+(y*y)+(z*z));
 		
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
+
+		if(test==1){
+			test_check();
+		}	
+		test_check();
+
 	}
 	
 	public void test_check(){
@@ -287,18 +296,23 @@ LocationListener, SensorEventListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
+
+			
+
+
 		}
-		// Request audio focus for playback
-		int result = am.requestAudioFocus(afChangeListener,
+		if(myDistance >  0){
+	/*	int result = am.requestAudioFocus(afChangeListener,
 		                             // Use the music stream.
-		                             AudioManager.STREAM_MUSIC,
+		                             AudioManager.STREAM_NOTIFICATION,
 		                             // Request permanent focus.
 		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		   
 		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 		   mediaPlayer.start();
+		   am.abandonAudioFocus(afChangeListener);
+		}*/
 		}
-		
 
 		
 		if(value >= set){
@@ -306,13 +320,15 @@ LocationListener, SensorEventListener {
 			
 		}
 	}
+
+
 	
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
 	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-	            // Lower the volume
+	        	
 	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-	            // Raise it back to normal
+	        	
 	        }
 	    }
 	};
@@ -356,6 +372,16 @@ LocationListener, SensorEventListener {
 				Interval(); 
 			else if(workoutType.equals("Test"))
 			{
+				int result = am.requestAudioFocus(afChangeListener,
+                        // Use the music stream.
+                        AudioManager.STREAM_NOTIFICATION,
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+
+					if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+							mediaPlayer.start();
+							am.abandonAudioFocus(afChangeListener);
+					}
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -396,11 +422,6 @@ LocationListener, SensorEventListener {
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 		
-		int avgSpeed = (int) ((int) myDistance / (pauseTime / 1000));
-		
-		Gson gson = new Gson();
-		String jsonLocations = gson.toJson(locationList);
-		
 		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 			//If weight is set calculate calories burnt during the workout
@@ -432,8 +453,6 @@ LocationListener, SensorEventListener {
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-			values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
@@ -463,11 +482,6 @@ LocationListener, SensorEventListener {
 			Date cDate = new Date();
 			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 			
-			double avgSpeed = (myDistance / (pauseTime / 1000));
-			
-			Gson gson = new Gson();
-			String jsonLocations = gson.toJson(locationList);
-			
 			if(w.moveToFirst()){	//Checks if the user has set the weight 
 				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				//If weight is set calculate calories burnt during the workout
@@ -483,8 +497,6 @@ LocationListener, SensorEventListener {
 				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-				values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 				db.insert(TrappEntry.TABLE_NAME, null, values);
 			
 				Intent intent = new Intent(this, WorkoutEnd.class);
@@ -563,9 +575,6 @@ LocationListener, SensorEventListener {
 		},PauseTime*1000);
 	}
 
-	
-
-	
 	public void DelayStop(int Time, final int x){
 		TimerStopStart = true;
 		final MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
@@ -593,7 +602,25 @@ LocationListener, SensorEventListener {
 		},Time*1000);
 	}
 	
-	public int Calories(int time, int weight){
+	public boolean verifyLocation(double distance) {
+		if(isMoving()) {
+			
+		}
+		else {
+			
+		}
+			return true;
+	}
+	
+	public boolean isMoving() {
+		if(amplitude > 0/*TOTAL_RUNNING_ACCELERATION*/) {
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public int Calories(int time, int weight) {
 		int caloriemath = 0;
 		if(workoutType.equals("Walk"))
 			caloriemath = 9;
