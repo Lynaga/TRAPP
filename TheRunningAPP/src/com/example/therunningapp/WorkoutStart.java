@@ -45,7 +45,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 
 public class WorkoutStart extends FragmentActivity implements
 GooglePlayServicesClient.ConnectionCallbacks,
@@ -229,6 +228,10 @@ LocationListener, SensorEventListener {
 	public void onLocationChanged(Location newLocation) {
 		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
+		
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		ContentValues values = new ContentValues();
 		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
@@ -417,11 +420,6 @@ LocationListener, SensorEventListener {
 		Date cDate = new Date();
 		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 		
-		int avgSpeed = (int) ((int) myDistance / (pauseTime / 1000));
-		
-		//Gson gson = new Gson();
-		//String jsonLocations = gson.toJson(locationList);
-		
 		if(w.moveToFirst()){	//Checks if the user has set the weight 
 			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 			//If weight is set calculate calories burnt during the workout
@@ -452,8 +450,6 @@ LocationListener, SensorEventListener {
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-			values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-			//values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
@@ -483,11 +479,6 @@ LocationListener, SensorEventListener {
 			Date cDate = new Date();
 			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
 			
-			double avgSpeed = (myDistance / (pauseTime / 1000));
-			
-			Gson gson = new Gson();
-			String jsonLocations = gson.toJson(locationList);
-			
 			if(w.moveToFirst()){	//Checks if the user has set the weight 
 				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				//If weight is set calculate calories burnt during the workout
@@ -503,8 +494,6 @@ LocationListener, SensorEventListener {
 				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-				values.put(TrappEntry.COLUMN_NAME_AVGSPEED, avgSpeed);
-				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, jsonLocations);
 				db.insert(TrappEntry.TABLE_NAME, null, values);
 			
 				Intent intent = new Intent(this, WorkoutEnd.class);
