@@ -275,7 +275,6 @@ LocationListener, SensorEventListener {
 		if(test==1){
 			test_check();
 		}	
-		test_check();
 
 	}
 	
