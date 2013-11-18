@@ -269,16 +269,10 @@ LocationListener, SensorEventListener {
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		
-
-		if(test==1){
-			test_check();
-		}	
-		test_check();
-
 	}
-	
+  
 	public void test_check(){
-		Bundle extras = getIntent().getExtras();
+		//Bundle extras = getIntent().getExtras();
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
@@ -287,7 +281,8 @@ LocationListener, SensorEventListener {
 		
 		int value;
 		int set = 0;
-		if(testType.equals("Distance")){
+		do{
+			if(testType.equals("Distance")){
 			value = (int) myDistance;
 			set = lengde;
 		}
@@ -299,26 +294,21 @@ LocationListener, SensorEventListener {
 
 
 		}
-		if(myDistance >  0){
-	/*	int result = am.requestAudioFocus(afChangeListener,
-		                             // Use the music stream.
-		                             AudioManager.STREAM_NOTIFICATION,
-		                             // Request permanent focus.
-		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-		   
-		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-		   mediaPlayer.start();
-		   am.abandonAudioFocus(afChangeListener);
-		}*/
-		}
+		int result = am.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_NOTIFICATION,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 
+			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+					mediaPlayer.start();
+					am.abandonAudioFocus(afChangeListener);
+			}
 		
-		if(value >= set){
-			end();
-			
 		}
+		while(value <= set);
+			end();
 	}
-
 
 	
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
@@ -368,16 +358,14 @@ LocationListener, SensorEventListener {
 				Interval(); 
 			else if(workoutType.equals("Test"))
 			{
-				int result = am.requestAudioFocus(afChangeListener,
-                        // Use the music stream.
-                        AudioManager.STREAM_NOTIFICATION,
-                        // Request permanent focus.
-                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+				 new Thread(new Runnable() {
+				        public void run() {
+							
+				            test_check();
+				            }
+				    }).start();
+				
 
-					if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-							mediaPlayer.start();
-							am.abandonAudioFocus(afChangeListener);
-					}
 			}
 		    
 		    workoutStatus = true;											//Change workout status

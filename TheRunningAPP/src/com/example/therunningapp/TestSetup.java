@@ -115,6 +115,7 @@ public class TestSetup extends Activity {
 		intent.putExtra("sec", sec);
 		intent.putExtra("workoutType", workoutType);
 		startActivity(intent);
+		finish();
 	}
 
 }

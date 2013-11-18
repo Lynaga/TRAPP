@@ -32,18 +32,26 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_NAME + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_RUN_TIME + " INTEGER, " + TrappEntry.COLUMN_NAME_PAUSE_TIME + " INTEGER, "
 				+ TrappEntry.COLUMN_NAME_REPETITION + " INTEGER)";
-	
+	//table for storing Test
+		private static final String SQL_CREATE_TEST = "CREATE TABLE " + TrappEntry.TABLE_TESTS + 
+				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_TEST_TYPE + " TEXT, "
+				+ TrappEntry.COLUMN_NAME_DISTANCE + "INTEGER, " + TrappEntry.COLUMN_NAME_MIN + "INTEGER, "
+				+ TrappEntry.COLUMN_NAME_SEC +"INTEGER)";
+		
 	//Delete table for workout
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAME;
 	//delete table for preferences
 	private static final String SQL_DELETE_ENTRIES1 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAMEPREF;
 	//delete table for preferences
 	private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAME_INTERVAL;
+	//delete table for test
+	private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_TESTS;
 		
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(SQL_CREATE_WORKOUTLOG);
 		db.execSQL(SQL_CREATE_PREF);
 		db.execSQL(SQL_CREATE_INTERVAL);
+		db.execSQL(SQL_CREATE_TEST);
 	}
 	
 	public TrappDBHelper(Context context) {
@@ -55,6 +63,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_DELETE_ENTRIES);
 		db.execSQL(SQL_DELETE_ENTRIES1);
 		db.execSQL(SQL_DELETE_ENTRIES2);
+		db.execSQL(SQL_DELETE_ENTRIES3);
 		onCreate(db);
 	}
 	
