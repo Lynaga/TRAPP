@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -89,7 +90,7 @@ LocationListener, SensorEventListener {
 	String testType = "0";
 	
 	double x, y, z, amplitude;	//Used for accelerometer data
-	int nextWorkoutID = 0;
+	int nextWorkoutID = -1;
 	
 	MediaPlayer mediaPlayer;
 	AudioManager am;
@@ -225,16 +226,21 @@ LocationListener, SensorEventListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-		if (prevLocation == null)	//Check if last location is set
+		if (prevLocation == null) {	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
+			writeLocation(prevLocation.getLatitude(), prevLocation.getLongitude());	//Write start location to db
+		}
 		
 		double tempDistance = prevLocation.distanceTo(newLocation);
 		
 		setCamera(newLocation);		//Update map to new location
 		setText();					//Update distance
 		
+		double tempLat = newLocation.getLatitude();
+		double tempLng = newLocation.getLongitude();
+		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
-		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+		LatLng newLatLng = new LatLng(tempLat, tempLng);
 		
 		//Drawing on the map from last location to new location
 		myMap.addPolyline(new PolylineOptions()
@@ -243,7 +249,7 @@ LocationListener, SensorEventListener {
 	     .color(Color.RED).geodesic(true));
 	
 		myDistance = myDistance + tempDistance;	//Updating total distance
-
+		writeLocation(tempLat, tempLng);		//Write new location to db
 		prevLocation = newLocation;				//Update last location for next update
 
 	}
@@ -602,16 +608,18 @@ LocationListener, SensorEventListener {
 			return false;
 	}
 	
-	public void writeLocation() {
+	public void writeLocation(double lat, double lng) {
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
-		if(nextWorkoutID == 0) {
-			nextWorkoutID = ;
-		}
+		if(nextWorkoutID == -1)
+			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, "entry") + 1;
 			 
-		
 		ContentValues values = new ContentValues();
+		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
+		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
+		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
+		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
 	}
 	
 	public int Calories(int time, int weight) {
