@@ -1,17 +1,26 @@
 package com.example.therunningapp;
 
+import com.example.therunningapp.TrappContract.TrappEntry;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class TestSetup extends Activity {
 	String testType;
+	String type = "Test";
 	int test;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +28,45 @@ public class TestSetup extends Activity {
 		setContentView(R.layout.activity_test_setup);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		//Get the DB
+		TrappDBHelper mDbHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDbHelper.getReadableDatabase();
+		
+		ListView workoutList = (ListView) findViewById(R.id.listView1); 
+		workoutList.setClickable(true);
+		
+
+		
+		//Query the DB
+				final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, null); 
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+				
+				//Display the name of test
+				if(c.moveToFirst()){
+					do{
+						String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
+						adapter.add(name);
+					}while(c.moveToNext());
+					
+					workoutList.setAdapter(adapter);
+					
+					workoutList.setOnItemClickListener(new OnItemClickListener() {
+						  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+							  c.moveToPosition(position);	
+						      Intent intent = new Intent(TestSetup.this, WorkoutStart.class);
+						      intent.putExtra("lengder", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE)));	
+							  intent.putExtra("min", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_MIN)));
+							  intent.putExtra("sec", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_SEC)));
+							  intent.putExtra("testType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TEST_TYPE)));
+							  intent.putExtra("workoutType", type);
+						      startActivity(intent);
+						      finish();          
+						  }
+					});	
+				} 
+				db.close();
 	}
+
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.

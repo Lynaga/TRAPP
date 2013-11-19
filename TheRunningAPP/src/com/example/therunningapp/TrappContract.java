@@ -26,7 +26,7 @@ public class TrappContract extends Activity {
 		
 		public static final String TABLE_TESTS = "test";
 		public static final String COLUMN_NAME_TESTNAME = "name";
-		public static final String COLUMN_NAME_TEST_DISTANCE = "test_distance";
+		public static final String COLUMN_NAME_TEST_DISTANCE = "distance";
 		public static final String COLUMN_NAME_MIN = "min";
 		public static final String COLUMN_NAME_SEC = "sec";
 		public static final String COLUMN_NAME_TEST_TYPE = "test_type";
