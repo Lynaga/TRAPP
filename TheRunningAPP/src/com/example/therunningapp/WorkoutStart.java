@@ -495,6 +495,7 @@ LocationListener, SensorEventListener {
 				Intent intent = new Intent(this, WorkoutEnd.class);
 				startActivity(intent);
 				}
+			db.close();
 			finish();
 	}
 	

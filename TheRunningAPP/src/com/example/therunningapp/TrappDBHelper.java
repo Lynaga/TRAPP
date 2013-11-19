@@ -123,6 +123,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.insert(TrappEntry.TABLE_TESTS,
 	         null,
 	         values5);
+		db.close();
 }
 
 
