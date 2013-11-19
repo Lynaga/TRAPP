@@ -23,7 +23,8 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_PREF = "CREATE TABLE " 
 			+ TrappEntry.TABLE_NAMEPREF +
 			" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_NAME + " TEXT, "
-			+ TrappEntry.COLUMN_NAME_WEIGHT + " INTEGER, " + TrappEntry.COLUMN_NAME_HEIGHT + " INTEGER)";
+			+ TrappEntry.COLUMN_NAME_WEIGHT + " INTEGER, " + TrappEntry.COLUMN_NAME_HEIGHT + " INTEGER, "
+			+ TrappEntry.COLUMN_NAME_AGE + " INTEGER, " + TrappEntry.COLUMN_NAME_GENDER + " TEXT)";
 	
 	//table for storing Interval
 	private static final String SQL_CREATE_INTERVAL = "CREATE TABLE " + TrappEntry.TABLE_NAME_INTERVAL

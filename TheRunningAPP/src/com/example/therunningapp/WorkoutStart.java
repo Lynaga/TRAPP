@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -69,8 +70,6 @@ LocationListener, SensorEventListener {
 	GoogleMap myMap;					//Object to get map from fragment
 	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
 	
-	private List<Location> locationList = new ArrayList<Location>();
-	
 	//Objects to access the accelerometer
 	SensorManager mySensorManager;
 	Sensor mySensor;
@@ -90,8 +89,9 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
-	double x, y, z, amplitude;
-
+	double x, y, z, amplitude;	//Used for accelerometer data
+	int nextWorkoutID = -1;
+	
 	MediaPlayer mediaPlayer;
 	AudioManager am;
 	
@@ -226,36 +226,30 @@ LocationListener, SensorEventListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-		if (prevLocation == null)	//Check if last location is set
+		if (prevLocation == null) {	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
+			writeLocation(prevLocation.getLatitude(), prevLocation.getLongitude());	//Write start location to db
+		}
 		
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		ContentValues values = new ContentValues();
-		
-		double tempDistance = prevLocation.distanceTo(newLocation);
-		
+		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
+		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
-		setText();					//Update distance
+		setText();		//Update text
+		
+		double tempLat = newLocation.getLatitude();
+		double tempLng = newLocation.getLongitude();
 		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
-		LatLng newLatLng = new LatLng(newLocation.getLatitude(), newLocation.getLongitude());
+		LatLng newLatLng = new LatLng(tempLat, tempLng);
 		
 		//Drawing on the map from last location to new location
 		myMap.addPolyline(new PolylineOptions()
 	     .add(prevLatLng, newLatLng)
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
-		
-		locationList.add(prevLocation);
-
-		prevLocation = newLocation;	//Update last location for next update	
-
-		prevLocation = newLocation;	//Update last location for next update
 	
-		myDistance = myDistance + tempDistance;	//Updating total distance
-
-		locationList.add(prevLocation);			//Adds the location to the Arraylist
+		
+		writeLocation(tempLat, tempLng);		//Write new location to db
 		prevLocation = newLocation;				//Update last location for next update
 
 	}
@@ -338,15 +332,27 @@ LocationListener, SensorEventListener {
 	
 	//Function to set and update current distance
 	public void setText() {
-		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
-		textView.setText(tempDistance + " m");
+		StringBuilder sb = new StringBuilder();
 		
-		TextView tempView = (TextView) findViewById(R.id.T_testtemp);
-		tempView.setText("Speed: Later work" );
+		if(tempDistance > 1000) {		//If user ran more than 1 km, format output to (ex.) "1.23 km"
+			int tempKm = tempDistance / 1000;
+			int tempM = (tempDistance % 1000) / 100;
+			sb.append(tempKm + "." + tempM + " km");
+		}
+		else {
+			sb.append(tempDistance + " m");
+		}
 		
-		TextView tempView2 = (TextView) findViewById(R.id.T_testtemp_2);
-		tempView2.setText("Antall feil lesninger: " + tempCounter);
+		//Set new values
+		TextView textView = (TextView) findViewById(R.id.T_distance);
+		textView.setText(sb.toString());		
+		
+		TextView tempView = (TextView) findViewById(R.id.T_speed);
+		tempView.setText(String.format("%.2f", amplitude));
+		
+		TextView tempView2 = (TextView) findViewById(R.id.T_calories);
+		tempView2.setText("Coming soon");
 	}
 	
 	//Onclick function for the start / pause workout button
@@ -451,7 +457,7 @@ LocationListener, SensorEventListener {
 			Intent intent = new Intent(this, WorkoutEnd.class);
 			startActivity(intent);
 			}
-		
+		db.close();
 		finish();
 	}
 
@@ -509,8 +515,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void Interval(int RunTime, int PauseTime, int Repetition){
-		TextView tv = (TextView) findViewById(R.id.A_testtemp);
-        tv.setText("Run");
         
         MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
         mediaPlayerRun.start();
@@ -532,8 +536,6 @@ LocationListener, SensorEventListener {
 
 		    	    @Override
 		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	        tv.setText("Pause");
 		    	        
 		    	        mediaPlayerPause.start();
 		    	        
@@ -557,8 +559,6 @@ LocationListener, SensorEventListener {
 
 		    	    @Override
 		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	        tv.setText("Run");
 		    	        
 		    	        mediaPlayerRun.start();
 		    	        
@@ -585,8 +585,6 @@ LocationListener, SensorEventListener {
 		    	    	if(x == 1)
 		    	    		run.cancel();
 		    	    	else if(x == 2){
-		    	    		TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	    		tv.setText("Stop");
 		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
 		    	        }
@@ -612,6 +610,21 @@ LocationListener, SensorEventListener {
 		}
 		else
 			return false;
+	}
+	
+	public void writeLocation(double lat, double lng) {
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		
+		if(nextWorkoutID == -1)
+			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
+			 
+		ContentValues values = new ContentValues();
+		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
+		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
+		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
+		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
+		db.close();
 	}
 	
 	public int Calories(int time, int weight) {
