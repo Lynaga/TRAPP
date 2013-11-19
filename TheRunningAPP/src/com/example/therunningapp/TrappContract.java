@@ -21,6 +21,8 @@ public class TrappContract extends Activity {
 		public static final String COLUMN_NAME_NAME = "name";
 		public static final String COLUMN_NAME_HEIGHT = "height";
 		public static final String COLUMN_NAME_WEIGHT = "weight";
+		public static final String COLUMN_NAME_AGE = "age";
+		public static final String COLUMN_NAME_GENDER = "gender";
 		
 		public static final String TABLE_TESTS = "test";
 		public static final String COLUMN_NAME_TESTNAME = "name";

@@ -11,13 +11,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class Settings extends Activity {
-	
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,9 @@ public class Settings extends Activity {
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, TrappEntry.COLUMN_NAME_HEIGHT};
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, 
+												TrappEntry.COLUMN_NAME_HEIGHT, TrappEntry.COLUMN_NAME_AGE
+												,TrappEntry.COLUMN_NAME_GENDER};
 		
 		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
 
@@ -36,19 +38,27 @@ public class Settings extends Activity {
 				String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
 				String weight = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				String height = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_HEIGHT));
+				String age = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_AGE));
+				String gender = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_GENDER));
+				
 				EditText name1 = (EditText) findViewById(R.id.editText_name);
 				EditText height1 = (EditText) findViewById(R.id.editText_height);
 				EditText weight1 = (EditText) findViewById(R.id.editText_weight);
+				EditText age1 = (EditText) findViewById(R.id.editText_age);
+				Spinner genderspinner = (Spinner) findViewById(R.id.spinner_gender);
+				
 				name1.setText(name);
 				height1.setText(height);
 				weight1.setText(weight);
+				age1.setText(age);
 				
-				
-	            
+				@SuppressWarnings("unchecked")
+				ArrayAdapter<String> myAdap = (ArrayAdapter<String>) genderspinner.getAdapter(); //cast to an ArrayAdapter
+				int spinnerPosition = myAdap.getPosition(gender);
+				//set the default according to value
+				genderspinner.setSelection(spinnerPosition);
 		}
-
-
-		
+		db.close();
 	}
 
 
@@ -71,20 +81,28 @@ public class Settings extends Activity {
 		EditText name = (EditText) findViewById(R.id.editText_name);
 		EditText height = (EditText) findViewById(R.id.editText_height);
 		EditText weight = (EditText) findViewById(R.id.editText_weight);
+		EditText age = (EditText) findViewById(R.id.editText_age);
+		Spinner genderspinner = (Spinner)findViewById(R.id.spinner_gender);
+		
 		//Get's the strings from EditText fields
 		String namestring = name.getText().toString();
 		String heightstring = height.getText().toString();
 		String weightstring = weight.getText().toString();
+		String agestring = age.getText().toString();
+		String genderstring = genderspinner.getSelectedItem().toString();
 		
 		ContentValues values = new ContentValues();
 		//Puts the data into the contentvalues
 		values.put(TrappEntry.COLUMN_NAME_NAME, namestring);
 		values.put(TrappEntry.COLUMN_NAME_HEIGHT, heightstring);
 		values.put(TrappEntry.COLUMN_NAME_WEIGHT, weightstring);
+		values.put(TrappEntry.COLUMN_NAME_AGE, agestring);
+		values.put(TrappEntry.COLUMN_NAME_GENDER, genderstring);
 		String selection = TrappEntry.COLUMN_NAME_NAME + " LIKE ?";
 		//String[] selectionArgs = { String.valueOf(rowId) };
 		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, TrappEntry.COLUMN_NAME_HEIGHT};
+		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_NAME, TrappEntry.COLUMN_NAME_WEIGHT, 
+				TrappEntry.COLUMN_NAME_HEIGHT, TrappEntry.COLUMN_NAME_AGE , TrappEntry.COLUMN_NAME_GENDER};
 		Cursor c = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
 		//check is data is in the database if so it updates it, els it creates a entry
 		int test = c.getCount();
@@ -135,6 +153,4 @@ public class Settings extends Activity {
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	    startActivity(intent);	
 	}
-	
-
 }

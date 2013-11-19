@@ -7,11 +7,11 @@
     <string name="title_activity_trapp_dbhelper">TrappDBHjelper</string>
     <string name="title_activity_trapp_contract">Trapp Kontakter</string>
     <string name="title_activity_workout_start">Start økt</string>
-    <string name="title_activity_settings">Innstilinnger</string>
+    <string name="title_activity_settings">Innstillinger</string>
     <string name="title_activity_workout_display">Vis Trening</string>
     <string name="title_activity_interval">Interval</string>
     <string name="title_activity_test_setup">Test instillinger</string>
-    <string name="title_activity_setup_workout">Trening instillinger</string>
+    <string name="title_activity_setup_workout">Treningstype</string>
     <string name="title_activity_history">Historie</string>
         
     <string name="action_settings">Innstillinger</string>
@@ -21,6 +21,7 @@
     <string name="S_name">Navn</string>
     <string name="S_height">Høyde</string>
     <string name="S_weight">Vekt</string>
+    <string name="Age">Alder</string>
     <string name="S_sex">Kjønn</string>
     <string name="S_save">Lagre</string>
     <string name="S_cancel">Avbryt</string>
@@ -55,5 +56,17 @@
     <string name="Pause_time">Pause tid</string>
     <string name="Run_distance">Løpe distanse</string>
     <string name="Pause_distance">Pause distanse</string>
+    <string name="walking">Spasere</string>
+    <string name="running">Løpe</string>
 	
+    <string-array name="Gender_array">
+        <item>Mann</item>
+        <item>Kvinne</item>
+    </string-array>
+    
+    <string-array name="Language_array">
+        <item>Norsk</item>
+        <item>Engelsk</item>
+    </string-array>
+    
 </resources>

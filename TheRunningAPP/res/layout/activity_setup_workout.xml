@@ -17,7 +17,7 @@
         android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
         android:onClick="walk"
-        android:text="Walking" />
+        android:text="@string/walking" />
   
   <Button
         android:id="@+id/button_running"
@@ -29,7 +29,7 @@
         android:background="#FF808080"
 	    android:textColor="#FFFFFF00"
         android:onClick="running"
-        android:text="Running" />
+        android:text="@string/running" />
   
   <Button
 	    android:id="@+id/button_interval"
