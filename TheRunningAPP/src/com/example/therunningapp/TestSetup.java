@@ -20,7 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class TestSetup extends Activity {
 	String testType;
-	String type = "test";
+	String type = "Test";
 	int test;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,13 @@ public class TestSetup extends Activity {
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		
-		ListView workoutList = (ListView) findViewById(R.id.listViewInterval); 
+		ListView workoutList = (ListView) findViewById(R.id.listView1); 
 		workoutList.setClickable(true);
 		
-		String sortOrder = TrappEntry._ID + " DESC";
+
 		
 		//Query the DB
-				final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, sortOrder); 
+				final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, null); 
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 				
 				//Display the name of test
@@ -57,6 +57,7 @@ public class TestSetup extends Activity {
 						      intent.putExtra("lengder", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE)));	
 							  intent.putExtra("min", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_MIN)));
 							  intent.putExtra("sec", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_SEC)));
+							  intent.putExtra("testType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TEST_TYPE)));
 							  intent.putExtra("workoutType", type);
 						      startActivity(intent);
 						      finish();          

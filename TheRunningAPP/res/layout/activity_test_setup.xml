@@ -107,9 +107,9 @@
         android:onClick="starttest"
         android:text="@string/start" 
         />
-    
+
     <ListView
-        android:id="@+id/listViewInterval"
+        android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
