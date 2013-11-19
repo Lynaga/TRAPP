@@ -231,10 +231,10 @@ LocationListener, SensorEventListener {
 			writeLocation(prevLocation.getLatitude(), prevLocation.getLongitude());	//Write start location to db
 		}
 		
-		double tempDistance = prevLocation.distanceTo(newLocation);
-		
+		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
+		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
-		setText();					//Update distance
+		setText();		//Update text
 		
 		double tempLat = newLocation.getLatitude();
 		double tempLng = newLocation.getLongitude();
@@ -248,7 +248,7 @@ LocationListener, SensorEventListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 	
-		myDistance = myDistance + tempDistance;	//Updating total distance
+		
 		writeLocation(tempLat, tempLng);		//Write new location to db
 		prevLocation = newLocation;				//Update last location for next update
 
@@ -332,15 +332,27 @@ LocationListener, SensorEventListener {
 	
 	//Function to set and update current distance
 	public void setText() {
-		TextView textView = (TextView) findViewById(R.id.T_distance);
 		int tempDistance = (int) myDistance;
-		textView.setText(tempDistance + " m");
+		StringBuilder sb = new StringBuilder();
 		
-		TextView tempView = (TextView) findViewById(R.id.T_testtemp);
-		tempView.setText("Speed: Later work" );
+		if(tempDistance > 1000) {		//If user ran more than 1 km, format output to (ex.) "1.23 km"
+			int tempKm = tempDistance / 1000;
+			int tempM = (tempDistance % 1000) / 100;
+			sb.append(tempKm + "." + tempM + " km");
+		}
+		else {
+			sb.append(tempDistance + " m");
+		}
 		
-		TextView tempView2 = (TextView) findViewById(R.id.T_testtemp_2);
-		tempView2.setText("Antall feil lesninger: " + tempCounter);
+		//Set new values
+		TextView textView = (TextView) findViewById(R.id.T_distance);
+		textView.setText(sb.toString());		
+		
+		TextView tempView = (TextView) findViewById(R.id.T_speed);
+		tempView.setText(String.format("%.2f", amplitude));
+		
+		TextView tempView2 = (TextView) findViewById(R.id.T_calories);
+		tempView2.setText("Coming soon");
 	}
 	
 	//Onclick function for the start / pause workout button
@@ -503,8 +515,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void Interval(int RunTime, int PauseTime, int Repetition){
-		TextView tv = (TextView) findViewById(R.id.A_testtemp);
-        tv.setText("Run");
         
         MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
         mediaPlayerRun.start();
@@ -526,8 +536,6 @@ LocationListener, SensorEventListener {
 
 		    	    @Override
 		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	        tv.setText("Pause");
 		    	        
 		    	        mediaPlayerPause.start();
 		    	        
@@ -551,8 +559,6 @@ LocationListener, SensorEventListener {
 
 		    	    @Override
 		    	    public void run() {
-		    	        TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	        tv.setText("Run");
 		    	        
 		    	        mediaPlayerRun.start();
 		    	        
@@ -579,8 +585,6 @@ LocationListener, SensorEventListener {
 		    	    	if(x == 1)
 		    	    		run.cancel();
 		    	    	else if(x == 2){
-		    	    		TextView tv = (TextView) findViewById(R.id.A_testtemp);
-		    	    		tv.setText("Stop");
 		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
 		    	        }
@@ -613,13 +617,14 @@ LocationListener, SensorEventListener {
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
 		if(nextWorkoutID == -1)
-			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, "entry") + 1;
+			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
 			 
 		ContentValues values = new ContentValues();
 		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
 		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
 		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
 		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
+		db.close();
 	}
 	
 	public int Calories(int time, int weight) {

@@ -11,9 +11,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +25,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutDisplay extends FragmentActivity {
 
@@ -49,7 +55,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
 								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
-		db.close();
+		
 		//Display the workout
 		if(c.moveToFirst()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
@@ -90,6 +96,9 @@ public class WorkoutDisplay extends FragmentActivity {
 			viewDistance.setText(tempDistanceString + ": " + distance + " m");
 			viewCalories.setText(tempCaloriesString + ": " + calories);
 			viewSpeed.setText(tempSpeedString + ": " + String.format("%.2f", tempSpeed) + " m/s");
+			
+			drawMap(db_id, db);
+			db.close();
 	}
 		
 		
@@ -126,6 +135,37 @@ public class WorkoutDisplay extends FragmentActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void drawMap(String workoutID, SQLiteDatabase db) {
+		GoogleMap myMap;
+		FragmentManager myFragmentManager = getSupportFragmentManager();
+		SupportMapFragment mySupportMapFragment;
+		mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
+		myMap = mySupportMapFragment.getMap();
+		
+		String [] proj = {TrappEntry.COLUMN_NAME_LATITUDE, TrappEntry.COLUMN_NAME_LONGITUDE };
+		Cursor cur = db.query(TrappEntry.TABLE_NAME_LOCATIONS, proj, TrappEntry.COLUMN_NAME_WORKOUT + "=?",
+				new String [] {workoutID}, null, null, null, null);
+		
+		if(cur.moveToFirst()) {
+			LatLng prevLatLng = null, newLatLng = null;
+			do {
+				if(prevLatLng == null) {
+					prevLatLng = new LatLng(cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LATITUDE)),
+											cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LONGITUDE)));
+				}
+				else {
+					newLatLng = new LatLng(cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LATITUDE)),
+										   cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LONGITUDE)));
+					
+					myMap.addPolyline(new PolylineOptions()
+				     .add(prevLatLng, newLatLng)
+				     .width(5)
+				     .color(Color.RED).geodesic(true));
+				}
+			} while(cur.moveToNext());
+		}
 	}
 	
 	public void back(View view){	//Back button to exit activity

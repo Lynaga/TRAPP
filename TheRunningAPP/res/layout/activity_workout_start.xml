@@ -1,92 +1,93 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FF000000"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#FF000000"
     tools:context=".WorkoutStart" >
 
-	<fragment
-    	android:id="@+id/map"
-    	android:layout_width="match_parent"
-   		android:layout_height="wrap_content"
-    	class="com.google.android.gms.maps.SupportMapFragment" />
-	
-	<TextView 
-	    android:id="@+id/A_time_on_map"
-	    android:text="@string/A_time_display_string"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="3dp" />
-	
-	<Chronometer 
-	    android:id="@+id/T_timer"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/A_time_on_map"
-        android:layout_alignBaseline="@id/A_time_on_map" />
-	
-	<TextView 
-	    android:id="@+id/A_distance_on_map"
-	    android:text="@string/A_distance_display_string"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="3dp"
-	    android:layout_below="@id/A_time_on_map" />
-	
-	<TextView
-	    android:id="@+id/T_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/A_distance_on_map"
-        android:layout_alignBaseline="@id/A_distance_on_map" />
-	
-	<TextView 
-	    android:id="@+id/T_testtemp"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="3dp"
-	    android:layout_below="@id/A_distance_on_map" />
-	
-	<TextView 
-	    android:id="@+id/T_testtemp_2"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="3dp"
-	    android:layout_below="@id/T_testtemp" />
-	
-	<TextView 
-	    android:id="@+id/A_testtemp"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="3dp"
-	    android:layout_below="@id/T_testtemp_2" />
-	
-	<Button
-	    android:id="@+id/T_pause_workout_button"
-	    android:text="@string/T_start_workout_button_string"
-	    android:layout_width="120dp"
-	    android:layout_height="wrap_content"
-	    android:layout_marginRight="10dp"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentBottom="true"
-	    android:background="#FF808080"
-		android:textColor="#FFFFFF00"
-	    android:onClick="workoutStartPause" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
-	<Button
-	    android:id="@+id/T_end_workout_button"
-	    android:layout_width="120dp"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBaseline="@id/T_pause_workout_button"
-	    android:layout_alignBottom="@id/T_pause_workout_button"
-	    android:layout_toRightOf="@id/T_pause_workout_button"
-	    android:background="#FF808080"
-	    android:onClick="workoutEnd"
-	    android:text="@string/T_end_workout_button_string"
-	    android:textColor="#FFFFFF00" />
+        <TableRow android:layout_width="match_parent" >
 
-</RelativeLayout>
+            <Chronometer
+                android:id="@+id/T_timer"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF" />
+
+            <TextView
+                android:id="@+id/T_distance"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/T_speed"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF" />
+
+            <TextView
+                android:id="@+id/T_calories"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF" />
+        </TableRow>
+    </TableLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_weight="9"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <TableRow android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/T_pause_workout_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="#FF808080"
+                android:onClick="workoutStartPause"
+                android:text="@string/T_start_workout_button_string"
+                android:textColor="#FFFFFF00" />
+
+            <Button
+                android:id="@+id/T_end_workout_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#FF808080"
+                android:onClick="workoutEnd"
+                android:text="@string/T_end_workout_button_string"
+                android:textColor="#FFFFFF00" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
