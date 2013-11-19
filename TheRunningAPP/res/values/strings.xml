@@ -11,7 +11,7 @@
     <string name="title_activity_workout_display">Workout Display</string>
     <string name="title_activity_interval">Interval</string>
     <string name="title_activity_test_setup">Test Setup</string>
-    <string name="title_activity_setup_workout">Setup Workout</string>
+    <string name="title_activity_setup_workout">Workouttype</string>
     <string name="title_activity_history">History</string>
     
     <string name="action_settings">Settings</string>
@@ -21,6 +21,7 @@
     <string name="S_name">Name</string>
     <string name="S_height">Height</string>
     <string name="S_weight">Weight</string>
+    <string name="Age">Age</string>
     <string name="S_sex">Gender</string>
     <string name="S_save">Save</string>
     <string name="S_cancel">Cancel</string>
@@ -41,9 +42,9 @@
     <string name="A_speed_display_string">Speed</string>
     <string name="A_Setup_workout">Workout</string>
     <string name="A_interval">Interval</string>
+    <string name="S_test">Start new test</string>
     <string name="S_Time">Time</string>
     <string name="S_Distance">Distance</string>
-    <string name="S_test">Start new test</string>
     <string name="S_Value">Value</string>
     <string name="A_cm">\t\tin centimeter</string>
     <string name="A_kilo">\t\tin kilo</string>
@@ -55,5 +56,16 @@
     <string name="Pause_time">Pause time</string>
     <string name="Run_distance">Run distance</string>
     <string name="Pause_distance">Pause distance</string>
+    <string name="walking">Walking</string>
+    <string name="running">Running</string>
     
+    <string-array name="Gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    
+    <string-array name="Language_array">
+        <item>Norwegian</item>
+        <item>English</item>
+    </string-array>
 </resources>
