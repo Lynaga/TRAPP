@@ -68,7 +68,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		// Create a new map of values, where column names are the keys
 		ContentValues values1 = new ContentValues();
 		values1.put(TrappEntry.COLUMN_NAME_TESTNAME, "1K Test");
-		values1.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values1.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values1.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "1000");
 		values1.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values1.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -79,7 +79,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	
 		ContentValues values2 = new ContentValues();
 		values2.put(TrappEntry.COLUMN_NAME_TESTNAME, "3K Test");
-		values2.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values2.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values2.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "3000");
 		values2.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values2.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -91,7 +91,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		
 		ContentValues values3 = new ContentValues();
 		values3.put(TrappEntry.COLUMN_NAME_TESTNAME, "5K Test");
-		values3.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values3.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values3.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "5000");
 		values3.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values3.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -103,7 +103,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		
 		ContentValues values4 = new ContentValues();
 		values4.put(TrappEntry.COLUMN_NAME_TESTNAME, "10K Test");
-		values4.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values4.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values4.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "10000");
 		values4.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values4.put(TrappEntry.COLUMN_NAME_SEC, "0");
