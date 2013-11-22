@@ -1,5 +1,10 @@
 package com.example.therunningapp;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +32,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -105,6 +111,13 @@ LocationListener, SensorEventListener {
 	String intervalType;
 	String workoutType;
 	Bundle extras;
+	
+	public static class myLatLng implements Serializable {	//Class to read/write lat /lng values
+		double lat;
+		double lng;
+	}
+	
+	List<myLatLng> locationList = new ArrayList<myLatLng>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -226,11 +239,10 @@ LocationListener, SensorEventListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-		if (prevLocation == null) {	//Check if last location is set
+		myLatLng listLatLng = new myLatLng();
+		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
-			writeLocation(prevLocation.getLatitude(), prevLocation.getLongitude());	//Write start location to db
-		}
-		
+	
 		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
@@ -238,6 +250,8 @@ LocationListener, SensorEventListener {
 		
 		double tempLat = newLocation.getLatitude();
 		double tempLng = newLocation.getLongitude();
+		listLatLng.lat = tempLat;
+		listLatLng.lng = tempLng;
 		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
 		LatLng newLatLng = new LatLng(tempLat, tempLng);
@@ -248,8 +262,7 @@ LocationListener, SensorEventListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 	
-		
-		writeLocation(tempLat, tempLng);		//Write new location to db
+		locationList.add(listLatLng);
 		prevLocation = newLocation;				//Update last location for next update
 
 	}
@@ -264,11 +277,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-
-		if(test==1){
-			test_check();
-		}	
 
 	}
   
@@ -447,11 +455,23 @@ LocationListener, SensorEventListener {
 		if(time != 0 && myDistance != 0) {	//Check if users started workout
 				//If workout was started -> write to database and start new activity, WorkoutEnd
 			ContentValues values = new ContentValues();
+			byte[] buff = null;
+			
+			try {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			    ObjectOutputStream out = new ObjectOutputStream(bos);
+			    out.writeObject(locationList);
+			    out.close();
+			    buff = bos.toByteArray();
+			} catch(IOException ioe) { 
+			      Log.e("serializeObject", "error", ioe);
+			    } 
 		
 			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
 			db.insert(TrappEntry.TABLE_NAME, null, values);
 		
 			Intent intent = new Intent(this, WorkoutEnd.class);
@@ -491,11 +511,23 @@ LocationListener, SensorEventListener {
 			if(time != 0 && myDistance != 0) {	//Check if users started workout
 					//If workout was started -> write to database and start new activity, WorkoutEnd
 				ContentValues values = new ContentValues();
-			
+				byte[] buff = null;
+				
+				try {
+				    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				    ObjectOutputStream out = new ObjectOutputStream(bos);
+				    out.writeObject(locationList);
+				    out.close();
+				    buff = bos.toByteArray();
+				} catch(IOException ioe) { 
+				      Log.e("serializeObject", "error", ioe);
+				    } 
+				
 				values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
 				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
 				db.insert(TrappEntry.TABLE_NAME, null, values);
 			
 				Intent intent = new Intent(this, WorkoutEnd.class);
@@ -610,21 +642,6 @@ LocationListener, SensorEventListener {
 		}
 		else
 			return false;
-	}
-	
-	public void writeLocation(double lat, double lng) {
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		
-		if(nextWorkoutID == -1)
-			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
-			 
-		ContentValues values = new ContentValues();
-		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
-		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
-		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
-		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
-		db.close();
 	}
 	
 	public int Calories(int time, int weight) {

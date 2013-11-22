@@ -25,6 +25,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.therunningapp.TrappContract.TrappEntry;
+import com.example.therunningapp.WorkoutStart.myLatLng;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -42,6 +45,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		setupActionBar();
 		
+		List<myLatLng> locationList = new ArrayList<myLatLng>();
 		Intent intent = getIntent();
 		String db_id = intent.getStringExtra("id");
 		//Setting the TextView
@@ -53,7 +57,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		
 		//query the DB
 		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
-								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME };
+								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME, TrappEntry.COLUMN_NAME_LOCATIONS };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
 		
 		//Display the workout
@@ -62,15 +66,27 @@ public class WorkoutDisplay extends FragmentActivity {
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
+			byte[] locations = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
+			
+			try { 
+			      ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(locations)); 
+			      locationList = (List<myLatLng>) in.readObject();
+			      in.close(); 
+
+			    } catch(ClassNotFoundException cnfe) { 
+			      Log.e("deserializeObject", "class not found error", cnfe); 
+			    } catch(IOException ioe) { 
+			      Log.e("deserializeObject", "io error", ioe); 
+			  } 
 			
 			//Formatting time from milliseconds to hh:mm:ss
-			int tempTime = Integer.parseInt(time);
-			int tempDistance =Integer.parseInt(distance);
+			int tempTime = Integer.parseInt(time) / 1000;
+			int tempDistance = Integer.parseInt(distance);
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
 			int seconds = ((tempTime / 1000) % 60);
 			
-			double tempSpeed = tempDistance / tempTime;
+			double tempSpeed = (double) tempDistance / tempTime;	//Calculating average speed
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -86,18 +102,20 @@ public class WorkoutDisplay extends FragmentActivity {
 			sb.append(seconds);
 			time = sb.toString();
 			
+			//Fetch display strings
 			String tempTimeString = getString(R.string.A_time_display_string);
 			String tempDistanceString = getString(R.string.A_distance_display_string);
 			String tempCaloriesString = getString(R.string.A_calories_display_string);
 			String tempSpeedString = getString(R.string.A_speed_display_string);
 			
+			//Set text
 			viewDate.setText(date);
 			viewTime.setText(tempTimeString + ": " + time);
 			viewDistance.setText(tempDistanceString + ": " + distance + " m");
 			viewCalories.setText(tempCaloriesString + ": " + calories);
 			viewSpeed.setText(tempSpeedString + ": " + String.format("%.2f", tempSpeed) + " m/s");
 			
-			drawMap(db_id, db);
+			drawMap(locationList);	//Draw route on map
 			db.close();
 	}
 		
@@ -137,34 +155,44 @@ public class WorkoutDisplay extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void drawMap(String workoutID, SQLiteDatabase db) {
+	public void drawMap(List<myLatLng> locationList) {
+		//Getting map
 		GoogleMap myMap;
 		FragmentManager myFragmentManager = getSupportFragmentManager();
 		SupportMapFragment mySupportMapFragment;
 		mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
 		myMap = mySupportMapFragment.getMap();
 		
-		String [] proj = {TrappEntry.COLUMN_NAME_LATITUDE, TrappEntry.COLUMN_NAME_LONGITUDE };
-		Cursor cur = db.query(TrappEntry.TABLE_NAME_LOCATIONS, proj, TrappEntry.COLUMN_NAME_WORKOUT + "=?",
-				new String [] {workoutID}, null, null, null, null);
+		int numberOfElements = locationList.size();		//Get numbers in list
+		int temp = numberOfElements / 2;				//Variables to set camera
 		
-		if(cur.moveToFirst()) {
+		if(numberOfElements > 0) {		//If locations in database for this workout
 			LatLng prevLatLng = null, newLatLng = null;
-			do {
-				if(prevLatLng == null) {
-					prevLatLng = new LatLng(cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LATITUDE)),
-											cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LONGITUDE)));
-				}
-				else {
-					newLatLng = new LatLng(cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LATITUDE)),
-										   cur.getDouble(cur.getColumnIndex(TrappEntry.COLUMN_NAME_LONGITUDE)));
+			for(int i = 0; i < numberOfElements; i++) {			//Loop through all locations
+				
+				if(prevLatLng == null)	//Setting first location
+					prevLatLng = new LatLng(locationList.get(i).lat,
+											locationList.get(i).lng);
+				
+				else {						//Updating new location
+					newLatLng = new LatLng(locationList.get(i).lat,
+										   locationList.get(i).lng);
 					
-					myMap.addPolyline(new PolylineOptions()
+					//Draw polyline
+					myMap.addPolyline(new PolylineOptions()	
 				     .add(prevLatLng, newLatLng)
 				     .width(5)
 				     .color(Color.RED).geodesic(true));
+					
+					if(i == temp) {					//Set camera and zoom
+						CameraUpdate center = CameraUpdateFactory.newLatLng(newLatLng);
+						myMap.moveCamera(center);
+						CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);	
+						myMap.animateCamera(zoom);
+					}
+					prevLatLng = newLatLng;			//Updating for next loop
 				}
-			} while(cur.moveToNext());
+			}
 		}
 	}
 	
