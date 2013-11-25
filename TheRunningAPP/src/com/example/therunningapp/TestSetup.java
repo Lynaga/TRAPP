@@ -43,7 +43,7 @@ public class TestSetup extends Activity {
 			final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, null); 
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 				
-			//Display the name of test
+			//Display the name of tests
 			if(c.moveToFirst()){
 				do{
 					String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
@@ -51,7 +51,7 @@ public class TestSetup extends Activity {
 				}while(c.moveToNext());
 					
 				workoutList.setAdapter(adapter);
-					
+					// listener to send the needed data to the workoutstart to setup the desired test
 				workoutList.setOnItemClickListener(new OnItemClickListener() {
 					  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						  c.moveToPosition(position);	
