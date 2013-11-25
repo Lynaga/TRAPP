@@ -146,10 +146,6 @@ public class Interval extends Activity {
 		}
 	}
 	
-	public void cancel(View view){
-		finish();
-	}
-	
 	public void save(View view){
 		int run = 0;
 		int pause = 0;

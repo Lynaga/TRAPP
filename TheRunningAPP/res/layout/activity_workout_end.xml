@@ -90,17 +90,4 @@
         android:layout_toRightOf="@id/time_display"
         android:layout_alignBaseline="@id/time_display" />
     
-    <Button
-	    android:id="@+id/button_cancel"
-	    android:layout_width="95dp"
-	    android:layout_height="50dp"
-	    android:layout_centerHorizontal="true"
-	    android:layout_alignParentBottom="true"
-	    android:background="#FF808080"
-	    android:textColor="#FFFFFF00"
-	    android:onClick="cancel"
-	    android:text="@string/S_cancel"
-	    android:textSize="20sp" />
-    
-    
 </RelativeLayout>

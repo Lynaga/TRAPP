@@ -176,16 +176,6 @@
 	    android:textSize="20sp"
 	    android:onClick="save" />
     
-    <Button 
-        android:id="@+id/button_cancel_interval"
-        android:layout_width="wrap_content"
-	    android:layout_height="50dp"
-	    android:layout_toRightOf="@id/button_save_interval"
-        android:layout_alignBaseline="@id/button_save_interval"
-	    android:text="@string/S_cancel"
-	    android:textSize="20sp"
-	    android:onClick="cancel" />
-    
     <ListView
         android:id="@+id/listViewInterval"
         android:layout_width="match_parent"
