@@ -1,5 +1,10 @@
 package com.example.therunningapp;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +32,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -105,6 +111,13 @@ LocationListener, SensorEventListener {
 	String intervalType;
 	String workoutType;
 	Bundle extras;
+	
+	public static class myLatLng implements Serializable {	//Class to read/write lat /lng values
+		double lat;
+		double lng;
+	}
+	
+	List<myLatLng> locationList = new ArrayList<myLatLng>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -226,11 +239,10 @@ LocationListener, SensorEventListener {
 	
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
-		if (prevLocation == null) {	//Check if last location is set
+		myLatLng listLatLng = new myLatLng();
+		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
-			writeLocation(prevLocation.getLatitude(), prevLocation.getLongitude());	//Write start location to db
-		}
-		
+	
 		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
@@ -238,6 +250,8 @@ LocationListener, SensorEventListener {
 		
 		double tempLat = newLocation.getLatitude();
 		double tempLng = newLocation.getLongitude();
+		listLatLng.lat = tempLat;
+		listLatLng.lng = tempLng;
 		
 		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
 		LatLng newLatLng = new LatLng(tempLat, tempLng);
@@ -248,8 +262,7 @@ LocationListener, SensorEventListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 	
-		
-		writeLocation(tempLat, tempLng);		//Write new location to db
+		locationList.add(listLatLng);
 		prevLocation = newLocation;				//Update last location for next update
 
 	}
@@ -267,13 +280,16 @@ LocationListener, SensorEventListener {
 
 	}
   
-	public void test_check(){
-		//Bundle extras = getIntent().getExtras();
+	public void test_check(int test){
+		int rounds = 1;
+		//Getting data from the intent that comes from TestSetup.java
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
-		
 		String testType = extras.getString("testType");
+		
+		//variables for checking the test condition and ending the test at apropiate time
+		
 		
 		int value;
 		int set = 0;
@@ -285,31 +301,43 @@ LocationListener, SensorEventListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
-
-			
-
-
-		}
-		int result = am.requestAudioFocus(afChangeListener,
-                // Use the music stream.
-                AudioManager.STREAM_NOTIFICATION,
-                // Request permanent focus.
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-
-			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					mediaPlayer.start();
-					am.abandonAudioFocus(afChangeListener);
 			}
 		
+		if(test == 1 || test == 2){
+			int sound = rounds*500;
+			if(value > sound){
+				sounds(sound);
+				rounds++;
+			}
 		}
+		if(test == 3 || test == 4){
+			int sound = rounds*1000;
+			if (value > sound){
+				sounds(sound);
+				rounds++;
+			}
+		}
+		if(test == 5)
+		{
+			int sound = rounds*5;
+			if(value > sound){
+				sounds(sound);
+				rounds++;	
+			}
+		}
+		
+			
+			
+		}
+		// Ends the test when u have reached the value(time or distance)
 		while(value <= set);
 			end();
 	}
 
-	
+	// Function to make the music duck while playing notification sounds..
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
-	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 	        	
 	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
 	        	
@@ -374,14 +402,43 @@ LocationListener, SensorEventListener {
 			}
 			else if(workoutType.equals("Test"))
 			{
-				 new Thread(new Runnable() {
+				int abcd = 0;
+			
+				switch(abcd){
+				case 1 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 1 );}
+			    			}).start();
+				case 2 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 2 );}
+							}).start();
+				case 3 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 3 );}
+							}).start();
+				case 4 : new Thread(new Runnable() {
+			        		public void run() {
+			        			test_check( 4 );}
+							}).start();
+				case 5 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 5 );}
+							}).start();
+				case 6 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 0 );}
+							}).start();
+				}
+				//Starts the test checking in a different thread than the main(to avoid having onlocationchange do a function call.
+		/*	new Thread(new Runnable() {
 				        public void run() {
 							
 				            test_check();
 				            }
 				    }).start();
 				
-
+*/
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -451,11 +508,23 @@ LocationListener, SensorEventListener {
 			if(time != 0 && myDistance != 0) {	//Check if users started workout
 					//If workout was started -> write to database and start new activity, WorkoutEnd
 				ContentValues values = new ContentValues();
-			
+				byte[] buff = null;
+				
+				try {
+				    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				    ObjectOutputStream out = new ObjectOutputStream(bos);
+				    out.writeObject(locationList);
+				    out.close();
+				    buff = bos.toByteArray();
+				} catch(IOException ioe) { 
+				      Log.e("serializeObject", "error", ioe);
+				    } 
+				
 				values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
 				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
 				db.insert(TrappEntry.TABLE_NAME, null, values);
 			
 				Intent intent = new Intent(this, WorkoutEnd.class);
@@ -605,6 +674,7 @@ LocationListener, SensorEventListener {
 			return false;
 	}
 	
+
 	public void writeLocation(double lat, double lng) {
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
@@ -619,8 +689,8 @@ LocationListener, SensorEventListener {
 		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
 		db.close();
 	}
-	
-	public int Calorie_math(Float time, int weight) {
+
+	public int Calorie_math(float time, int weight) {
 		int caloriemath = 0;
 		if(workoutType.equals("Walk"))
 			caloriemath = 9;
@@ -634,5 +704,26 @@ LocationListener, SensorEventListener {
 		int calories = (int) ((weight * caloriemath) * time);
 		
 		return calories;
+	}
+	public void sounds(int sound) {
+		/*switch(sound)
+		{
+		case 5 : mediaPlayer = MediaPlayer.create(this, R.raw.5);
+		case 10 : mediaPlayer = MediaPlayer.create(this, R.raw.10);
+		case 500 : mediaPlayer = MediaPlayer.create(this, R.raw.500);
+		case 1000 : mediaPlayer = MediaPlayer.create(this, R.raw.1000);
+		case 1500 : mediaPlayer = MediaPlayer.create(this, R.raw.1500);
+		case 2000 : mediaPlayer = MediaPlayer.create(this, R.raw.2000);
+		case 2500 : mediaPlayer = MediaPlayer.create(this, R.raw.2500);
+		case 3000 : mediaPlayer = MediaPlayer.create(this, R.raw.3000);
+		case 4000 : mediaPlayer = MediaPlayer.create(this, R.raw.4000);
+		case 5000 : mediaPlayer = MediaPlayer.create(this, R.raw.5000);
+		case 6000 : mediaPlayer = MediaPlayer.create(this, R.raw.6000);
+		case 7000 : mediaPlayer = MediaPlayer.create(this, R.raw.7000);
+		case 8000 : mediaPlayer = MediaPlayer.create(this, R.raw.8000);
+		case 9000 : mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+		
+		}*/
+		
 	}
 }

@@ -1,7 +1,5 @@
 package com.example.therunningapp;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,11 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class TestSetup extends Activity {
 	String testType;
@@ -28,6 +28,8 @@ public class TestSetup extends Activity {
 		setContentView(R.layout.activity_test_setup);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		
 		//Get the DB
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -38,33 +40,33 @@ public class TestSetup extends Activity {
 
 		
 		//Query the DB
-				final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, null); 
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+			final Cursor c = db.query(TrappEntry.TABLE_TESTS, null, null, null, null, null, null); 
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 				
-				//Display the name of test
-				if(c.moveToFirst()){
-					do{
-						String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
-						adapter.add(name);
-					}while(c.moveToNext());
+			//Display the name of test
+			if(c.moveToFirst()){
+				do{
+					String name = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME));
+					adapter.add(name);
+				}while(c.moveToNext());
 					
-					workoutList.setAdapter(adapter);
+				workoutList.setAdapter(adapter);
 					
-					workoutList.setOnItemClickListener(new OnItemClickListener() {
-						  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-							  c.moveToPosition(position);	
-						      Intent intent = new Intent(TestSetup.this, WorkoutStart.class);
-						      intent.putExtra("lengder", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE)));	
-							  intent.putExtra("min", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_MIN)));
-							  intent.putExtra("sec", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_SEC)));
-							  intent.putExtra("testType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TEST_TYPE)));
-							  intent.putExtra("workoutType", type);
-						      startActivity(intent);
-						      finish();          
+				workoutList.setOnItemClickListener(new OnItemClickListener() {
+					  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						  c.moveToPosition(position);	
+					      Intent intent = new Intent(TestSetup.this, WorkoutStart.class);
+					      intent.putExtra("lengder", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE)));	
+						  intent.putExtra("min", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_MIN)));
+						  intent.putExtra("sec", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_SEC)));
+						  intent.putExtra("testType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TEST_TYPE)));
+						  intent.putExtra("workoutType", type);
+						  startActivity(intent);
+						  finish();          
 						  }
 					});	
 				} 
-				db.close();
+			db.close();
 	}
 
 
@@ -105,7 +107,8 @@ public class TestSetup extends Activity {
 	
 	public void onRadioButtonClicked(View view){
 		boolean checked = ((RadioButton) view).isChecked();
-		
+		// Makes the edit text views visable or invisible depending on the selection in the radio button
+		// Set's the value of the testype accordingly
 		switch(view.getId()){
 			case R.id.Button_Time:
 				if(checked){
@@ -135,26 +138,34 @@ public class TestSetup extends Activity {
 	
 	
 	public void starttest(View view){
+		// the variables for the data to be stored in, depening on the selection in radiobutton
 		int min = 0;
 		int sec = 0;
 		int distances = 0;
 		String workoutType = "Test";
+	
+	
 		//setup the EditText fields
 		EditText time_min = (EditText) findViewById(R.id.min);
 		EditText time_sec = (EditText) findViewById(R.id.sec);
 		EditText distance = (EditText) findViewById(R.id.distance);
 		
-		//Get's the strings from EditText fields
 		if(testType == "Distance"){
-			distances = Integer.parseInt(distance.getText().toString());
+			if(isEmpty(distance)){
+				distances = Integer.parseInt(distance.getText().toString());
+			}
 		}
 		else{
-		min = Integer.parseInt(time_min.getText().toString());
-		sec = Integer.parseInt(time_sec.getText().toString());
+		
+			if(isEmpty(time_min)){
+				min = Integer.parseInt(time_min.getText().toString());
+			}
+			if(isEmpty(time_sec)){
+				sec = Integer.parseInt(time_sec.getText().toString());
+			}
 		}
-		
-		
-		//Intent
+				
+		//Intent sent to workoutstart
 		Intent intent = new Intent(this, WorkoutStart.class);
 		intent.putExtra("testType", testType);
 		intent.putExtra("lengder", distances);	
@@ -163,6 +174,15 @@ public class TestSetup extends Activity {
 		intent.putExtra("workoutType", workoutType);
 		startActivity(intent);
 		finish();
+	}
+	
+	
+	private boolean isEmpty(EditText etText) {
+	    if (etText.getText().toString().trim().length() > 0) {
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 
 }

@@ -17,7 +17,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 				+ TrappEntry.TABLE_NAME +
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_DATE + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_TIME + " FLOAT, " + TrappEntry.COLUMN_NAME_DISTANCE + " DOUBLE, " 
-				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER)";
+				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER, " + TrappEntry.COLUMN_NAME_LOCATIONS + " BLOB)";
 	
 	//table for storing preferances
 	private static final String SQL_CREATE_PREF = "CREATE TABLE " 
@@ -37,14 +37,6 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 				" (" + TrappEntry.COLUMN_NAME_MIN + " INTEGER, " + TrappEntry.COLUMN_NAME_TEST_DISTANCE + " INTEGER, "
 				+ TrappEntry.COLUMN_NAME_SEC +" INTEGER, " + TrappEntry._ID + " INTEGER PRIMARY KEY, " 
 				+ TrappEntry.COLUMN_NAME_TEST_TYPE + " TEXT, "+ TrappEntry.COLUMN_NAME_TESTNAME + " TEXT)";
-	
-	//table for storing GPS locations
-	private static final String SQL_CREATE_LOCATIONS = "CREATE TABLE " + TrappEntry.TABLE_NAME_LOCATIONS
-				+ " (" + TrappEntry._ID + " INTEGER PRIMARY KEY, "
-				+ TrappEntry.COLUMN_NAME_WORKOUT + " INTEGER, "
-				+ TrappEntry.COLUMN_NAME_LATITUDE + " DOUBLE, "
-				+ TrappEntry.COLUMN_NAME_LONGITUDE + " DOUBLE)";
-
 		
 	//Delete table for workout
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAME;
@@ -54,8 +46,6 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	private static final String SQL_DELETE_ENTRIES2 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAME_INTERVAL;
 	//delete table for test
 	private static final String SQL_DELETE_ENTRIES3 = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_TESTS;
-	//delete table for GPS locations
-	private static final String SQL_DELETE_LOCATIONS = "DROP TABLE IF EXISTS " + TrappEntry.TABLE_NAME_LOCATIONS;
 	
 
 	public void onCreate(SQLiteDatabase db) {
@@ -63,12 +53,11 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_PREF);
 		db.execSQL(SQL_CREATE_INTERVAL);
 		db.execSQL(SQL_CREATE_TEST);
-		db.execSQL(SQL_CREATE_LOCATIONS);
 		
-		// Create a new map of values, where column names are the keys
+		// Inserting the standard workout tests into database
 		ContentValues values1 = new ContentValues();
 		values1.put(TrappEntry.COLUMN_NAME_TESTNAME, "1K Test");
-		values1.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values1.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values1.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "1000");
 		values1.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values1.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -79,7 +68,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	
 		ContentValues values2 = new ContentValues();
 		values2.put(TrappEntry.COLUMN_NAME_TESTNAME, "3K Test");
-		values2.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values2.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values2.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "3000");
 		values2.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values2.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -91,7 +80,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		
 		ContentValues values3 = new ContentValues();
 		values3.put(TrappEntry.COLUMN_NAME_TESTNAME, "5K Test");
-		values3.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values3.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values3.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "5000");
 		values3.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values3.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -103,7 +92,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		
 		ContentValues values4 = new ContentValues();
 		values4.put(TrappEntry.COLUMN_NAME_TESTNAME, "10K Test");
-		values4.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "distance" );
+		values4.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
 		values4.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "10000");
 		values4.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values4.put(TrappEntry.COLUMN_NAME_SEC, "0");
@@ -124,7 +113,6 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.insert(TrappEntry.TABLE_TESTS,
 	         null,
 	         values5);
-
 }
 
 
@@ -139,7 +127,6 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_DELETE_ENTRIES1);
 		db.execSQL(SQL_DELETE_ENTRIES2);
 		db.execSQL(SQL_DELETE_ENTRIES3);
-		db.execSQL(SQL_DELETE_LOCATIONS);
 		onCreate(db);
 	}
 	
