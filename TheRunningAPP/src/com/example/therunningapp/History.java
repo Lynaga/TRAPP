@@ -58,10 +58,6 @@ public class History extends Activity {
 		
 		db.close();
 	}
-	
-	public void back(View view){
-		finish();
-	}
 }
 
 

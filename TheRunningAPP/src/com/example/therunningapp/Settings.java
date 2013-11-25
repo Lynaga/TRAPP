@@ -117,12 +117,6 @@ public class Settings extends Activity {
 		//db.update(TrappEntry.TABLE_NAMEPREF, values, selection, selectionArgs);
 		db.close();
 		finish();
-
-		
-	}
-	
-	public void cancel(View view){
-		finish();	
 	}
 	
 	public void norwegian(View view){

@@ -152,16 +152,5 @@
 	    android:onClick="save"
 	    android:text="@string/S_save"
 	    android:textSize="20sp" />
-
-	<Button
-	    android:id="@+id/button_cancel"
-	    android:layout_width="95dp"
-	    android:layout_height="50dp"
-	    android:layout_marginLeft="10dp"
-	    android:layout_alignBaseline="@id/button_save"
-	    android:layout_toRightOf="@id/button_save"
-	    android:onClick="cancel"
-	    android:text="@string/S_cancel"
-	    android:textSize="20sp" />
 	
 </RelativeLayout>
