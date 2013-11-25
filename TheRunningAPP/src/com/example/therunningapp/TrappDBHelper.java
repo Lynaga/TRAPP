@@ -30,7 +30,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 	private static final String SQL_CREATE_INTERVAL = "CREATE TABLE " + TrappEntry.TABLE_NAME_INTERVAL
 				+ " (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_NAME + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_RUN_TIME + " INTEGER, " + TrappEntry.COLUMN_NAME_PAUSE_TIME + " INTEGER, "
-				+ TrappEntry.COLUMN_NAME_REPETITION + " INTEGER)";
+				+ TrappEntry.COLUMN_NAME_REPETITION + " INTEGER, " + TrappEntry.COLUMN_NAME_INTERVALTYPE + " TEXT)";
 
 	//table for storing Test
 		private static final String SQL_CREATE_TEST = "CREATE TABLE " + TrappEntry.TABLE_TESTS + 
@@ -124,7 +124,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.insert(TrappEntry.TABLE_TESTS,
 	         null,
 	         values5);
-		db.close();
+
 }
 
 

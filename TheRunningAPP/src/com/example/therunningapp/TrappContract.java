@@ -36,6 +36,7 @@ public class TrappContract extends Activity {
 		public static final String COLUMN_NAME_RUN_TIME = "run";
 		public static final String COLUMN_NAME_PAUSE_TIME = "pause";
 		public static final String COLUMN_NAME_REPETITION = "repetition";
+		public static final String COLUMN_NAME_INTERVALTYPE = "intervaltype";
 		
 		public static final String TABLE_NAME_LOCATIONS = "locations";
 		public static final String COLUMN_NAME_WORKOUT = "workoutID";

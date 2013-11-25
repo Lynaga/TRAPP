@@ -264,11 +264,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-
-		if(test==1){
-			test_check();
-		}	
 
 	}
   
@@ -370,7 +365,13 @@ LocationListener, SensorEventListener {
 		    else if(workoutType.equals("Running"))
 				{}
 			else if(workoutType.equals("Interval"))
-				Interval(); 
+				{
+				new Thread(new Runnable() {
+			        public void run() {
+			        	Interval();
+			        }
+			    }).start();
+			}
 			else if(workoutType.equals("Test"))
 			{
 				 new Thread(new Runnable() {
@@ -403,31 +404,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void workoutEnd (View view) {
-		//Get the database
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		myTimer.stop();
-		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
-		
-		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-		
-		//Initiate variables needed to write to the database
-		int calories = 0;
-		Float time;
-		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
-		time = (float) pauseTime / 3600000;
-		
-		Date cDate = new Date();
-		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
-		
-		if(w.moveToFirst()){	//Checks if the user has set the weight 
-			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-			//If weight is set calculate calories burnt during the workout
-			calories = weight * 9;
-			calories = (int) (calories * time);
-			}
-		
 		// stop the loops if it's an Interval
 		if(TimerRunStart){
 			run.cancel();
@@ -442,23 +418,8 @@ LocationListener, SensorEventListener {
 			stop.cancel();
 			TimerStopStart = false;
 		}
-
 		
-		if(time != 0 && myDistance != 0) {	//Check if users started workout
-				//If workout was started -> write to database and start new activity, WorkoutEnd
-			ContentValues values = new ContentValues();
-		
-			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-			db.insert(TrappEntry.TABLE_NAME, null, values);
-		
-			Intent intent = new Intent(this, WorkoutEnd.class);
-			startActivity(intent);
-			}
-		db.close();
-		finish();
+		end();
 	}
 
 
@@ -484,8 +445,7 @@ LocationListener, SensorEventListener {
 			if(w.moveToFirst()){	//Checks if the user has set the weight 
 				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				//If weight is set calculate calories burnt during the workout
-				calories = weight * 9;
-				calories = (int) (calories * time);
+				calories = Calorie_math(time, weight);
 				}
 				
 			if(time != 0 && myDistance != 0) {	//Check if users started workout
@@ -506,19 +466,52 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void Interval(){
+		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		Bundle extras = getIntent().getExtras();
 		int run = extras.getInt("run");
 		int pause = extras.getInt("pause");
 		int rep = extras.getInt("rep");
+		String intervalType = extras.getString("intervalType");
 		
-		Interval(run,pause,rep);
+        mediaPlayerRun.start();
+		
+		if(intervalType.equals("time"))
+			Interval_time(run,pause,rep);
+		else if(intervalType.equals("distance"))
+			Interval_distance(run,pause,rep);
+		else
+			end();
 	}
 	
-	public void Interval(int RunTime, int PauseTime, int Repetition){
+	public void Interval_distance(int RunDistance, int PauseDistance, int Repetition){
+		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
+		MediaPlayer mediaPlayerPause = MediaPlayer.create(this, R.raw.pause);
+		MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
         
-        MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
-        mediaPlayerRun.start();
-        
+		Interval_distance(RunDistance);
+		
+		for(int rep = 1; rep < Repetition; rep++)
+		{
+			mediaPlayerPause.start(); //pause
+			Interval_distance((RunDistance+PauseDistance)*rep);
+			
+			mediaPlayerRun.start();	//run
+			Interval_distance(((RunDistance+PauseDistance)*rep)+RunDistance);
+		}
+		
+		mediaPlayerStop.start();
+	}
+	
+	public void Interval_distance(int Distance){
+		int value;
+		int set = Distance;
+		
+		do{
+		value = (int) myDistance;
+		}while(value <= set);
+	}
+	
+	public void Interval_time(int RunTime, int PauseTime, int Repetition){
         DelayRun(RunTime,PauseTime);
         DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
         DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
@@ -532,17 +525,17 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
 		    	        
 		    	        mediaPlayerPause.start();
-		    	        
-		    	        DelayPause(PauseTime);
 		    	        TimerRunStart = false;
+		    	        DelayPause(PauseTime);
+		    	        
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
 		},RunTime*1000 , (RunTime+PauseTime)*1000);
 	}
@@ -555,7 +548,7 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
@@ -564,7 +557,7 @@ LocationListener, SensorEventListener {
 		    	        
 		    	        TimerPauseStart = false;
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'PauseTime*1000' before it does something (milliseconds)
 		},PauseTime*1000);
 	}
@@ -577,7 +570,7 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
@@ -589,7 +582,7 @@ LocationListener, SensorEventListener {
 		    	    		TimerStopStart = false;
 		    	        }
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
 		},Time*1000);
 	}
@@ -627,18 +620,18 @@ LocationListener, SensorEventListener {
 		db.close();
 	}
 	
-	public int Calories(int time, int weight) {
+	public int Calorie_math(Float time, int weight) {
 		int caloriemath = 0;
 		if(workoutType.equals("Walk"))
 			caloriemath = 9;
 		else if(workoutType.equals("Running"))
-			caloriemath = 10;
+			caloriemath = 9;
 		else if(workoutType.equals("Interval"))
-			caloriemath = (int) 10.5;
+			caloriemath = 9;
 		else if(workoutType.equals("Test"))
-			caloriemath = 11;
+			caloriemath = 9;
 		
-		int calories = (weight * caloriemath) * time;
+		int calories = (int) ((weight * caloriemath) * time);
 		
 		return calories;
 	}

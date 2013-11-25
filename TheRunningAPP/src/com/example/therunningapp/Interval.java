@@ -66,13 +66,14 @@ public class Interval extends Activity {
 						      intent.putExtra("run", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_RUN_TIME)));	
 							  intent.putExtra("pause", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_PAUSE_TIME)));
 							  intent.putExtra("rep", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_REPETITION)));
+							  intent.putExtra("intervalType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_INTERVALTYPE)));
 							  intent.putExtra("workoutType", Interval);
 						      startActivity(intent);
 						      finish();          
 						  }
 					});	
 				} 
-				db.close();
+		db.close();
 	}
 
 	/**
@@ -154,9 +155,11 @@ public class Interval extends Activity {
 		int pause = 0;
 		int rep = 0;
 		
+		//open database
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
+		//add different values in int's from editText
 		if(intervalType == "time")
 		{
 			EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
@@ -183,19 +186,23 @@ public class Interval extends Activity {
 		rep = Integer.parseInt(repitition.getText().toString());
 		String name = name1.getText().toString();
 		
+		//save values in database
 		ContentValues values = new ContentValues();
 		values.put(TrappEntry.COLUMN_NAME_NAME, name);
 		values.put(TrappEntry.COLUMN_NAME_RUN_TIME, run);
 		values.put(TrappEntry.COLUMN_NAME_PAUSE_TIME, pause);
 		values.put(TrappEntry.COLUMN_NAME_REPETITION, rep);
+		values.put(TrappEntry.COLUMN_NAME_INTERVALTYPE, intervalType);
 		db.insert(TrappEntry.TABLE_NAME_INTERVAL, null, values);
 		db.close();
 		
+		//put values in intent and send them to an new activity
 		Intent intent = new Intent(this, WorkoutStart.class);
 		intent.putExtra("run", run);	
 		intent.putExtra("pause", pause);
 		intent.putExtra("rep", rep);
 		intent.putExtra("workoutType", Interval);
+		intent.putExtra("intervalType", intervalType);
 		startActivity(intent); 
 		finish(); 
 	}
