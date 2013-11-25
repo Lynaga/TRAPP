@@ -280,13 +280,16 @@ LocationListener, SensorEventListener {
 
 	}
   
-	public void test_check(){
-		//Bundle extras = getIntent().getExtras();
+	public void test_check(int test){
+		int rounds = 1;
+		//Getting data from the intent that comes from TestSetup.java
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
-		
 		String testType = extras.getString("testType");
+		
+		//variables for checking the test condition and ending the test at apropiate time
+		
 		
 		int value;
 		int set = 0;
@@ -298,31 +301,54 @@ LocationListener, SensorEventListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
-
-			
-
-
-		}
-		int result = am.requestAudioFocus(afChangeListener,
-                // Use the music stream.
-                AudioManager.STREAM_NOTIFICATION,
-                // Request permanent focus.
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-
-			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					mediaPlayer.start();
-					am.abandonAudioFocus(afChangeListener);
 			}
 		
+		if(test == 1 || test == 2){
+			int sound = rounds*500;
+			if(value > sound){
+				sounds(sound);
+				rounds++;
+			}
 		}
+		if(test == 3 || test == 4){
+			int sound = rounds*1000;
+			if (value > sound){
+				sounds(sound);
+				rounds++;
+			}
+		}
+		if(test == 5)
+		{
+			int sound = rounds*5;
+			if(value > sound){
+				sounds(sound);
+				rounds++;	
+			}
+		}
+		
+			
+			
+		}
+		// Ends the test when u have reached the value(time or distance)
 		while(value <= set);
+		// Request audio focus for playback
+		int result = am.requestAudioFocus(afChangeListener,
+		                             // Use the music stream.
+		                             AudioManager.STREAM_MUSIC,
+		                             // Request permanent focus.
+		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+		   
+		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			sounds(0);
+		}
 			end();
 	}
-
 	
+
+	// Function to make the music duck while playing notification sounds..
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
-	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 	        	
 	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
 	        	
@@ -378,17 +404,52 @@ LocationListener, SensorEventListener {
 		    else if(workoutType.equals("Running"))
 				{}
 			else if(workoutType.equals("Interval"))
-				Interval(); 
+				{
+				new Thread(new Runnable() {
+			        public void run() {
+			        	Interval();
+			        }
+			    }).start();
+			}
 			else if(workoutType.equals("Test"))
 			{
-				 new Thread(new Runnable() {
+				int abcd = 0;
+			
+				switch(abcd){
+				case 1 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 1 );}
+			    			}).start();
+				case 2 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 2 );}
+							}).start();
+				case 3 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 3 );}
+							}).start();
+				case 4 : new Thread(new Runnable() {
+			        		public void run() {
+			        			test_check( 4 );}
+							}).start();
+				case 5 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 5 );}
+							}).start();
+				case 6 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 0 );}
+							}).start();
+				}
+				//Starts the test checking in a different thread than the main(to avoid having onlocationchange do a function call.
+		/*	new Thread(new Runnable() {
 				        public void run() {
 							
 				            test_check();
 				            }
 				    }).start();
 				
-
+*/
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -411,31 +472,6 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void workoutEnd (View view) {
-		//Get the database
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		myTimer.stop();
-		
-		String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
-		
-		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-		
-		//Initiate variables needed to write to the database
-		int calories = 0;
-		Float time;
-		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
-		time = (float) pauseTime / 3600000;
-		
-		Date cDate = new Date();
-		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
-		
-		if(w.moveToFirst()){	//Checks if the user has set the weight 
-			int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-			//If weight is set calculate calories burnt during the workout
-			calories = weight * 9;
-			calories = (int) (calories * time);
-			}
-		
 		// stop the loops if it's an Interval
 		if(TimerRunStart){
 			run.cancel();
@@ -450,35 +486,8 @@ LocationListener, SensorEventListener {
 			stop.cancel();
 			TimerStopStart = false;
 		}
-
 		
-		if(time != 0 && myDistance != 0) {	//Check if users started workout
-				//If workout was started -> write to database and start new activity, WorkoutEnd
-			ContentValues values = new ContentValues();
-			byte[] buff = null;
-			
-			try {
-				ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			    ObjectOutputStream out = new ObjectOutputStream(bos);
-			    out.writeObject(locationList);
-			    out.close();
-			    buff = bos.toByteArray();
-			} catch(IOException ioe) { 
-			      Log.e("serializeObject", "error", ioe);
-			    } 
-		
-			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
-			db.insert(TrappEntry.TABLE_NAME, null, values);
-		
-			Intent intent = new Intent(this, WorkoutEnd.class);
-			startActivity(intent);
-			}
-		db.close();
-		finish();
+		end();
 	}
 
 
@@ -504,8 +513,7 @@ LocationListener, SensorEventListener {
 			if(w.moveToFirst()){	//Checks if the user has set the weight 
 				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
 				//If weight is set calculate calories burnt during the workout
-				calories = weight * 9;
-				calories = (int) (calories * time);
+				calories = Calorie_math(time, weight);
 				}
 				
 			if(time != 0 && myDistance != 0) {	//Check if users started workout
@@ -538,19 +546,52 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void Interval(){
+		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		Bundle extras = getIntent().getExtras();
 		int run = extras.getInt("run");
 		int pause = extras.getInt("pause");
 		int rep = extras.getInt("rep");
+		String intervalType = extras.getString("intervalType");
 		
-		Interval(run,pause,rep);
+        mediaPlayerRun.start();
+		
+		if(intervalType.equals("time"))
+			Interval_time(run,pause,rep);
+		else if(intervalType.equals("distance"))
+			Interval_distance(run,pause,rep);
+		else
+			end();
 	}
 	
-	public void Interval(int RunTime, int PauseTime, int Repetition){
+	public void Interval_distance(int RunDistance, int PauseDistance, int Repetition){
+		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
+		MediaPlayer mediaPlayerPause = MediaPlayer.create(this, R.raw.pause);
+		MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
         
-        MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
-        mediaPlayerRun.start();
-        
+		Interval_distance(RunDistance);
+		
+		for(int rep = 1; rep < Repetition; rep++)
+		{
+			mediaPlayerPause.start(); //pause
+			Interval_distance((RunDistance+PauseDistance)*rep);
+			
+			mediaPlayerRun.start();	//run
+			Interval_distance(((RunDistance+PauseDistance)*rep)+RunDistance);
+		}
+		
+		mediaPlayerStop.start();
+	}
+	
+	public void Interval_distance(int Distance){
+		int value;
+		int set = Distance;
+		
+		do{
+		value = (int) myDistance;
+		}while(value <= set);
+	}
+	
+	public void Interval_time(int RunTime, int PauseTime, int Repetition){
         DelayRun(RunTime,PauseTime);
         DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
         DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
@@ -564,17 +605,17 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
 		    	        
 		    	        mediaPlayerPause.start();
-		    	        
-		    	        DelayPause(PauseTime);
 		    	        TimerRunStart = false;
+		    	        DelayPause(PauseTime);
+		    	        
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
 		},RunTime*1000 , (RunTime+PauseTime)*1000);
 	}
@@ -587,7 +628,7 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
@@ -596,7 +637,7 @@ LocationListener, SensorEventListener {
 		    	        
 		    	        TimerPauseStart = false;
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'PauseTime*1000' before it does something (milliseconds)
 		},PauseTime*1000);
 	}
@@ -609,7 +650,7 @@ LocationListener, SensorEventListener {
 
 		    @Override
 		    public void run() {
-		    	runOnUiThread(new Runnable() {
+		    	new Thread(new Runnable() {
 
 		    	    @Override
 		    	    public void run() {
@@ -621,7 +662,7 @@ LocationListener, SensorEventListener {
 		    	    		TimerStopStart = false;
 		    	        }
 		    	    }
-		    	});
+		    	}).start();
 		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
 		},Time*1000);
 	}
@@ -644,19 +685,56 @@ LocationListener, SensorEventListener {
 			return false;
 	}
 	
-	public int Calories(int time, int weight) {
+
+	public void writeLocation(double lat, double lng) {
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		
+		if(nextWorkoutID == -1)
+			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
+			 
+		ContentValues values = new ContentValues();
+		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
+		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
+		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
+		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
+		db.close();
+	}
+
+	public int Calorie_math(float time, int weight) {
 		int caloriemath = 0;
 		if(workoutType.equals("Walk"))
 			caloriemath = 9;
 		else if(workoutType.equals("Running"))
-			caloriemath = 10;
+			caloriemath = 9;
 		else if(workoutType.equals("Interval"))
-			caloriemath = (int) 10.5;
+			caloriemath = 9;
 		else if(workoutType.equals("Test"))
-			caloriemath = 11;
+			caloriemath = 9;
 		
-		int calories = (weight * caloriemath) * time;
+		int calories = (int) ((weight * caloriemath) * time);
 		
 		return calories;
+	}
+	public void sounds(int sound) {
+		/*switch(sound)
+		{
+		case 5 : mediaPlayer = MediaPlayer.create(this, R.raw.5);
+		case 10 : mediaPlayer = MediaPlayer.create(this, R.raw.10);
+		case 500 : mediaPlayer = MediaPlayer.create(this, R.raw.500);
+		case 1000 : mediaPlayer = MediaPlayer.create(this, R.raw.1000);
+		case 1500 : mediaPlayer = MediaPlayer.create(this, R.raw.1500);
+		case 2000 : mediaPlayer = MediaPlayer.create(this, R.raw.2000);
+		case 2500 : mediaPlayer = MediaPlayer.create(this, R.raw.2500);
+		case 3000 : mediaPlayer = MediaPlayer.create(this, R.raw.3000);
+		case 4000 : mediaPlayer = MediaPlayer.create(this, R.raw.4000);
+		case 5000 : mediaPlayer = MediaPlayer.create(this, R.raw.5000);
+		case 6000 : mediaPlayer = MediaPlayer.create(this, R.raw.6000);
+		case 7000 : mediaPlayer = MediaPlayer.create(this, R.raw.7000);
+		case 8000 : mediaPlayer = MediaPlayer.create(this, R.raw.8000);
+		case 9000 : mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+		
+		}*/
+		
 	}
 }
