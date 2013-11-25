@@ -331,8 +331,19 @@ LocationListener, SensorEventListener {
 		}
 		// Ends the test when u have reached the value(time or distance)
 		while(value <= set);
+		// Request audio focus for playback
+		int result = am.requestAudioFocus(afChangeListener,
+		                             // Use the music stream.
+		                             AudioManager.STREAM_MUSIC,
+		                             // Request permanent focus.
+		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+		   
+		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			sounds(0);
+		}
 			end();
 	}
+	
 
 	// Function to make the music duck while playing notification sounds..
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
