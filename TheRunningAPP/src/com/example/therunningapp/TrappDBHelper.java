@@ -65,7 +65,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.execSQL(SQL_CREATE_TEST);
 		db.execSQL(SQL_CREATE_LOCATIONS);
 		
-		// Create a new map of values, where column names are the keys
+		// Inserting the standard workout tests into database
 		ContentValues values1 = new ContentValues();
 		values1.put(TrappEntry.COLUMN_NAME_TESTNAME, "1K Test");
 		values1.put(TrappEntry.COLUMN_NAME_TEST_TYPE , "Distance" );
@@ -124,7 +124,6 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		db.insert(TrappEntry.TABLE_TESTS,
 	         null,
 	         values5);
-		db.close();
 }
 
 

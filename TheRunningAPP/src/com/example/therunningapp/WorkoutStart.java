@@ -264,21 +264,19 @@ LocationListener, SensorEventListener {
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-
-		if(test==1){
-			test_check();
-		}	
 
 	}
   
-	public void test_check(){
-		//Bundle extras = getIntent().getExtras();
+	public void test_check(int test){
+		int rounds = 1;
+		//Getting data from the intent that comes from TestSetup.java
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
-		
 		String testType = extras.getString("testType");
+		
+		//variables for checking the test condition and ending the test at apropiate time
+		
 		
 		int value;
 		int set = 0;
@@ -290,31 +288,43 @@ LocationListener, SensorEventListener {
 		else {
 			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
 			set = (min * 60000) + (sec * 1000);
-
-			
-
-
-		}
-		int result = am.requestAudioFocus(afChangeListener,
-                // Use the music stream.
-                AudioManager.STREAM_NOTIFICATION,
-                // Request permanent focus.
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-
-			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-					mediaPlayer.start();
-					am.abandonAudioFocus(afChangeListener);
 			}
 		
+		if(test == 1 || test == 2){
+			int sound = rounds*500;
+			if(value > sound){
+				sounds(sound);
+				rounds++;
+			}
 		}
+		if(test == 3 || test == 4){
+			int sound = rounds*1000;
+			if (value > sound){
+				sounds(sound);
+				rounds++;
+			}
+		}
+		if(test == 5)
+		{
+			int sound = rounds*5;
+			if(value > sound){
+				sounds(sound);
+				rounds++;	
+			}
+		}
+		
+			
+			
+		}
+		// Ends the test when u have reached the value(time or distance)
 		while(value <= set);
 			end();
 	}
 
-	
+	// Function to make the music duck while playing notification sounds..
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
 	    public void onAudioFocusChange(int focusChange) {
-	        if (focusChange == am.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 	        	
 	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
 	        	
@@ -373,14 +383,43 @@ LocationListener, SensorEventListener {
 				Interval(); 
 			else if(workoutType.equals("Test"))
 			{
-				 new Thread(new Runnable() {
+				int abcd = 0;
+			
+				switch(abcd){
+				case 1 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 1 );}
+			    			}).start();
+				case 2 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 2 );}
+							}).start();
+				case 3 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 3 );}
+							}).start();
+				case 4 : new Thread(new Runnable() {
+			        		public void run() {
+			        			test_check( 4 );}
+							}).start();
+				case 5 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 5 );}
+							}).start();
+				case 6 : new Thread(new Runnable() {
+							public void run() {
+								test_check( 0 );}
+							}).start();
+				}
+				//Starts the test checking in a different thread than the main(to avoid having onlocationchange do a function call.
+		/*	new Thread(new Runnable() {
 				        public void run() {
 							
 				            test_check();
 				            }
 				    }).start();
 				
-
+*/
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -641,5 +680,26 @@ LocationListener, SensorEventListener {
 		int calories = (weight * caloriemath) * time;
 		
 		return calories;
+	}
+	public void sounds(int sound) {
+		/*switch(sound)
+		{
+		case 5 : mediaPlayer = MediaPlayer.create(this, R.raw.5);
+		case 10 : mediaPlayer = MediaPlayer.create(this, R.raw.10);
+		case 500 : mediaPlayer = MediaPlayer.create(this, R.raw.500);
+		case 1000 : mediaPlayer = MediaPlayer.create(this, R.raw.1000);
+		case 1500 : mediaPlayer = MediaPlayer.create(this, R.raw.1500);
+		case 2000 : mediaPlayer = MediaPlayer.create(this, R.raw.2000);
+		case 2500 : mediaPlayer = MediaPlayer.create(this, R.raw.2500);
+		case 3000 : mediaPlayer = MediaPlayer.create(this, R.raw.3000);
+		case 4000 : mediaPlayer = MediaPlayer.create(this, R.raw.4000);
+		case 5000 : mediaPlayer = MediaPlayer.create(this, R.raw.5000);
+		case 6000 : mediaPlayer = MediaPlayer.create(this, R.raw.6000);
+		case 7000 : mediaPlayer = MediaPlayer.create(this, R.raw.7000);
+		case 8000 : mediaPlayer = MediaPlayer.create(this, R.raw.8000);
+		case 9000 : mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+		
+		}*/
+		
 	}
 }
