@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutDisplay extends FragmentActivity {
 
+	@SuppressWarnings("unchecked")		//Ignore warning when converting from Object to List<myLatLng>
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
