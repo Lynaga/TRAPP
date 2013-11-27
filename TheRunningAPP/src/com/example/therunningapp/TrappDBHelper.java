@@ -36,6 +36,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		private static final String SQL_CREATE_TEST = "CREATE TABLE " + TrappEntry.TABLE_TESTS + 
 				" (" + TrappEntry.COLUMN_NAME_MIN + " INTEGER, " + TrappEntry.COLUMN_NAME_TEST_DISTANCE + " INTEGER, "
 				+ TrappEntry.COLUMN_NAME_SEC +" INTEGER, " + TrappEntry._ID + " INTEGER PRIMARY KEY, " 
+				+ TrappEntry.COLUMN_NAME_CHOSE + " INTEGER, "
 				+ TrappEntry.COLUMN_NAME_TEST_TYPE + " TEXT, "+ TrappEntry.COLUMN_NAME_TESTNAME + " TEXT)";
 		
 	//Delete table for workout
@@ -61,6 +62,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		values1.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "1000");
 		values1.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values1.put(TrappEntry.COLUMN_NAME_SEC, "0");
+		values1.put(TrappEntry.COLUMN_NAME_CHOSE, "1");
 
 		db.insert(TrappEntry.TABLE_TESTS,
 		         null,
@@ -72,6 +74,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		values2.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "3000");
 		values2.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values2.put(TrappEntry.COLUMN_NAME_SEC, "0");
+		values2.put(TrappEntry.COLUMN_NAME_CHOSE, "2");
 	
 		
 		db.insert(TrappEntry.TABLE_TESTS,
@@ -84,6 +87,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		values3.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "5000");
 		values3.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values3.put(TrappEntry.COLUMN_NAME_SEC, "0");
+		values3.put(TrappEntry.COLUMN_NAME_CHOSE, "3");
 	
 	
 		db.insert(TrappEntry.TABLE_TESTS,
@@ -96,6 +100,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		values4.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "10000");
 		values4.put(TrappEntry.COLUMN_NAME_MIN, "0");
 		values4.put(TrappEntry.COLUMN_NAME_SEC, "0");
+		values4.put(TrappEntry.COLUMN_NAME_CHOSE, "4");
 	
 
 		db.insert(TrappEntry.TABLE_TESTS,
@@ -108,6 +113,7 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 		values5.put(TrappEntry.COLUMN_NAME_TEST_DISTANCE, "0");
 		values5.put(TrappEntry.COLUMN_NAME_MIN, "12");
 		values5.put(TrappEntry.COLUMN_NAME_SEC, "0");
+		values5.put(TrappEntry.COLUMN_NAME_CHOSE, "5");
 	
 		// Insert the new row, returning the primary key value of the new row
 		db.insert(TrappEntry.TABLE_TESTS,

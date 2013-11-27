@@ -11,14 +11,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,7 +29,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -99,8 +94,7 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
-	double x, y, z, amplitude;	//Used for accelerometer data
-	int nextWorkoutID = -1;
+	double amplitude;	//Used for accelerometer data
 	
 	MediaPlayer mediaPlayer;
 	AudioManager am;
@@ -121,7 +115,7 @@ LocationListener, SensorEventListener {
 		double lng;
 	}
 	
-	List<myLatLng> locationList = new ArrayList<myLatLng>();
+	List<myLatLng> locationList = new ArrayList<myLatLng>();	//List to store gps data
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -183,21 +177,18 @@ LocationListener, SensorEventListener {
 	
 	@Override
     protected void onStop() {
-        // Disconnecting the client if connected
+		super.onStop();
+    }
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// Disconnecting the client if connected
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
-        super.onStop();
-    }	
-	@Override
-    public void onDestroy()
-    {
-		 super.onDestroy();
-		 end();
-
-}
-   
-	 
+	}
+	
 	@Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
@@ -205,7 +196,7 @@ LocationListener, SensorEventListener {
         
         //Set map to users location and set initial text
 		setCamera(myLocationClient.getLastLocation());
-		CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);	
+		CameraUpdate zoom = CameraUpdateFactory.zoomTo(19);	
 		myMap.animateCamera(zoom);	//Set zoom
 		setText();
 	}
@@ -242,7 +233,7 @@ LocationListener, SensorEventListener {
             }
         } else {
             /*
-             * If no resolution is available, display a dialog to the
+             * If no solution is available, display a dialog to the
              * user.
              */
         	String T_Errortext = "Google Play services could not resolve the connection problem.";
@@ -260,7 +251,7 @@ LocationListener, SensorEventListener {
 		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
-		setText();		//Update text
+		setText();					//Update text
 		
 		double tempLat = newLocation.getLatitude();
 		double tempLng = newLocation.getLongitude();
@@ -276,18 +267,16 @@ LocationListener, SensorEventListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 	
-		locationList.add(listLatLng);
+		locationList.add(listLatLng);			//Add new location to list
 		prevLocation = newLocation;				//Update last location for next update
-
+		//Log.i("LOCATION UPDATE", Double.toString(amplitude));
 	}
 	
-	public void onSensorChanged(SensorEvent event) {
-		x = event.values[0];
-		y = event.values[1];
-		z = event.values[2];
-		
-		amplitude = Math.sqrt((x*x)+(y*y)+(z*z));
-		
+	public void onSensorChanged(SensorEvent event) {	
+		amplitude = Math.sqrt((event.values[0] * event.values[0])
+						    + (event.values[1] * event.values[1])
+						    + (event.values[2] * event.values[2]));
+		//Log.i("ACCELEROMETER UPDATE", Double.toString(amplitude));
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -360,7 +349,6 @@ LocationListener, SensorEventListener {
 	    }
 	};
 	
-	
 	//Function to center map on user
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
@@ -368,14 +356,14 @@ LocationListener, SensorEventListener {
 		myMap.moveCamera(center);
 	}
 	
-	//Function to set and update current distance
+	//Function to set and update current workout info
 	public void setText() {
 		int tempDistance = (int) myDistance;
 		StringBuilder sb = new StringBuilder();
 		
 		if(tempDistance > 1000) {		//If user ran more than 1 km, format output to (ex.) "1.23 km"
 			int tempKm = tempDistance / 1000;
-			int tempM = (tempDistance % 1000) / 100;
+			int tempM = (tempDistance % 1000) / 10;
 			sb.append(tempKm + "." + tempM + " km");
 		}
 		else {
@@ -417,9 +405,9 @@ LocationListener, SensorEventListener {
 			}
 			else if(workoutType.equals("Test"))
 			{
-				int abcd = 0;
+				int chose = extras.getInt("chose");
 			
-				switch(abcd){
+				switch(chose){
 				case 1 : new Thread(new Runnable() {
 							public void run() {
 								test_check( 1 );}
@@ -680,22 +668,6 @@ LocationListener, SensorEventListener {
 		else
 			return false;
 	}
-	
-
-	public void writeLocation(double lat, double lng) {
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		
-		if(nextWorkoutID == -1)
-			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
-			 
-		ContentValues values = new ContentValues();
-		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
-		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
-		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
-		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
-		db.close();
-	}
 
 	public int Calorie_math(float time, int weight) {
 		int caloriemath = 0;
@@ -715,20 +687,34 @@ LocationListener, SensorEventListener {
 	public void sounds(int sound) {
 		/*switch(sound)
 		{
-		case 5 : mediaPlayer = MediaPlayer.create(this, R.raw.5);
-		case 10 : mediaPlayer = MediaPlayer.create(this, R.raw.10);
-		case 500 : mediaPlayer = MediaPlayer.create(this, R.raw.500);
-		case 1000 : mediaPlayer = MediaPlayer.create(this, R.raw.1000);
-		case 1500 : mediaPlayer = MediaPlayer.create(this, R.raw.1500);
-		case 2000 : mediaPlayer = MediaPlayer.create(this, R.raw.2000);
-		case 2500 : mediaPlayer = MediaPlayer.create(this, R.raw.2500);
-		case 3000 : mediaPlayer = MediaPlayer.create(this, R.raw.3000);
-		case 4000 : mediaPlayer = MediaPlayer.create(this, R.raw.4000);
-		case 5000 : mediaPlayer = MediaPlayer.create(this, R.raw.5000);
-		case 6000 : mediaPlayer = MediaPlayer.create(this, R.raw.6000);
-		case 7000 : mediaPlayer = MediaPlayer.create(this, R.raw.7000);
-		case 8000 : mediaPlayer = MediaPlayer.create(this, R.raw.8000);
-		case 9000 : mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+		case 5 : {mediaPlayer = MediaPlayer.create(this, R.raw.5); 
+					mediaPlayer.start();}
+		case 10 : {mediaPlayer = MediaPlayer.create(this, R.raw.10);
+					mediaPlayer.start();}
+		case 500 : {mediaPlayer = MediaPlayer.create(this, R.raw.500);
+					mediaPlayer.start();}	
+		case 1000 : {mediaPlayer = MediaPlayer.create(this, R.raw.1000);
+					mediaPlayer.start();}
+		case 1500 : {mediaPlayer = MediaPlayer.create(this, R.raw.1500);
+					mediaPlayer.start();}
+		case 2000 : {mediaPlayer = MediaPlayer.create(this, R.raw.2000);
+					mediaPlayer.start();}
+		case 2500 : {mediaPlayer = MediaPlayer.create(this, R.raw.2500);
+					mediaPlayer.start();}
+		case 3000 : {mediaPlayer = MediaPlayer.create(this, R.raw.3000);
+					mediaPlayer.start();}
+		case 4000 : {mediaPlayer = MediaPlayer.create(this, R.raw.4000);
+					mediaPlayer.start();}
+		case 5000 : {mediaPlayer = MediaPlayer.create(this, R.raw.5000);
+					mediaPlayer.start();}
+		case 6000 : {mediaPlayer = MediaPlayer.create(this, R.raw.6000);
+					mediaPlayer.start();}
+		case 7000 : {mediaPlayer = MediaPlayer.create(this, R.raw.7000);
+					mediaPlayer.start();}
+		case 8000 : {mediaPlayer = MediaPlayer.create(this, R.raw.8000);
+					mediaPlayer.start();}
+		case 9000 : {mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+					mediaPlayer.start();}
 		
 		}*/
 		
