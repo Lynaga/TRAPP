@@ -531,9 +531,9 @@ LocationListener, SensorEventListener {
 	public void Interval(){
 		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		Bundle extras = getIntent().getExtras();
-		int run = extras.getInt("run");
-		int pause = extras.getInt("pause");
-		int rep = extras.getInt("rep");
+		final int run = extras.getInt("run");
+		final int pause = extras.getInt("pause");
+		final int rep = extras.getInt("rep");
 		String intervalType = extras.getString("intervalType");
 		
         mediaPlayerRun.start();
@@ -541,7 +541,13 @@ LocationListener, SensorEventListener {
 		if(intervalType.equals("time"))
 			Interval_time(run,pause,rep);
 		else if(intervalType.equals("distance"))
-			Interval_distance(run,pause,rep);
+		{
+			new Thread(new Runnable() {
+		        public void run() {
+		        	Interval_distance(run,pause,rep);
+		        }
+		    }).start();	
+		}
 		else
 			end();
 	}
@@ -571,6 +577,7 @@ LocationListener, SensorEventListener {
 		
 		do{
 		value = (int) myDistance;
+		SystemClock.sleep(1000); //since the gps doesn't update more often
 		}while(value <= set);
 	}
 	
