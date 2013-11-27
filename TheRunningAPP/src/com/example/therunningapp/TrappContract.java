@@ -31,6 +31,7 @@ public class TrappContract extends Activity {
 		public static final String COLUMN_NAME_MIN = "min";
 		public static final String COLUMN_NAME_SEC = "sec";
 		public static final String COLUMN_NAME_TEST_TYPE = "test_type";
+		public static final String COLUMN_NAME_CHOSE = "chose";
 
 		public static final String TABLE_NAME_INTERVAL = "interval";
 		//public static final String COLUMN_NAME_NAME = "name";		//Declared above

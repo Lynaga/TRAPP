@@ -11,14 +11,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -32,7 +28,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -409,9 +404,9 @@ LocationListener, SensorEventListener {
 			}
 			else if(workoutType.equals("Test"))
 			{
-				int abcd = 0;
+				int chose = extras.getInt("chose");
 			
-				switch(abcd){
+				switch(chose){
 				case 1 : new Thread(new Runnable() {
 							public void run() {
 								test_check( 1 );}
@@ -691,20 +686,34 @@ LocationListener, SensorEventListener {
 	public void sounds(int sound) {
 		/*switch(sound)
 		{
-		case 5 : mediaPlayer = MediaPlayer.create(this, R.raw.5);
-		case 10 : mediaPlayer = MediaPlayer.create(this, R.raw.10);
-		case 500 : mediaPlayer = MediaPlayer.create(this, R.raw.500);
-		case 1000 : mediaPlayer = MediaPlayer.create(this, R.raw.1000);
-		case 1500 : mediaPlayer = MediaPlayer.create(this, R.raw.1500);
-		case 2000 : mediaPlayer = MediaPlayer.create(this, R.raw.2000);
-		case 2500 : mediaPlayer = MediaPlayer.create(this, R.raw.2500);
-		case 3000 : mediaPlayer = MediaPlayer.create(this, R.raw.3000);
-		case 4000 : mediaPlayer = MediaPlayer.create(this, R.raw.4000);
-		case 5000 : mediaPlayer = MediaPlayer.create(this, R.raw.5000);
-		case 6000 : mediaPlayer = MediaPlayer.create(this, R.raw.6000);
-		case 7000 : mediaPlayer = MediaPlayer.create(this, R.raw.7000);
-		case 8000 : mediaPlayer = MediaPlayer.create(this, R.raw.8000);
-		case 9000 : mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+		case 5 : {mediaPlayer = MediaPlayer.create(this, R.raw.5); 
+					mediaPlayer.start();}
+		case 10 : {mediaPlayer = MediaPlayer.create(this, R.raw.10);
+					mediaPlayer.start();}
+		case 500 : {mediaPlayer = MediaPlayer.create(this, R.raw.500);
+					mediaPlayer.start();}	
+		case 1000 : {mediaPlayer = MediaPlayer.create(this, R.raw.1000);
+					mediaPlayer.start();}
+		case 1500 : {mediaPlayer = MediaPlayer.create(this, R.raw.1500);
+					mediaPlayer.start();}
+		case 2000 : {mediaPlayer = MediaPlayer.create(this, R.raw.2000);
+					mediaPlayer.start();}
+		case 2500 : {mediaPlayer = MediaPlayer.create(this, R.raw.2500);
+					mediaPlayer.start();}
+		case 3000 : {mediaPlayer = MediaPlayer.create(this, R.raw.3000);
+					mediaPlayer.start();}
+		case 4000 : {mediaPlayer = MediaPlayer.create(this, R.raw.4000);
+					mediaPlayer.start();}
+		case 5000 : {mediaPlayer = MediaPlayer.create(this, R.raw.5000);
+					mediaPlayer.start();}
+		case 6000 : {mediaPlayer = MediaPlayer.create(this, R.raw.6000);
+					mediaPlayer.start();}
+		case 7000 : {mediaPlayer = MediaPlayer.create(this, R.raw.7000);
+					mediaPlayer.start();}
+		case 8000 : {mediaPlayer = MediaPlayer.create(this, R.raw.8000);
+					mediaPlayer.start();}
+		case 9000 : {mediaPlayer = MediaPlayer.create(this, R.raw.9000);
+					mediaPlayer.start();}
 		
 		}*/
 		
