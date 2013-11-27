@@ -60,6 +60,7 @@ public class TestSetup extends Activity {
 						  intent.putExtra("min", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_MIN)));
 						  intent.putExtra("sec", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_SEC)));
 						  intent.putExtra("testType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TEST_TYPE)));
+						  intent.putExtra("chose", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_CHOSE)));
 						  intent.putExtra("workoutType", type);
 						  startActivity(intent);
 						  finish();          
@@ -166,12 +167,14 @@ public class TestSetup extends Activity {
 		}
 				
 		//Intent sent to workoutstart
+		int temp = 6;
 		Intent intent = new Intent(this, WorkoutStart.class);
 		intent.putExtra("testType", testType);
 		intent.putExtra("lengder", distances);	
 		intent.putExtra("min", min);
 		intent.putExtra("sec", sec);
 		intent.putExtra("workoutType", workoutType);
+		intent.putExtra("chose", temp);
 		startActivity(intent);
 		finish();
 	}
