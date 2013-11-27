@@ -1,12 +1,17 @@
 package com.example.therunningapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -23,6 +28,25 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		int des = sharedPreferences.getInt("destroyed", 0);
+
+	if(des == 1){
+		new AlertDialog.Builder(this)
+	    .setTitle("Delete entry")
+	    .setMessage("Are you sure you want to delete this entry?")
+	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with delete
+	        }
+	     })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	     .show();
+	}
 	}
 
 	@Override
@@ -165,5 +189,14 @@ public class MainActivity extends FragmentActivity {
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
-	
+	 @Override
+	    public void onDestroy()
+	    {
+	        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+	        Editor editor = sharedPreferences.edit();
+	        editor.putInt("destroyed", 1);
+	        editor.commit();
+	        super.onDestroy();
+
+}
 }

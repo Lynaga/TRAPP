@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,12 +11,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -30,6 +32,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -125,6 +128,8 @@ LocationListener, SensorEventListener {
 		mediaPlayer = MediaPlayer.create(this, R.raw.pause);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
+
+
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
 
@@ -160,37 +165,33 @@ LocationListener, SensorEventListener {
         super.onStart();
         // Connect the client.
         myLocationClient.connect();
-        Log.i("onStart called", "Shiiieet");
     }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-		Log.i("onResume called", "Shiiieet");
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
 		mySensorManager.unregisterListener(this, mySensor);
-		Log.i("onPause called", "Shiiieet");
 	}
 	
 	@Override
     protected void onStop() {
 		super.onStop();
-        // Disconnecting the client if connected
-        Log.i("onStop called", "Shiiieet");
     }
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		// Disconnecting the client if connected
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
-		Log.i("onDestroy called", "Shiiieet");
+		end();
 	}
 	
 	@Override
@@ -300,6 +301,7 @@ LocationListener, SensorEventListener {
 		
 		int value;
 		int set = 0;
+		//The test checking happends as long as the distance/time is lower than the test value.
 		do{
 			if(testType.equals("Distance")){
 			value = (int) myDistance;
@@ -332,22 +334,11 @@ LocationListener, SensorEventListener {
 				rounds++;	
 			}
 		}
-		
-			
-			
+		// sleeps the thread for a second as the gps updates dosn't happend more often.
+		SystemClock.sleep(1000);
 		}
 		// Ends the test when u have reached the value(time or distance)
 		while(value <= set);
-		// Request audio focus for playback
-		int result = am.requestAudioFocus(afChangeListener,
-		                             // Use the music stream.
-		                             AudioManager.STREAM_MUSIC,
-		                             // Request permanent focus.
-		                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-		   
-		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			sounds(0);
-		}
 			end();
 	}
 	
@@ -448,15 +439,6 @@ LocationListener, SensorEventListener {
 								test_check( 0 );}
 							}).start();
 				}
-				//Starts the test checking in a different thread than the main(to avoid having onlocationchange do a function call.
-		/*	new Thread(new Runnable() {
-				        public void run() {
-							
-				            test_check();
-				            }
-				    }).start();
-				
-*/
 			}
 		    
 		    workoutStatus = true;											//Change workout status
@@ -667,6 +649,7 @@ LocationListener, SensorEventListener {
 		    	    	else if(x == 2){
 		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
+		    	    		end();
 		    	        }
 		    	    }
 		    	}).start();
