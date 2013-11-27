@@ -94,8 +94,7 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
-	double x, y, z, amplitude;	//Used for accelerometer data
-	int nextWorkoutID = -1;
+	double amplitude;	//Used for accelerometer data
 	
 	MediaPlayer mediaPlayer;
 	AudioManager am;
@@ -116,7 +115,7 @@ LocationListener, SensorEventListener {
 		double lng;
 	}
 	
-	List<myLatLng> locationList = new ArrayList<myLatLng>();
+	List<myLatLng> locationList = new ArrayList<myLatLng>();	//List to store gps data
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,15 +177,20 @@ LocationListener, SensorEventListener {
 	
 	@Override
     protected void onStop() {
-        // Disconnecting the client if connected
+		super.onStop();
+    }
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// Disconnecting the client if connected
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
         super.onStop();
     }	
 
-   
-	 
+	
 	@Override
     public void onConnected(Bundle dataBundle) {
         // Display the connection status
@@ -194,7 +198,7 @@ LocationListener, SensorEventListener {
         
         //Set map to users location and set initial text
 		setCamera(myLocationClient.getLastLocation());
-		CameraUpdate zoom = CameraUpdateFactory.zoomTo(18);	
+		CameraUpdate zoom = CameraUpdateFactory.zoomTo(19);	
 		myMap.animateCamera(zoom);	//Set zoom
 		setText();
 	}
@@ -249,7 +253,7 @@ LocationListener, SensorEventListener {
 		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 		myDistance = myDistance + tempDistance;	//Updating total distance
 		setCamera(newLocation);		//Update map to new location
-		setText();		//Update text
+		setText();					//Update text
 		
 		double tempLat = newLocation.getLatitude();
 		double tempLng = newLocation.getLongitude();
@@ -265,18 +269,16 @@ LocationListener, SensorEventListener {
 	     .width(5)
 	     .color(Color.RED).geodesic(true));
 	
-		locationList.add(listLatLng);
+		locationList.add(listLatLng);			//Add new location to list
 		prevLocation = newLocation;				//Update last location for next update
-
+		//Log.i("LOCATION UPDATE", Double.toString(amplitude));
 	}
 	
-	public void onSensorChanged(SensorEvent event) {
-		x = event.values[0];
-		y = event.values[1];
-		z = event.values[2];
-		
-		amplitude = Math.sqrt((x*x)+(y*y)+(z*z));
-		
+	public void onSensorChanged(SensorEvent event) {	
+		amplitude = Math.sqrt((event.values[0] * event.values[0])
+						    + (event.values[1] * event.values[1])
+						    + (event.values[2] * event.values[2]));
+		//Log.i("ACCELEROMETER UPDATE", Double.toString(amplitude));
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -644,6 +646,7 @@ LocationListener, SensorEventListener {
 		    	    	else if(x == 2){
 		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
+		    	    		end();
 		    	        }
 		    	    }
 		    	}).start();
@@ -667,22 +670,6 @@ LocationListener, SensorEventListener {
 		}
 		else
 			return false;
-	}
-	
-
-	public void writeLocation(double lat, double lng) {
-		TrappDBHelper mDBHelper = new TrappDBHelper(this);
-		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		
-		if(nextWorkoutID == -1)
-			nextWorkoutID = (int) DatabaseUtils.queryNumEntries(db, TrappEntry.TABLE_NAME) + 1;
-			 
-		ContentValues values = new ContentValues();
-		values.put(TrappEntry.COLUMN_NAME_WORKOUT, nextWorkoutID);
-		values.put(TrappEntry.COLUMN_NAME_LATITUDE, lat);
-		values.put(TrappEntry.COLUMN_NAME_LONGITUDE, lng);
-		db.insert(TrappEntry.TABLE_NAME_LOCATIONS, null, values);
-		db.close();
 	}
 
 	public int Calorie_math(float time, int weight) {

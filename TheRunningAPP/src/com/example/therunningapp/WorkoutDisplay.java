@@ -81,11 +81,12 @@ public class WorkoutDisplay extends FragmentActivity {
 			  } 
 			
 			//Formatting time from milliseconds to hh:mm:ss
-			int tempTime = Integer.parseInt(time) / 1000;
+			int tempTime = Integer.parseInt(time);
 			int tempDistance = Integer.parseInt(distance);
 			int hours = (int) (tempTime / (1000 * 60 * 60));
 			int minutes = ((tempTime / (1000 * 60)) % 60);
 			int seconds = ((tempTime / 1000) % 60);
+			tempTime = tempTime / 1000;	//Converting from milliseconds to seconds
 			
 			double tempSpeed = (double) tempDistance / tempTime;	//Calculating average speed
 			
