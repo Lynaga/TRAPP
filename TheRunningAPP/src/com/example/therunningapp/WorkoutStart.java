@@ -660,6 +660,7 @@ LocationListener, SensorEventListener {
 		    	    	else if(x == 2){
 		    	    		mediaPlayerStop.start();
 		    	    		TimerStopStart = false;
+		    	    		end();
 		    	        }
 		    	    }
 		    	}).start();
