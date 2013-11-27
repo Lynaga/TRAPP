@@ -191,7 +191,6 @@ LocationListener, SensorEventListener {
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
-		end();
 	}
 	
 	@Override
@@ -238,7 +237,7 @@ LocationListener, SensorEventListener {
             }
         } else {
             /*
-             * If no resolution is available, display a dialog to the
+             * If no solution is available, display a dialog to the
              * user.
              */
         	String T_Errortext = "Google Play services could not resolve the connection problem.";
@@ -354,7 +353,6 @@ LocationListener, SensorEventListener {
 	    }
 	};
 	
-	
 	//Function to center map on user
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
@@ -362,14 +360,14 @@ LocationListener, SensorEventListener {
 		myMap.moveCamera(center);
 	}
 	
-	//Function to set and update current distance
+	//Function to set and update current workout info
 	public void setText() {
 		int tempDistance = (int) myDistance;
 		StringBuilder sb = new StringBuilder();
 		
 		if(tempDistance > 1000) {		//If user ran more than 1 km, format output to (ex.) "1.23 km"
 			int tempKm = tempDistance / 1000;
-			int tempM = (tempDistance % 1000) / 100;
+			int tempM = (tempDistance % 1000) / 10;
 			sb.append(tempKm + "." + tempM + " km");
 		}
 		else {
