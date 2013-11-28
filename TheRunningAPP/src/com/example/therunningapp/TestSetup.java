@@ -1,6 +1,8 @@
 package com.example.therunningapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -151,11 +153,33 @@ public class TestSetup extends Activity {
 		EditText time_sec = (EditText) findViewById(R.id.sec);
 		EditText distance = (EditText) findViewById(R.id.distance);
 		
+		
+		//Checks if the test type is distance
 		if(testType == "Distance"){
+			//If the field is not empty it get's the data, els it pops up an alert dialog for the user
 			if(isEmpty(distance)){
 				distances = Integer.parseInt(distance.getText().toString());
 			}
+			else
+			{
+				new AlertDialog.Builder(this)
+			    .setTitle("Error")
+			    .setMessage("You did not enter a distance, do you want to start a plain workout?")
+			    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // continue with delete
+			        }
+			     })
+			    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // do nothing
+			        }
+			     })
+			     .show();
+			}
+			
 		}
+		//If the testtype is not distance it is then a time based test
 		else{
 		
 			if(isEmpty(time_min)){
@@ -164,8 +188,31 @@ public class TestSetup extends Activity {
 			if(isEmpty(time_sec)){
 				sec = Integer.parseInt(time_sec.getText().toString());
 			}
+			// If user has not typed in anything in the fields for setting up a time based test
+			if(!isEmpty(time_sec) && !isEmpty(time_min))
+			{
+				new AlertDialog.Builder(this)
+			    .setTitle("Error")
+			    .setMessage("You did not enter a test time, do you want to start a plain workout?")
+			    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            running();
+			        }
+			     })
+			    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int which) { 
+			            // do nothing
+			        }
+			     })
+			     .show();
+			}
 		}
-				
+		
+		
+		
+		//Check if the user has  typed in anything in distance or min/sec, then start a workout based on the data user entered
+	if((isEmpty(time_sec) || isEmpty(time_min)) || isEmpty(distance) ){			
+		
 		//Intent sent to workoutstart
 		int temp = 6;
 		Intent intent = new Intent(this, WorkoutStart.class);
@@ -177,6 +224,7 @@ public class TestSetup extends Activity {
 		intent.putExtra("chose", temp);
 		startActivity(intent);
 		finish();
+		}
 	}
 	
 	
@@ -187,6 +235,11 @@ public class TestSetup extends Activity {
 	        return false;
 	    }
 	}
-
+	public void running () { 
+		Intent intent = new Intent(this, WorkoutStart.class);
+		String running = "Running";
+		intent.putExtra("workoutType", running);
+		startActivity(intent);									
+	}
 }
 
