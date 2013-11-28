@@ -7,7 +7,9 @@ import com.example.therunningapp.TrappContract.TrappEntry;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -150,57 +152,74 @@ public class Interval extends Activity {
 		int run = 0;
 		int pause = 0;
 		int rep = 0;
+		String name = "";
 		
 		//open database
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		
-		//add different values in int's from editText
-		if(intervalType == "time")
-		{
-			EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
-			EditText pause_time = (EditText) findViewById(R.id.editText_time_pause_interval);
-			
-			run = Integer.parseInt(run_time.getText().toString());
-			pause = Integer.parseInt(pause_time.getText().toString());
-
-			run = onToggleClicked(findViewById(R.id.ToggleButton_time_run_interval), run);
-			pause = onToggleClicked(findViewById(R.id.ToggleButton_time_pause_interval), pause);
-		}
-		else if(intervalType == "distance")
-		{
-			EditText run_distance = (EditText) findViewById(R.id.editText_distance_run_interval);
-			EditText pause_distance = (EditText) findViewById(R.id.editText_distance_pause_interval);
-	
-			run = Integer.parseInt(run_distance.getText().toString());
-			pause = Integer.parseInt(pause_distance.getText().toString());
-		}
-		
+		EditText run_time = (EditText) findViewById(R.id.editText_time_run_interval);
+		EditText pause_time = (EditText) findViewById(R.id.editText_time_pause_interval);
+		EditText run_distance = (EditText) findViewById(R.id.editText_distance_run_interval);
+		EditText pause_distance = (EditText) findViewById(R.id.editText_distance_pause_interval);
 		EditText repitition = (EditText) findViewById(R.id.editText_repetition_interval);
 		EditText name1 = (EditText) findViewById(R.id.editText_name_interval);
 		
-		rep = Integer.parseInt(repitition.getText().toString());
-		String name = name1.getText().toString();
+		//add different values in int's from editText
+		if(intervalType == "time")
+		{	
+			if(!isEmpty(run_time))
+				{
+				run = Integer.parseInt(run_time.getText().toString());
+				run = onToggleClicked(findViewById(R.id.ToggleButton_time_run_interval), run);
+				}
+			if(!isEmpty(pause_time))
+				{
+				pause = Integer.parseInt(pause_time.getText().toString());
+				pause = onToggleClicked(findViewById(R.id.ToggleButton_time_pause_interval), pause);
+				}
+		}
+		else if(intervalType == "distance")
+		{
+			if(!isEmpty(run_distance))
+				run = Integer.parseInt(run_distance.getText().toString());
+			if(!isEmpty(pause_distance))
+				pause = Integer.parseInt(pause_distance.getText().toString());
+		}
 		
-		//save values in database
-		ContentValues values = new ContentValues();
-		values.put(TrappEntry.COLUMN_NAME_NAME, name);
-		values.put(TrappEntry.COLUMN_NAME_RUN_TIME, run);
-		values.put(TrappEntry.COLUMN_NAME_PAUSE_TIME, pause);
-		values.put(TrappEntry.COLUMN_NAME_REPETITION, rep);
-		values.put(TrappEntry.COLUMN_NAME_INTERVALTYPE, intervalType);
-		db.insert(TrappEntry.TABLE_NAME_INTERVAL, null, values);
-		db.close();
+		if(!isEmpty(repitition))
+			rep = Integer.parseInt(repitition.getText().toString());
+		if(!isEmpty(name1))
+			name = name1.getText().toString();
 		
-		//put values in intent and send them to an new activity
-		Intent intent = new Intent(this, WorkoutStart.class);
-		intent.putExtra("run", run);	
-		intent.putExtra("pause", pause);
-		intent.putExtra("rep", rep);
-		intent.putExtra("workoutType", Interval);
-		intent.putExtra("intervalType", intervalType);
-		startActivity(intent); 
-		finish(); 
+		if((!isEmpty(run_time) && !isEmpty(pause_time)) || (!isEmpty(run_distance) && !isEmpty(pause_distance)))
+		{
+			if(!isEmpty(repitition) && !isEmpty(name1)){//save values in database
+				ContentValues values = new ContentValues();
+				values.put(TrappEntry.COLUMN_NAME_NAME, name);
+				values.put(TrappEntry.COLUMN_NAME_RUN_TIME, run);
+				values.put(TrappEntry.COLUMN_NAME_PAUSE_TIME, pause);
+				values.put(TrappEntry.COLUMN_NAME_REPETITION, rep);
+				values.put(TrappEntry.COLUMN_NAME_INTERVALTYPE, intervalType);
+				db.insert(TrappEntry.TABLE_NAME_INTERVAL, null, values);
+				db.close();
+		
+				//put values in intent and send them to an new activity
+				Intent intent = new Intent(this, WorkoutStart.class);
+				intent.putExtra("run", run);	
+				intent.putExtra("pause", pause);
+				intent.putExtra("rep", rep);
+				intent.putExtra("workoutType", Interval);
+				intent.putExtra("intervalType", intervalType);
+				startActivity(intent);
+				finish(); 
+			}
+			else
+				sintmelding();
+		}
+		else
+			sintmelding();
+		
 	}
 	
 	public int onToggleClicked(View view, int time) {
@@ -211,5 +230,37 @@ public class Interval extends Activity {
 	    } else {
 	        return time; // Seconds
 	    }
+	}
+	
+	private boolean isEmpty(EditText etText) {
+	    if (etText.getText().toString().trim().length() > 0) {
+	        return false;
+	    } else 
+	        return true;
+	}
+	
+	public void sintmelding(){
+		new AlertDialog.Builder(this)
+	    .setTitle("Error")
+	    .setMessage("You did not fill out all the information about your interval-workout,"
+	    		+ " do you want to start a plain Running-workout?")
+	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            running();
+	        }
+	     })
+	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	     .show();
+	}
+	
+	public void running () { 
+		Intent intent = new Intent(this, WorkoutStart.class);
+		String running = "Running";
+		intent.putExtra("workoutType", running);
+		startActivity(intent);									
 	}
 }

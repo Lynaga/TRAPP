@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -727,7 +728,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 	public void sounds(int sound) {
 		MediaPlayer MP = null;
-		String soundpackage = "funny";
+		String soundpackage = Settings.soundpackage;
 
 		if (soundpackage.equals("en")) {
 			switch (sound) {

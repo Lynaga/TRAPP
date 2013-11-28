@@ -58,6 +58,7 @@
     <string name="Pause_distance">Pause distanse</string>
     <string name="walking">Spasere</string>
     <string name="running">Løpe</string>
+    <string name="talking">Lyd</string>
 	
     <string-array name="Gender_array">
         <item>Mann</item>
@@ -65,8 +66,9 @@
     </string-array>
     
     <string-array name="Language_array">
-        <item>Norsk</item>
         <item>Engelsk</item>
+        <item>Norsk</item>
+        <item>For moro</item>
     </string-array>
     
 </resources>
