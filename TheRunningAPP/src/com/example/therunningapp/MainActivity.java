@@ -28,25 +28,6 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		int des = sharedPreferences.getInt("destroyed", 0);
-
-	if(des == 1){
-		new AlertDialog.Builder(this)
-	    .setTitle("Delete entry")
-	    .setMessage("Are you sure you want to delete this entry?")
-	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with delete
-	        }
-	     })
-	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
-	     })
-	     .show();
-	}
 	}
 
 	@Override
