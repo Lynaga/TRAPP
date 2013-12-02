@@ -100,8 +100,6 @@ public class History extends Activity {
 		final TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		final SQLiteDatabase db = mDbHelper.getReadableDatabase();
     	
-    	//String delete = toString()c.getInt(c.getColumnIndex(TrappEntry._ID));
-        Log.v("long clicked","delte: " + delete);
     	db.delete(TrappEntry.TABLE_NAME, "_ID ="+delete, null);
     	Intent intent = getIntent();
     	finish();
