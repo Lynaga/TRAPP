@@ -30,13 +30,13 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+*/
 	public void settings (View view) {	//Onclick function for the settings button
 		Intent intent = new Intent(this, Settings.class);
 		startActivity(intent);			//Start Settings activity
@@ -179,5 +179,7 @@ public class MainActivity extends FragmentActivity {
 	        editor.commit();
 	        super.onDestroy();
 
-}
+
+	    }
+	 
 }
