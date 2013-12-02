@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -52,42 +54,47 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutStart extends FragmentActivity implements
-GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener,
-LocationListener, SensorEventListener {
+		GooglePlayServicesClient.ConnectionCallbacks,
+		GooglePlayServicesClient.OnConnectionFailedListener, LocationListener,
+		SensorEventListener {
 
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-	
-	//Constants to set the update intervals
+
+	// Constants to set the update intervals
 	private final static int MILLISECONDS_PER_SECOND = 1000;
 	private final static int UPDATE_INTERVAL_IN_SECONDS = 1;
 	private final static int FASTEST_INTERVAL_IN_SECONDS = 1;
+
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
 	
 	private final static double MAX_DISTANCE = 7;	//Max average distance pr. second when 
 													//accellerating from 0 (applies for the first 3 seconds)
 	//Location variables to store user locations
-	private Location prevLocation = null;
-	
-	LocationClient myLocationClient;	//Object to connect to Google location services and request location update callbacks
-	GoogleMap myMap;					//Object to get map from fragment
-	LocationRequest myLocationRequest;	//Object to set parameters for the requests to the LocationClient
-	
-	//Objects to access the accelerometer
+
+	private Location prevLocation = null;	// Location variables to store user locations
+
+	LocationClient myLocationClient; // Object to connect to Google location
+										// services and request location update
+										// callbacks
+	GoogleMap myMap; // Object to get map from fragment
+	LocationRequest myLocationRequest; // Object to set parameters for the
+										// requests to the LocationClient
+	// Objects to access the accelerometer
 	SensorManager mySensorManager;
 	Sensor mySensor;
-	
-	//Variables used to pause / restart workout and store to database.
-	int timeInterval = 1;	//Time interval since last verified locations (Standard = 1)
+
+	// Variables used to pause / restart workout and store to database.
+	int timeInterval = 1; // Time interval since last verified locations
+							// (Standard = 1)
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
 	double averageDistance = 0;
 	int tempCounter = 0;
 	Chronometer myTimer;
-	
-	//getting extras
+
+	// getting extras
 	int min = 0;
 	int sec = 0;
 	int lengde = 0;
@@ -101,10 +108,13 @@ LocationListener, SensorEventListener {
 	int accFillListCounter = 1;
 	
 	//Objects to play sounds
+
+	double amplitude; // Used for accelerometer data
+
 	MediaPlayer mediaPlayer;
 	AudioManager am;
-	
-	//intervals
+
+	// intervals
 	Timer run;
 	Timer pause;
 	Timer stop;
@@ -114,20 +124,24 @@ LocationListener, SensorEventListener {
 	String intervalType;
 	String workoutType;
 	Bundle extras;
-	
-	public static class myLatLng implements Serializable {	//Class to read/write lat /lng values
+
+	public static class myLatLng implements Serializable { // Class to
+															// read/write lat
+															// /lng values
 		double lat;
 		double lng;
 	}
-	
-	List<myLatLng> locationList = new ArrayList<myLatLng>();	//List to store gps data
-	
+
+	List<myLatLng> locationList = new ArrayList<myLatLng>(); // List to store
+																// gps data
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-		mediaPlayer = MediaPlayer.create(this, R.raw.pause);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+		am = (AudioManager) getApplicationContext().getSystemService(
+				Context.AUDIO_SERVICE);
 
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
@@ -137,26 +151,20 @@ LocationListener, SensorEventListener {
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
-		
-		//Get map from the fragment
+
+		// Get map from the fragment
 		FragmentManager myFragmentManager = getSupportFragmentManager();
 		SupportMapFragment mySupportMapFragment;
-		mySupportMapFragment = (SupportMapFragment) myFragmentManager.findFragmentById(R.id.map);
+		mySupportMapFragment = (SupportMapFragment) myFragmentManager
+				.findFragmentById(R.id.map);
 		myMap = mySupportMapFragment.getMap();
-		myMap.setMyLocationEnabled(true);	//Enable the my locaton button
-		
-		//Set parameters for the location updates
+		myMap.setMyLocationEnabled(true); // Enable the my locaton button
+
+		// Set parameters for the location updates
 		myLocationRequest = LocationRequest.create();
 		myLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		myLocationRequest.setInterval(UPDATE_INTERVAL);
 		myLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.workout_start, menu);
-		return true;
 	}
 	
 	@Override
@@ -174,16 +182,16 @@ LocationListener, SensorEventListener {
 		//mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 		Log.i("onResume called", "Niggah");
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		//mySensorManager.unregisterListener(this, mySensor);
 		Log.i("onPause called", "Niggah");
 	}
-	
+
 	@Override
-    protected void onStop() {
+	protected void onStop() {
 		super.onStop();
 		Log.i("onStop called", "Niggah");
     }
@@ -197,61 +205,59 @@ LocationListener, SensorEventListener {
         myLocationClient.disconnect();
         Log.i("onDestroy called", "Niggah");
 	}
-	
+
 	@Override
-    public void onConnected(Bundle dataBundle) {
-        // Display the connection status
-        Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-        
-        //Set map to users location and set initial text
+	public void onConnected(Bundle dataBundle) {
+		// Display the connection status
+		Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+
+		// Set map to users location and set initial text
 		setCamera(myLocationClient.getLastLocation());
-		CameraUpdate zoom = CameraUpdateFactory.zoomTo(19);	
-		myMap.animateCamera(zoom);	//Set zoom
+		CameraUpdate zoom = CameraUpdateFactory.zoomTo(19);
+		myMap.animateCamera(zoom); // Set zoom
 		setText();
 	}
-	
+
 	@Override
-    public void onDisconnected() {
-        // Display the connection status
-        Toast.makeText(this, "Disconnected. Please reconnect to continue.",
-                Toast.LENGTH_SHORT).show();
-    }
-	
+	public void onDisconnected() {
+		// Display the connection status
+		Toast.makeText(this, "Disconnected. Please reconnect to continue.",
+				Toast.LENGTH_SHORT).show();
+	}
+
 	@Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        /* The following code was retrieved from developer.android.com,
-         * to resolve connection errors.
-         * Google Play services can resolve some errors it detects.
-         * If the error has a resolution, try sending an Intent to
-         * start a Google Play services activity that can resolve
-         * error.
-         */
-        if (connectionResult.hasResolution()) {
-            try {
-                // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(
-                        this,
-                        CONNECTION_FAILURE_RESOLUTION_REQUEST);
-                /*
-                 * Thrown if Google Play services canceled the original
-                 * PendingIntent
-                 */
-            } catch (IntentSender.SendIntentException e) {
-                // Log the error
-                e.printStackTrace();
-            }
-        } else {
-            /*
-             * If no solution is available, display a dialog to the
-             * user.
-             */
-        	String T_Errortext = "Google Play services could not resolve the connection problem.";
+	public void onConnectionFailed(ConnectionResult connectionResult) {
+		/*
+		 * The following code was retrieved from developer.android.com, to
+		 * resolve connection errors. Google Play services can resolve some
+		 * errors it detects. If the error has a resolution, try sending an
+		 * Intent to start a Google Play services activity that can resolve
+		 * error.
+		 */
+		if (connectionResult.hasResolution()) {
+			try {
+				// Start an Activity that tries to resolve the error
+				connectionResult.startResolutionForResult(this,
+						CONNECTION_FAILURE_RESOLUTION_REQUEST);
+				/*
+				 * Thrown if Google Play services canceled the original
+				 * PendingIntent
+				 */
+			} catch (IntentSender.SendIntentException e) {
+				// Log the error
+				e.printStackTrace();
+			}
+		} else {
+			/*
+			 * If no solution is available, display a dialog to the user.
+			 */
+			String T_Errortext = "Google Play services could not resolve the connection problem.";
 			TextView T_textView = (TextView) findViewById(R.id.T_distance);
 			T_textView.setText(T_Errortext);
-        }
-    }
-	
-	//Function to get location updates
+		}
+	}
+
+	// Function to get location updates
 	public void onLocationChanged(Location newLocation) {
 		myLatLng listLatLng = new myLatLng();
 		double newDistance;
@@ -325,254 +331,268 @@ LocationListener, SensorEventListener {
 			accFillListCounter = 1;								//Reset counter
 		}
 	}
-	
+
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			//Not needed (?)
 	}
-  
-	public void test_check(int test){
+
+	public void test_check(int test) {
 		int rounds = 1;
-		//Getting data from the intent that comes from TestSetup.java
+		// Getting data from the intent that comes from TestSetup.java
 		int min = extras.getInt("min");
 		int sec = extras.getInt("sec");
 		int lengde = extras.getInt("lengder");
 		String testType = extras.getString("testType");
-		
-		//variables for checking the test condition and ending the test at apropiate time
-		
-		
+
+		// variables for checking the test condition and ending the test at
+		// apropiate time
+
 		int value;
 		int set = 0;
-		//The test checking happends as long as the distance/time is lower than the test value.
-		do{
-			if(testType.equals("Distance")){
-			value = (int) myDistance;
-			set = lengde;
-		}
-		else {
-			value = (int) (SystemClock.elapsedRealtime() - myTimer.getBase());
-			set = (min * 60000) + (sec * 1000);
-			}
+		// The test checking happends as long as the distance/time is lower than
+		// the test value.
 		
-		if(test == 1 || test == 2){
-			int sound = rounds*500;
-			if(value > sound){
-				sounds(sound);
-				rounds++;
+		do {
+			if (testType.equals("Distance")) {
+				value = (int) myDistance;
+				set = lengde;
+			} else {
+				value = (int) (SystemClock.elapsedRealtime() - myTimer
+						.getBase());
+				set = (min * 60000) + (sec * 1000);
 			}
-		}
-		if(test == 3 || test == 4){
-			int sound = rounds*1000;
-			if (value > sound){
-				sounds(sound);
-				rounds++;
-			}
-		}
-		if(test == 5)
-		{
-			int sound = rounds*5;
-			if(value > sound){
-				sounds(sound);
-				rounds++;	
-			}
-		}
-		// sleeps the thread for a second as the gps updates dosn't happend more often.
-		SystemClock.sleep(1000);
-		}
-		// Ends the test when u have reached the value(time or distance)
-		while(value <= set);
-			end();
-	}
-	
 
-	// Function to make the music duck while playing notification sounds..
-	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
-	    public void onAudioFocusChange(int focusChange) {
-	        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-	        	
-	        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-	        	
-	        }
-	    }
-	};
-	
-	//Function to center map on user
-	public void setCamera(Location camLocation) {
-		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(camLocation.getLatitude(),
-                												camLocation.getLongitude()));
-		myMap.moveCamera(center);
-	}
-	
-	//Function to set and update current workout info
-	public void setText() {
-		int tempDistance = (int) myDistance;
-		StringBuilder sb = new StringBuilder();
-		
-		if(tempDistance > 1000) {		//If user ran more than 1 km, format output to (ex.) "1.23 km"
-			int tempKm = tempDistance / 1000;
-			int tempM = (tempDistance % 1000) / 10;
-			sb.append(tempKm + "." + tempM + " km");
-		}
-		else {
-			sb.append(tempDistance + " m");
-		}
-		
-		//Set new values
-		TextView textView = (TextView) findViewById(R.id.T_distance);
-		textView.setText(sb.toString());		
-		
-		TextView tempView = (TextView) findViewById(R.id.T_speed);
-		tempView.setText("Coming soon");
-		
-		TextView tempView2 = (TextView) findViewById(R.id.T_calories);
-		tempView2.setText("Coming soon");
-	}
-	
-	//Onclick function for the start / pause workout button
-	public void workoutStartPause(View view) {
-		String tempString;	//String to change the text on button
-		Button tempButton;	//Object to change the text on button
-		
-		if(workoutStatus == false) {	//If workout is not started, or paused
-			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime);	//Sets timer to right start value
-			myTimer.start();
-		    myLocationClient.requestLocationUpdates(myLocationRequest, this);	//Starts location updates
-			
-		    if(workoutType.equals("Walk"))
-		    	{}
-		    else if(workoutType.equals("Running"))
-				{}
-			else if(workoutType.equals("Interval"))
-				{
-				new Thread(new Runnable() {
-			        public void run() {
-			        	Interval();
-			        }
-			    }).start();
-			}
-			else if(workoutType.equals("Test"))
-			{
-				int chose = extras.getInt("chose");
-			
-				switch(chose){
-				case 1 : new Thread(new Runnable() {
-							public void run() {
-								test_check( 1 );}
-			    			}).start();
-				case 2 : new Thread(new Runnable() {
-							public void run() {
-								test_check( 2 );}
-							}).start();
-				case 3 : new Thread(new Runnable() {
-							public void run() {
-								test_check( 3 );}
-							}).start();
-				case 4 : new Thread(new Runnable() {
-			        		public void run() {
-			        			test_check( 4 );}
-							}).start();
-				case 5 : new Thread(new Runnable() {
-							public void run() {
-								test_check( 5 );}
-							}).start();
-				case 6 : new Thread(new Runnable() {
-							public void run() {
-								test_check( 0 );}
-							}).start();
+			if (test == 1 || test == 2) {
+				int sound = rounds * 500;
+				if (value > sound) {
+					sounds(sound);
+					rounds++;
 				}
 			}
-		    
-		    workoutStatus = true;											//Change workout status
-			tempString = getString(R.string.T_pause_workout_button_string);	//Get text for button
+			if (test == 3 || test == 4) {
+				int sound = rounds * 1000;
+				if (value > sound) {
+					sounds(sound);
+					rounds++;
+				}
+			}
+			if (test == 5) {
+				int sound = rounds * 5;
+				if (value > sound) {
+					sounds(sound);
+					rounds++;
+				}
+			}
+			// sleeps the thread for a second as the gps updates dosn't happend
+			// more often.
+			SystemClock.sleep(1000);
 		}
-		
-		else {
-			myTimer.stop();
-			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime();	//Stores value of the timer
-			
-			if (myLocationClient.isConnected())		//If client is connected
-	        	myLocationClient.removeLocationUpdates(this);	//remove location updates
-			workoutStatus = false;								//Change workout status
-			tempString = getString(R.string.T_start_workout_button_string);	//Get text for button
-		}
-		
-		//Set new text for button
-		tempButton = (Button) findViewById(R.id.T_pause_workout_button);
-		tempButton.setText(tempString);
-	}
-	
-	public void workoutEnd (View view) {
-		// stop the loops if it's an Interval
-		if(TimerRunStart){
-			run.cancel();
-			TimerRunStart = false;
-		}
-		if(TimerPauseStart){
-			pause.cancel();
-			TimerPauseStart = false;
-		}
-		if(TimerStopStart)
-		{
-			stop.cancel();
-			TimerStopStart = false;
-		}
-		
+		// Ends the test when u have reached the value(time or distance)
+		while (value <= set);
+		sounds(4);
 		end();
 	}
 
+	// Function to make the music duck while playing notification sounds..
+	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+		public void onAudioFocusChange(int focusChange) {
+			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+
+			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+
+			}
+		}
+	};
+
+	// Function to center map on user
+	public void setCamera(Location camLocation) {
+		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
+				camLocation.getLatitude(), camLocation.getLongitude()));
+		myMap.moveCamera(center);
+	}
+
+	// Function to set and update current workout info
+	public void setText() {
+		int tempDistance = (int) myDistance;
+		StringBuilder sb = new StringBuilder();
+
+		if (tempDistance > 1000) { // If user ran more than 1 km, format output
+									// to (ex.) "1.23 km"
+			int tempKm = tempDistance / 1000;
+			int tempM = (tempDistance % 1000) / 10;
+			sb.append(tempKm + "." + tempM + " km");
+		} else {
+			sb.append(tempDistance + " m");
+		}
+
+		// Set new values
+		TextView textView = (TextView) findViewById(R.id.T_distance);
+		textView.setText(sb.toString());
+
+		TextView tempView = (TextView) findViewById(R.id.T_speed);
+		tempView.setText("Coming soon");
+
+		TextView tempView2 = (TextView) findViewById(R.id.T_calories);
+		tempView2.setText("Coming soon");
+	}
+
+	// Onclick function for the start / pause workout button
+	public void workoutStartPause(View view) {
+		String tempString; // String to change the text on button
+		Button tempButton; // Object to change the text on button
+
+		if (workoutStatus == false) { // If workout is not started, or paused
+			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime); // Sets timer to right start value
+			myTimer.start();
+			myLocationClient.requestLocationUpdates(myLocationRequest, this); // Starts location updates
+			sounds(1);			//start sound
+			
+			if (workoutType.equals("Walk")) {
+			} else if (workoutType.equals("Running")) {
+			} else if (workoutType.equals("Interval")) {
+				new Thread(new Runnable() {
+					public void run() {
+						Interval();
+					}
+				}).start();
+			} else if (workoutType.equals("Test")) {
+				int chose = extras.getInt("chose");
+
+				switch (chose) {
+				case 1:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(1);
+						}
+					}).start();
+				case 2:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(2);
+						}
+					}).start();
+				case 3:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(3);
+						}
+					}).start();
+				case 4:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(4);
+						}
+					}).start();
+				case 5:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(5);
+						}
+					}).start();
+				case 6:
+					new Thread(new Runnable() {
+						public void run() {
+							test_check(0);
+						}
+					}).start();
+				}
+			}
+
+			workoutStatus = true; // Change workout status
+			tempString = getString(R.string.T_pause_workout_button_string); // Get text for button
+		}
+
+		else {
+			myTimer.stop();
+			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime(); // Stores value of the timer
+
+			if (myLocationClient.isConnected()) // If client is connected
+				myLocationClient.removeLocationUpdates(this); // remove location
+																// updates
+			workoutStatus = false; // Change workout status
+			tempString = getString(R.string.T_start_workout_button_string); // Get text for button
+		}
+
+		// Set new text for button
+		tempButton = (Button) findViewById(R.id.T_pause_workout_button);
+		tempButton.setText(tempString);
+	}
+
+	public void workoutEnd(View view) {
+		// stop the loops if it's an Interval
+		if (TimerRunStart) {
+			run.cancel();
+			TimerRunStart = false;
+		}
+		if (TimerPauseStart) {
+			pause.cancel();
+			TimerPauseStart = false;
+		}
+		if (TimerStopStart) {
+			stop.cancel();
+			TimerStopStart = false;
+		}
+
+		end();
+	}
 
 	public void end() {
-			//Get the database
-			TrappDBHelper mDBHelper = new TrappDBHelper(this);
-			SQLiteDatabase db = mDBHelper.getWritableDatabase();
-			myTimer.stop();
-			
-			String[] projection = {TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT};
-			
-			Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,null,null,null);
-			
-			//Initiate variables needed to write to the database
-			int calories = 0;
-			Float time;
-			pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
-			time = (float) pauseTime / 3600000;
-			
-			Date cDate = new Date();
-			String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);	//Set the dateformat
-			
-			if(w.moveToFirst()){	//Checks if the user has set the weight 
-				int weight = w.getInt(w.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
-				//If weight is set calculate calories burnt during the workout
-				calories = Calorie_math(time, weight);
-				}
-				
-			if(time != 0 && myDistance != 0) {	//Check if users started workout
-					//If workout was started -> write to database and start new activity, WorkoutEnd
-				ContentValues values = new ContentValues();
-				byte[] buff = null;
-				
-				try {
-				    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-				    ObjectOutputStream out = new ObjectOutputStream(bos);
-				    out.writeObject(locationList);
-				    out.close();
-				    buff = bos.toByteArray();
-				} catch(IOException ioe) { 
-				      Log.e("serializeObject", "error", ioe);
-				    } 
-				
-				values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
-				values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
-				values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
-				values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
-				values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
-				db.insert(TrappEntry.TABLE_NAME, null, values);
-			
-				Intent intent = new Intent(this, WorkoutEnd.class);
-				startActivity(intent);
-				}
-			db.close();
-			finish();
+		// Get the database
+		TrappDBHelper mDBHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDBHelper.getWritableDatabase();
+		myTimer.stop();
+
+		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_WEIGHT };
+
+		Cursor w = db.query(TrappEntry.TABLE_NAMEPREF, projection, null, null,
+				null, null, null);
+
+		// Initiate variables needed to write to the database
+		int calories = 0;
+		Float time;
+		pauseTime = SystemClock.elapsedRealtime() - myTimer.getBase();
+		time = (float) pauseTime / 3600000;
+
+		Date cDate = new Date();
+		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate); // Set
+																			// the
+																			// dateformat
+
+		if (w.moveToFirst()) { // Checks if the user has set the weight
+			int weight = w.getInt(w
+					.getColumnIndex(TrappEntry.COLUMN_NAME_WEIGHT));
+			// If weight is set calculate calories burnt during the workout
+			calories = Calorie_math(time, weight);
+		}
+
+		if (time != 0 && myDistance != 0) { // Check if users started workout
+			// If workout was started -> write to database and start new
+			// activity, WorkoutEnd
+			ContentValues values = new ContentValues();
+			byte[] buff = null;
+
+			try {
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				ObjectOutputStream out = new ObjectOutputStream(bos);
+				out.writeObject(locationList);
+				out.close();
+				buff = bos.toByteArray();
+			} catch (IOException ioe) {
+				Log.e("serializeObject", "error", ioe);
+			}
+
+			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
+			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
+			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
+			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
+			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
+			db.insert(TrappEntry.TABLE_NAME, null, values);
+
+			Intent intent = new Intent(this, WorkoutEnd.class);
+			startActivity(intent);
+		}
+		db.close();
+		finish();
 	}
 	
 	public boolean checkDistance(double tempDistance) {		//Checks if distance between the two latest locations are valid
@@ -608,187 +628,205 @@ LocationListener, SensorEventListener {
 		}
 	}
 	
-	public void Interval(){
-		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
+	public void Interval() {
 		Bundle extras = getIntent().getExtras();
-		int run = extras.getInt("run");
-		int pause = extras.getInt("pause");
-		int rep = extras.getInt("rep");
+		final int run = extras.getInt("run");
+		final int pause = extras.getInt("pause");
+		final int rep = extras.getInt("rep");
 		String intervalType = extras.getString("intervalType");
-		
-        mediaPlayerRun.start();
-		
-		if(intervalType.equals("time"))
-			Interval_time(run,pause,rep);
-		else if(intervalType.equals("distance"))
-			Interval_distance(run,pause,rep);
-		else
+
+		if (intervalType.equals("time"))
+			Interval_time(run, pause, rep);
+		else if (intervalType.equals("distance")) {
+			new Thread(new Runnable() {
+				public void run() {
+					Interval_distance(run, pause, rep);
+				}
+			}).start();
+		} else
 			end();
+		workoutEnd(null);
 	}
-	
-	public void Interval_distance(int RunDistance, int PauseDistance, int Repetition){
-		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
-		MediaPlayer mediaPlayerPause = MediaPlayer.create(this, R.raw.pause);
-		MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
-        
+
+	public void Interval_distance(int RunDistance, int PauseDistance,
+			int Repetition) {
 		Interval_distance(RunDistance);
-		
-		for(int rep = 1; rep < Repetition; rep++)
-		{
-			mediaPlayerPause.start(); //pause
-			Interval_distance((RunDistance+PauseDistance)*rep);
-			
-			mediaPlayerRun.start();	//run
-			Interval_distance(((RunDistance+PauseDistance)*rep)+RunDistance);
+
+		for (int rep = 1; rep < Repetition; rep++) {
+			sounds(3); // sound for pause
+			Interval_distance((RunDistance + PauseDistance) * rep);
+
+			sounds(2); // sound for run
+			Interval_distance(((RunDistance + PauseDistance) * rep)
+					+ RunDistance);
 		}
-		
-		mediaPlayerStop.start();
+
+		sounds(4); // sound for stop
 	}
-	
-	public void Interval_distance(int Distance){
+
+	public void Interval_distance(int Distance) {
 		int value;
 		int set = Distance;
-		
-		do{
-		value = (int) myDistance;
-		}while(value <= set);
+
+		do {
+			value = (int) myDistance;
+			SystemClock.sleep(1000); // since the gps doesn't update more often
+		} while (value <= set);
 	}
-	
-	public void Interval_time(int RunTime, int PauseTime, int Repetition){
-        DelayRun(RunTime,PauseTime);
-        DelayStop((RunTime+PauseTime)*(Repetition-1)+1 , 1);
-        DelayStop((RunTime*Repetition)+(PauseTime*(Repetition-1)) , 2);
+
+	public void Interval_time(int RunTime, int PauseTime, int Repetition) {
+		DelayRun(RunTime, PauseTime);
+		DelayStop((RunTime + PauseTime) * (Repetition - 1) + 1, 1);
+		DelayStop((RunTime * Repetition) + (PauseTime * (Repetition - 1)), 2);
 	}
-	
-	public void DelayRun(final int RunTime, final int PauseTime){
+
+	public void DelayRun(final int RunTime, final int PauseTime) {
 		TimerRunStart = true;
-		final MediaPlayer mediaPlayerPause = MediaPlayer.create(this, R.raw.pause);
 		run = new Timer();
 		run.scheduleAtFixedRate(new TimerTask() {
 
-		    @Override
-		    public void run() {
-		    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new Thread(new Runnable() {
 
-		    	    @Override
-		    	    public void run() {
-		    	        
-		    	        mediaPlayerPause.start();
-		    	        TimerRunStart = false;
-		    	        DelayPause(PauseTime);
-		    	        
-		    	    }
-		    	}).start();
-		    } //wait 'RunTime*1000' before it start, and loop every '(PauseTime+RunTime)*1000' (milliseconds)
-		},RunTime*1000 , (RunTime+PauseTime)*1000);
+					@Override
+					public void run() {
+
+						sounds(3); // sound for pause
+						TimerRunStart = false;
+						DelayPause(PauseTime);
+
+					}
+				}).start();
+			} // wait 'RunTime*1000' before it start, and loop every
+				// '(PauseTime+RunTime)*1000' (milliseconds)
+		}, RunTime * 1000, (RunTime + PauseTime) * 1000);
 	}
-	
-	public void DelayPause(int PauseTime){
+
+	public void DelayPause(int PauseTime) {
 		TimerPauseStart = true;
-		final MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		pause = new Timer();
 		pause.schedule(new TimerTask() {
 
-		    @Override
-		    public void run() {
-		    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new Thread(new Runnable() {
 
-		    	    @Override
-		    	    public void run() {
-		    	        
-		    	        mediaPlayerRun.start();
-		    	        
-		    	        TimerPauseStart = false;
-		    	    }
-		    	}).start();
-		    } //wait 'PauseTime*1000' before it does something (milliseconds)
-		},PauseTime*1000);
+					@Override
+					public void run() {
+						sounds(2); // sound for run
+						TimerPauseStart = false;
+					}
+				}).start();
+			} // wait 'PauseTime*1000' before it does something (milliseconds)
+		}, PauseTime * 1000);
 	}
 
-	public void DelayStop(int Time, final int x){
+	public void DelayStop(int Time, final int x) {
 		TimerStopStart = true;
-		final MediaPlayer mediaPlayerStop = MediaPlayer.create(this, R.raw.stop);
 		stop = new Timer();
 		stop.schedule(new TimerTask() {
 
-		    @Override
-		    public void run() {
-		    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new Thread(new Runnable() {
 
-		    	    @Override
-		    	    public void run() {
-		    	    	
-		    	    	if(x == 1)
-		    	    		run.cancel();
-		    	    	else if(x == 2){
-		    	    		mediaPlayerStop.start();
-		    	    		TimerStopStart = false;
-		    	    		end();
-		    	        }
-		    	    }
-		    	}).start();
-		    } //wait 'Time*1000' before it does one of the things. (milliseconds)
-		},Time*1000);
-	}
-	
-	public boolean verifyLocation(double distance) {
-		if(averageAmp > 0) {
-			//Later work
-		}
-		else {
-			
-		}
-			return true;
+					@Override
+					public void run() {
+
+						if (x == 1)
+							run.cancel();
+						else if (x == 2) {
+							sounds(4); // sound for stop
+							TimerStopStart = false;
+							end();
+						}
+					}
+				}).start();
+			} // wait 'Time*1000' before it does one of the things.
+				// (milliseconds)
+		}, Time * 1000);
 	}
 
 	public int Calorie_math(float time, int weight) {
 		int caloriemath = 0;
-		if(workoutType.equals("Walk"))
+		if (workoutType.equals("Walk"))
 			caloriemath = 9;
-		else if(workoutType.equals("Running"))
+		else if (workoutType.equals("Running"))
 			caloriemath = 9;
-		else if(workoutType.equals("Interval"))
+		else if (workoutType.equals("Interval"))
 			caloriemath = 9;
-		else if(workoutType.equals("Test"))
+		else if (workoutType.equals("Test"))
 			caloriemath = 9;
-		
+
 		int calories = (int) ((weight * caloriemath) * time);
-		
 		return calories;
 	}
+
 	public void sounds(int sound) {
-		/*switch(sound)
-		{
-		case 5 : {mediaPlayer = MediaPlayer.create(this, R.raw.5); 
-					mediaPlayer.start();}
-		case 10 : {mediaPlayer = MediaPlayer.create(this, R.raw.10);
-					mediaPlayer.start();}
-		case 500 : {mediaPlayer = MediaPlayer.create(this, R.raw.500);
-					mediaPlayer.start();}	
-		case 1000 : {mediaPlayer = MediaPlayer.create(this, R.raw.1000);
-					mediaPlayer.start();}
-		case 1500 : {mediaPlayer = MediaPlayer.create(this, R.raw.1500);
-					mediaPlayer.start();}
-		case 2000 : {mediaPlayer = MediaPlayer.create(this, R.raw.2000);
-					mediaPlayer.start();}
-		case 2500 : {mediaPlayer = MediaPlayer.create(this, R.raw.2500);
-					mediaPlayer.start();}
-		case 3000 : {mediaPlayer = MediaPlayer.create(this, R.raw.3000);
-					mediaPlayer.start();}
-		case 4000 : {mediaPlayer = MediaPlayer.create(this, R.raw.4000);
-					mediaPlayer.start();}
-		case 5000 : {mediaPlayer = MediaPlayer.create(this, R.raw.5000);
-					mediaPlayer.start();}
-		case 6000 : {mediaPlayer = MediaPlayer.create(this, R.raw.6000);
-					mediaPlayer.start();}
-		case 7000 : {mediaPlayer = MediaPlayer.create(this, R.raw.7000);
-					mediaPlayer.start();}
-		case 8000 : {mediaPlayer = MediaPlayer.create(this, R.raw.8000);
-					mediaPlayer.start();}
-		case 9000 : {mediaPlayer = MediaPlayer.create(this, R.raw.9000);
-					mediaPlayer.start();}
-		
-		}*/
-		
+		MediaPlayer MP = null;
+		String soundpackage = Settings.soundpackage;
+
+		if (soundpackage.equals("en")) {
+			switch (sound) {
+			case 1: { MP = MediaPlayer.create(this, R.raw.english_start); break;}
+			case 2: { MP = MediaPlayer.create(this, R.raw.english_run); break;}
+			case 3: { MP = MediaPlayer.create(this, R.raw.english_pause); break;}
+			case 4: { MP = MediaPlayer.create(this, R.raw.english_stop); break; }
+			case 500: { MP = MediaPlayer.create(this, R.raw.english_500); break; }
+			case 1000: { MP = MediaPlayer.create(this, R.raw.english_1000); break; }
+			case 1500: { MP = MediaPlayer.create(this, R.raw.english_1500); break; }
+			case 2000: { MP = MediaPlayer.create(this, R.raw.english_2000); break; }
+			case 2500: { MP = MediaPlayer.create(this, R.raw.english_2500); break; }
+			case 3000: { MP = MediaPlayer.create(this, R.raw.english_3000); break; }
+			case 4000: { MP = MediaPlayer.create(this, R.raw.english_4000); break; }
+			case 5000: { MP = MediaPlayer.create(this, R.raw.english_5000); break; }
+			case 6000: { MP = MediaPlayer.create(this, R.raw.english_6000); break; }
+			case 7000: { MP = MediaPlayer.create(this, R.raw.english_7000); break; }
+			case 8000: { MP = MediaPlayer.create(this, R.raw.english_8000); break; }
+			case 9000: { MP = MediaPlayer.create(this, R.raw.english_9000); break; }
+			} 
+		}
+		else if (soundpackage.equals("no")) {
+			switch (sound) {
+			case 1: { MP = MediaPlayer.create(this, R.raw.norwegian_start); break; }
+			case 2: { MP = MediaPlayer.create(this, R.raw.norwegian_run); break; }
+			case 3: { MP = MediaPlayer.create(this, R.raw.norwegian_pause); break; }
+			case 4: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 500: { MP = MediaPlayer.create(this, R.raw.norwegian_500); break; }
+			case 1000: { MP = MediaPlayer.create(this, R.raw.norwegian_1000); break; }
+			case 1500: { MP = MediaPlayer.create(this, R.raw.norwegian_1500); break; }
+			case 2000: { MP = MediaPlayer.create(this, R.raw.norwegian_2000); break; }
+			case 2500: { MP = MediaPlayer.create(this, R.raw.norwegian_2500); break; }
+			case 3000: { MP = MediaPlayer.create(this, R.raw.norwegian_3000); break; }
+			case 4000: { MP = MediaPlayer.create(this, R.raw.norwegian_4000); break; }
+			case 5000: { MP = MediaPlayer.create(this, R.raw.norwegian_5000); break; }
+			case 6000: { MP = MediaPlayer.create(this, R.raw.norwegian_6000); break; }
+			case 7000: { MP = MediaPlayer.create(this, R.raw.norwegian_7000); break; }
+			case 8000: { MP = MediaPlayer.create(this, R.raw.norwegian_8000); break; }
+			case 9000: { MP = MediaPlayer.create(this, R.raw.norwegian_9000); break; }
+			} 
+		}
+		else if (soundpackage.equals("funny")) {
+			switch (sound) {
+			case 1: { MP = MediaPlayer.create(this, R.raw.funny_start); break; }
+			case 2: { MP = MediaPlayer.create(this, R.raw.funny_run); break; }
+			case 3: { MP = MediaPlayer.create(this, R.raw.funny_pause); break; }
+			case 4: { MP = MediaPlayer.create(this, R.raw.funny_stop); break; }
+			case 500: { MP = MediaPlayer.create(this, R.raw.funny_500); break; }
+			case 1000: { MP = MediaPlayer.create(this, R.raw.funny_1000); break; }
+			case 1500: { MP = MediaPlayer.create(this, R.raw.funny_1500); break; }
+			case 2000: { MP = MediaPlayer.create(this, R.raw.funny_2000); break; }
+			case 2500: { MP = MediaPlayer.create(this, R.raw.funny_2500); break; }
+			case 3000: { MP = MediaPlayer.create(this, R.raw.funny_3000); break; }
+			case 4000: { MP = MediaPlayer.create(this, R.raw.funny_4000); break; }
+			case 5000: { MP = MediaPlayer.create(this, R.raw.funny_5000); break; }
+			case 6000: { MP = MediaPlayer.create(this, R.raw.funny_6000); break; }
+			case 7000: { MP = MediaPlayer.create(this, R.raw.funny_7000); break; }
+			case 8000: { MP = MediaPlayer.create(this, R.raw.funny_8000); break; } 
+			case 9000: { MP = MediaPlayer.create(this, R.raw.funny_9000); break; }
+			}
+		}
+		MP.start();
 	}
 }

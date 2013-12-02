@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,7 +19,11 @@ import android.widget.Spinner;
 import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class Settings extends Activity {
-
+	private String talk;
+	private Spinner talkspinner;
+	private SharedPreferences pref;
+	public static String soundpackage = "en";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,20 +64,32 @@ public class Settings extends Activity {
 				genderspinner.setSelection(spinnerPosition);
 		}
 		db.close();
-	}
-
-
-
-
 		
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.settings, menu);
-		return true;
+		talkspinner = (Spinner) findViewById(R.id.spinner_talking);
+		pref = getSharedPreferences(talk, MODE_PRIVATE);
+		talk = pref.getString("speech", "null");
+		
+		@SuppressWarnings("unchecked")
+		ArrayAdapter<String> myAdap = (ArrayAdapter<String>) talkspinner.getAdapter(); //cast to an ArrayAdapter
+		int spinnerPosition = myAdap.getPosition(talk);
+		//set the default according to value
+		talkspinner.setSelection(spinnerPosition);
 	}
 	
 	public void save(View view){
+		//spinner for speech
+		talk = String.valueOf(talkspinner.getSelectedItem());
+		SharedPreferences.Editor edit = pref.edit();
+        edit.putString("speech", talk);
+        edit.commit();
+		
+        if(talk.equals("English")||talk.equals("Engelsk"))
+        	soundpackage = "en";
+        else if(talk.equals("Norwegian")||talk.equals("Norsk"))
+        	soundpackage = "no";
+        else if(talk.equals("For fun")||talk.equals("For moro"))
+        	soundpackage = "funny";
+        
 		//get the DB
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
@@ -131,9 +148,15 @@ public class Settings extends Activity {
 		Locale mLocale = null;
 		
 		if(ch == "en")
+		{
 			mLocale = new Locale("");
+			soundpackage = "en";
+		}
 		else if(ch == "no")
+		{
 			mLocale = new Locale("no");
+			soundpackage = "no";
+		}
 		
 	    Locale.setDefault(mLocale); 
 	    Configuration config = getBaseContext().getResources().getConfiguration(); 

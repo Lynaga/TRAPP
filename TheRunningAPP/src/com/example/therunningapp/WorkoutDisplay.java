@@ -83,7 +83,7 @@ public class WorkoutDisplay extends FragmentActivity {
 			//Formatting time from milliseconds to hh:mm:ss
 			double tempTime = Double.parseDouble(time);
 			int tempDistance = Integer.parseInt(distance);
-			double hours = (int) (tempTime / (1000 * 60 * 60));
+			double hours = (double) (tempTime / (1000 * 60 * 60));
 			double minutes = ((tempTime / (1000 * 60)) % 60);
 			double seconds = ((tempTime / 1000) % 60);
 			tempTime = tempTime / 1000;	//Converting from milliseconds to seconds
@@ -131,13 +131,6 @@ public class WorkoutDisplay extends FragmentActivity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.workout_display, menu);
-		return true;
 	}
 
 	@Override

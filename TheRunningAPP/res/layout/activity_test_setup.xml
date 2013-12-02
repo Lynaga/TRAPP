@@ -48,6 +48,7 @@
 		android:layout_toRightOf="@id/Distance"
         android:layout_alignBaseline="@id/Distance"
 		android:visibility="gone"
+		android:imeOptions="actionDone"
         android:layout_alignRight="@+id/A_radiogroup"
         android:inputType="number"
         android:ems="10" >
@@ -84,6 +85,7 @@
         android:ems="10"
         android:visibility="gone"
         android:hint="sec"
+        android:imeOptions="actionDone"
         android:inputType="number" />
 
     <EditText

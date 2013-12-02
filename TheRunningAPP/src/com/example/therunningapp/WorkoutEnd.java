@@ -38,8 +38,8 @@ public class WorkoutEnd extends Activity {
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 
 			//Formatting time from milliseconds to hh:mm:ss
-			double tempTime = Integer.parseInt(time);
-			double hours = (int) (tempTime / (1000 * 60 * 60));
+			double tempTime = Double.parseDouble(time);
+			double hours = (tempTime / (1000 * 60 * 60));
 			double minutes = ((tempTime / (1000 * 60)) % 60);
 			double seconds = ((tempTime / 1000) % 60);
 			StringBuilder sb = new StringBuilder();
@@ -49,6 +49,7 @@ public class WorkoutEnd extends Activity {
 				sb.append("0");
 			sb.append(String.format("%.0f", hours) + ":");
 			if(minutes < 10)	
+			if(minutes < 10)
 				sb.append("0");
 			sb.append(String.format("%.0f", minutes) + ":");
 			if(seconds < 10)
@@ -63,13 +64,6 @@ public class WorkoutEnd extends Activity {
 			
 		}
 		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.workout_end, menu);
-		return true;
 	}
 	
 	@Override

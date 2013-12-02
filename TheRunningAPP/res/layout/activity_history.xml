@@ -15,8 +15,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:longClickable="true"
         android:layout_marginBottom="94dp" 
 		android:background="#FF808080"
         android:clickable="true" />
+	
+	<TextView
+	    android:id="@+id/textView_empty_history"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="20dp"
+	    android:layout_centerHorizontal="true"
+	    android:text="@string/empty_history"
+	    android:textSize="20sp"
+	    android:textColor="#FFFFFFFF"	 />
+	    
 
 </RelativeLayout>

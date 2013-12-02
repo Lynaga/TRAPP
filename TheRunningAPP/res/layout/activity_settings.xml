@@ -96,6 +96,15 @@
         android:layout_marginTop="15dp"
         android:text="@string/S_sex" />
     
+    <TextView
+        android:id="@+id/textView_talking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView_name"
+        android:layout_below="@+id/textView_gender"
+        android:layout_marginTop="15dp"
+        android:text="@string/talking" />
+    
 	<TextView
 	    android:id="@+id/title_language"
 	    android:layout_width="wrap_content"
@@ -120,8 +129,16 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@id/editText_height"
-	    android:layout_alignTop="@+id/textView_gender"
+	    android:layout_alignBaseline="@id/textView_gender"
 	    android:entries="@array/Gender_array" />
+	
+	<Spinner
+	    android:id="@+id/spinner_talking"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_toRightOf="@id/textView_talking"
+	    android:layout_alignBaseline="@id/textView_talking"
+	    android:entries="@array/Language_array" />
 	
 	<Button
 	    android:id="@+id/button_norwegian"
