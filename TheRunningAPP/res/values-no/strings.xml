@@ -59,6 +59,7 @@
     <string name="walking">Spasere</string>
     <string name="running">Løpe</string>
     <string name="talking">Lyd</string>
+	<string name="empty_history">Historien er tom</string>
 	
     <string-array name="Gender_array">
         <item>Mann</item>

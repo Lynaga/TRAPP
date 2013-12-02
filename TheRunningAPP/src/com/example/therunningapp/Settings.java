@@ -75,17 +75,6 @@ public class Settings extends Activity {
 		//set the default according to value
 		talkspinner.setSelection(spinnerPosition);
 	}
-
-
-
-
-		
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.settings, menu);
-		return true;
-	}
 	
 	public void save(View view){
 		//spinner for speech

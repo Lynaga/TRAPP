@@ -59,6 +59,7 @@
     <string name="walking">Walking</string>
     <string name="running">Running</string>
     <string name="talking">Sound</string>
+    <string name="empty_history">History is empty</string>
     
     <string-array name="Gender_array">
         <item>Male</item>

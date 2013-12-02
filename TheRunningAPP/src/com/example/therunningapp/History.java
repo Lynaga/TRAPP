@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -38,6 +40,7 @@ public class History extends Activity {
 		
 		//Display the date of each workout
 		if(c.moveToFirst()){
+			findViewById(R.id.textView_empty_history).setVisibility(View.GONE);
 			do{
 				String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
 				adapter.add(date);
@@ -53,7 +56,19 @@ public class History extends Activity {
 				      startActivity(intent);          
 				                }
 				            });
+			workoutList.setOnItemLongClickListener(new OnItemLongClickListener() {
 			
+		    public boolean onItemLongClick(AdapterView<?> parent, View view,
+		                int position, long id) {
+
+		            Log.v("long clicked","pos: " + position);
+
+		            return true;
+		        }
+		    }); 
+		}
+		else{
+			findViewById(R.id.textView_empty_history).setVisibility(View.VISIBLE);
 		}
 		
 		db.close();

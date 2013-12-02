@@ -42,9 +42,6 @@ public class WorkoutEnd extends Activity {
 			double hours = (double) (tempTime / (1000 * 60 * 60));
 			double minutes = ((tempTime / (1000 * 60)) % 60);
 			double seconds = ((tempTime / 1000) % 60);
-		//	String tempHours = Double.toString(hours);
-		//	String tempMinutes = Double.toString(minutes);
-		//	String tempSeconds = Double.toString(seconds);
 			StringBuilder sb = new StringBuilder();
 			
 			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
@@ -66,13 +63,6 @@ public class WorkoutEnd extends Activity {
 			
 		}
 		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.workout_end, menu);
-		return true;
 	}
 	
 	@Override

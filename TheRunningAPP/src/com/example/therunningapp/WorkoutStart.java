@@ -164,13 +164,6 @@ public class WorkoutStart extends FragmentActivity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.workout_start, menu);
-		return true;
-	}
-
-	@Override
 	protected void onStart() {
 		super.onStart();
 		// Connect the client.
@@ -316,6 +309,7 @@ public class WorkoutStart extends FragmentActivity implements
 		int set = 0;
 		// The test checking happends as long as the distance/time is lower than
 		// the test value.
+		
 		do {
 			if (testType.equals("Distance")) {
 				value = (int) myDistance;
@@ -353,6 +347,7 @@ public class WorkoutStart extends FragmentActivity implements
 		}
 		// Ends the test when u have reached the value(time or distance)
 		while (value <= set);
+		sounds(4);
 		end();
 	}
 
@@ -405,17 +400,11 @@ public class WorkoutStart extends FragmentActivity implements
 		Button tempButton; // Object to change the text on button
 
 		if (workoutStatus == false) { // If workout is not started, or paused
-			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime); // Sets
-																		// timer
-																		// to
-																		// right
-																		// start
-																		// value
+			myTimer.setBase(SystemClock.elapsedRealtime() + pauseTime); // Sets timer to right start value
 			myTimer.start();
-			myLocationClient.requestLocationUpdates(myLocationRequest, this); // Starts
-																				// location
-																				// updates
-
+			myLocationClient.requestLocationUpdates(myLocationRequest, this); // Starts location updates
+			sounds(1);			//start sound
+			
 			if (workoutType.equals("Walk")) {
 			} else if (workoutType.equals("Running")) {
 			} else if (workoutType.equals("Interval")) {
@@ -468,28 +457,18 @@ public class WorkoutStart extends FragmentActivity implements
 			}
 
 			workoutStatus = true; // Change workout status
-			tempString = getString(R.string.T_pause_workout_button_string); // Get
-																			// text
-																			// for
-																			// button
+			tempString = getString(R.string.T_pause_workout_button_string); // Get text for button
 		}
 
 		else {
 			myTimer.stop();
-			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime(); // Stores
-																			// value
-																			// of
-																			// the
-																			// timer
+			pauseTime = myTimer.getBase() - SystemClock.elapsedRealtime(); // Stores value of the timer
 
 			if (myLocationClient.isConnected()) // If client is connected
 				myLocationClient.removeLocationUpdates(this); // remove location
 																// updates
 			workoutStatus = false; // Change workout status
-			tempString = getString(R.string.T_start_workout_button_string); // Get
-																			// text
-																			// for
-																			// button
+			tempString = getString(R.string.T_start_workout_button_string); // Get text for button
 		}
 
 		// Set new text for button
@@ -581,8 +560,6 @@ public class WorkoutStart extends FragmentActivity implements
 		final int rep = extras.getInt("rep");
 		String intervalType = extras.getString("intervalType");
 
-		sounds(1); // sound for start
-
 		if (intervalType.equals("time"))
 			Interval_time(run, pause, rep);
 		else if (intervalType.equals("distance")) {
@@ -593,6 +570,7 @@ public class WorkoutStart extends FragmentActivity implements
 			}).start();
 		} else
 			end();
+		workoutEnd(null);
 	}
 
 	public void Interval_distance(int RunDistance, int PauseDistance,
