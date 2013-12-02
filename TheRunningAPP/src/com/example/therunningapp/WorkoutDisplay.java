@@ -88,7 +88,7 @@ public class WorkoutDisplay extends FragmentActivity {
 			double seconds = ((tempTime / 1000) % 60);
 			tempTime = tempTime / 1000;	//Converting from milliseconds to seconds
 			
-			double tempSpeed = (double) tempDistance / tempTime;	//Calculating average speed
+			double tempSpeed = tempDistance / tempTime;	//Calculating average speed
 			
 			StringBuilder sb = new StringBuilder();
 			
@@ -101,7 +101,7 @@ public class WorkoutDisplay extends FragmentActivity {
 			sb.append(String.format("%.0f", minutes) + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(String.format("%.0f", seconds) + ":");
+			sb.append(String.format("%.0f", seconds));
 			time = sb.toString();
 			
 			//Fetch display strings

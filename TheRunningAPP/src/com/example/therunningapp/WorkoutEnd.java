@@ -39,7 +39,7 @@ public class WorkoutEnd extends Activity {
 
 			//Formatting time from milliseconds to hh:mm:ss
 			double tempTime = Double.parseDouble(time);
-			double hours = (double) (tempTime / (1000 * 60 * 60));
+			double hours = (tempTime / (1000 * 60 * 60));
 			double minutes = ((tempTime / (1000 * 60)) % 60);
 			double seconds = ((tempTime / 1000) % 60);
 			StringBuilder sb = new StringBuilder();
@@ -48,12 +48,13 @@ public class WorkoutEnd extends Activity {
 			if(hours < 10)
 				sb.append("0");
 			sb.append(String.format("%.0f", hours) + ":");
+			if(minutes < 10)	
 			if(minutes < 10)
 				sb.append("0");
 			sb.append(String.format("%.0f", minutes) + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(String.format("%.0f", seconds) + ":");
+			sb.append(String.format("%.0f", seconds));
 			time = sb.toString();
 			
 			viewDate.setText(date);
