@@ -30,7 +30,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 	}
-	
+
 	public void settings (View view) {	//Onclick function for the settings button
 		Intent intent = new Intent(this, Settings.class);
 		startActivity(intent);			//Start Settings activity
@@ -173,5 +173,7 @@ public class MainActivity extends FragmentActivity {
 	        editor.commit();
 	        super.onDestroy();
 
-}
+
+	    }
+	 
 }
