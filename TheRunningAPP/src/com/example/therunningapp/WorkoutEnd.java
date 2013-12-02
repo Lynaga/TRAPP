@@ -38,25 +38,22 @@ public class WorkoutEnd extends Activity {
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
 
 			//Formatting time from milliseconds to hh:mm:ss
-			int tempTime = Integer.parseInt(time);
-			int hours = (int) (tempTime / (1000 * 60 * 60));
-			int minutes = ((tempTime / (1000 * 60)) % 60);
-			int seconds = ((tempTime / 1000) % 60);
-			String tempHours = Integer.toString(hours);
-			String tempMinutes = Integer.toString(minutes);
-			String tempSeconds = Integer.toString(seconds);
+			double tempTime = Integer.parseInt(time);
+			double hours = (int) (tempTime / (1000 * 60 * 60));
+			double minutes = ((tempTime / (1000 * 60)) % 60);
+			double seconds = ((tempTime / 1000) % 60);
 			StringBuilder sb = new StringBuilder();
 			
 			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
-			sb.append(tempHours + ":");
-			if(minutes < 10)
+			sb.append(String.format("%.0f", hours) + ":");
+			if(minutes < 10)	
 				sb.append("0");
-			sb.append(tempMinutes + ":");
+			sb.append(String.format("%.0f", minutes) + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(tempSeconds);
+			sb.append(String.format("%.0f", seconds));
 			time = sb.toString();
 			
 			viewDate.setText(date);

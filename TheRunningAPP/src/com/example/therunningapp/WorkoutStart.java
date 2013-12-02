@@ -65,8 +65,8 @@ LocationListener, SensorEventListener {
 	private final static long UPDATE_INTERVAL = MILLISECONDS_PER_SECOND * UPDATE_INTERVAL_IN_SECONDS;
 	private final static long FASTEST_INTERVAL = MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
 	
-	private final static double MAX_DISTANCE = 7;	//Max average distance pr. second when accellerating from 0 (applies for the first 3 seconds)
-	
+	private final static double MAX_DISTANCE = 7;	//Max average distance pr. second when 
+													//accellerating from 0 (applies for the first 3 seconds)
 	//Location variables to store user locations
 	private Location prevLocation = null;
 	
@@ -83,6 +83,7 @@ LocationListener, SensorEventListener {
 	long pauseTime = 0;
 	boolean workoutStatus = false;
 	double myDistance = 0;
+	double averageDistance = 0;
 	int tempCounter = 0;
 	Chronometer myTimer;
 	
@@ -93,8 +94,13 @@ LocationListener, SensorEventListener {
 	int test = 0;
 	String testType = "0";
 	
-	double amplitude;	//Used for accelerometer data
+	//Variables for accelerometer data
+	double averageAmp = 0;
+	boolean accUpdateList = true;
+	boolean accFillList = false;
+	int accFillListCounter = 1;
 	
+	//Objects to play sounds
 	MediaPlayer mediaPlayer;
 	AudioManager am;
 	
@@ -123,13 +129,11 @@ LocationListener, SensorEventListener {
 		mediaPlayer = MediaPlayer.create(this, R.raw.pause);
 		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-
-
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
 
 		mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		mySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 		
 		myLocationClient = new LocationClient(this, this, this);	//Initiate LocationClient
 		myTimer = (Chronometer) findViewById(R.id.T_timer);			//Set chronometer to view
@@ -159,24 +163,29 @@ LocationListener, SensorEventListener {
     protected void onStart() {
         super.onStart();
         // Connect the client.
-        myLocationClient.connect();
+        if(!myLocationClient.isConnected())
+        	myLocationClient.connect();
+        Log.i("onStart called", "Niggah");
     }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+		//mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+		Log.i("onResume called", "Niggah");
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mySensorManager.unregisterListener(this, mySensor);
+		//mySensorManager.unregisterListener(this, mySensor);
+		Log.i("onPause called", "Niggah");
 	}
 	
 	@Override
     protected void onStop() {
 		super.onStop();
+		Log.i("onStop called", "Niggah");
     }
 	
 	@Override
@@ -186,6 +195,7 @@ LocationListener, SensorEventListener {
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
+        Log.i("onDestroy called", "Niggah");
 	}
 	
 	@Override
@@ -244,42 +254,80 @@ LocationListener, SensorEventListener {
 	//Function to get location updates
 	public void onLocationChanged(Location newLocation) {
 		myLatLng listLatLng = new myLatLng();
+		double newDistance;
+		
 		if (prevLocation == null)	//Check if last location is set
 			prevLocation = myLocationClient.getLastLocation();	//If not set -> Update last location
+		
+		if(accUpdateList == true) {		//If it is time to update accelerometer
+			accUpdateList = false;		//Update variables and register listener
+			accFillList = true;
+			mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+			new Thread(new Runnable() {	//Starts a thread to sleep for x seconds (delay between updating accelerometer values)
+		        public void run() {
+		        	SystemClock.sleep(MILLISECONDS_PER_SECOND * 10);	//Sleep for x seconds
+		        	accUpdateList = true;								//Set bool to update list true after sleep is over
+		        }
+		    }).start();
+		}
+		
+		if(averageAmp > 2.5) {	//If user is moving
+			newDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
+			double tempLat = prevLocation.getLatitude();
+			double tempLng = prevLocation.getLongitude();
+			
+			if(!checkDistance(newDistance)) {	//If new location is invalid -> update new location to a valid location
+				double x = newLocation.getLatitude() - tempLat;		//Change in latitude
+				double y = newLocation.getLongitude() - tempLng;	//Change in longitude
+				double k;				//Scaling variable
+				
+				if(locationList.size() < 3)
+					k = MAX_DISTANCE / newDistance;				//Sets scaling factor according for the first 3 seconds
+				else
+					k = averageDistance*4 / newDistance;		//Sets scaling factor according to the users average distance
+																//during the last 3 locations
+				newLocation.setLatitude(tempLat + x*k);	//Scales latitude
+				newLocation.setLongitude(tempLng + y*k);	//Scales longitude
+				newDistance = prevLocation.distanceTo(newLocation);	//Update distance between two lastest locations
+			}
+			//Updates variables to draw path on map
+			listLatLng.lat = newLocation.getLatitude();
+			listLatLng.lng = newLocation.getLongitude();
+			
+			//Drawing on the map from last location to new location
+			myMap.addPolyline(new PolylineOptions()
+			.add(new LatLng(tempLat, tempLng), new LatLng(listLatLng.lat, listLatLng.lng))
+			.width(5)
+			.color(Color.RED).geodesic(true));
 	
-		double tempDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
-		myDistance = myDistance + tempDistance;	//Updating total distance
-		setCamera(newLocation);		//Update map to new location
-		setText();					//Update text
-		
-		double tempLat = newLocation.getLatitude();
-		double tempLng = newLocation.getLongitude();
-		listLatLng.lat = tempLat;
-		listLatLng.lng = tempLng;
-		
-		LatLng prevLatLng = new LatLng(prevLocation.getLatitude(), prevLocation.getLongitude());
-		LatLng newLatLng = new LatLng(tempLat, tempLng);
-		
-		//Drawing on the map from last location to new location
-		myMap.addPolyline(new PolylineOptions()
-	     .add(prevLatLng, newLatLng)
-	     .width(5)
-	     .color(Color.RED).geodesic(true));
-	
-		locationList.add(listLatLng);			//Add new location to list
-		prevLocation = newLocation;				//Update last location for next update
-		//Log.i("LOCATION UPDATE", Double.toString(amplitude));
+			myDistance += newDistance;	//Updating total distance
+			setCamera(newLocation);		//Update map to new location
+			setText();					//Update text
+			
+			locationList.add(listLatLng);			//Add new location to list
+			prevLocation = newLocation;				//Update last location for next update
+		}
 	}
 	
-	public void onSensorChanged(SensorEvent event) {	
-		amplitude = Math.sqrt((event.values[0] * event.values[0])
-						    + (event.values[1] * event.values[1])
-						    + (event.values[2] * event.values[2]));
-		//Log.i("ACCELEROMETER UPDATE", Double.toString(amplitude));
+	public void onSensorChanged(SensorEvent event) {	//Handling readings from the accelerometer
+		if(accFillList == true && accFillListCounter < 31) {	//If app needs to update average amplitude and still
+			double amplitude;									//need more readings
+			amplitude = Math.sqrt((event.values[0] * event.values[0])	//Calculate amplitude
+								+ (event.values[1] * event.values[1])
+								+ (event.values[2] * event.values[2]));
+			averageAmp += amplitude;		//Add amplitudes together to calculate average amplitude
+			accFillListCounter++;
+		}
+		else {								//If app got enough readings
+			accFillList = false;
+			mySensorManager.unregisterListener(this, mySensor);	//Unregister accelerometer
+			averageAmp /= accFillListCounter;					//Calculate average amplitude
+			accFillListCounter = 1;								//Reset counter
+		}
 	}
 	
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+			//Not needed (?)
 	}
   
 	public void test_check(int test){
@@ -374,7 +422,7 @@ LocationListener, SensorEventListener {
 		textView.setText(sb.toString());		
 		
 		TextView tempView = (TextView) findViewById(R.id.T_speed);
-		tempView.setText(String.format("%.2f", amplitude));
+		tempView.setText("Coming soon");
 		
 		TextView tempView2 = (TextView) findViewById(R.id.T_calories);
 		tempView2.setText("Coming soon");
@@ -527,6 +575,39 @@ LocationListener, SensorEventListener {
 			finish();
 	}
 	
+	public boolean checkDistance(double tempDistance) {		//Checks if distance between the two latest locations are valid
+		int i = locationList.size();
+		if(i < 3) {								//If not enough locations to determine average distance
+			if(tempDistance <= MAX_DISTANCE)	//If the distance between the two latest locations is valid
+				return true;
+			else
+				return false;
+		}
+		else	//If the application got enough locations to determine average distance
+		{
+			//Declaring variables to calculate average distance
+			Location tempLoc1 = new Location("Temp location 1");
+			Location tempLoc2 = new Location("Temp location 2");
+			Location tempLoc3 = new Location("Temp location 3");
+			
+			//Initiating variables to calculate average distance
+			tempLoc1.setLatitude(locationList.get(i-1).lat);
+			tempLoc1.setLongitude(locationList.get(i-1).lng);
+			tempLoc2.setLatitude(locationList.get(i-2).lat);
+			tempLoc2.setLongitude(locationList.get(i-2).lng);
+			tempLoc3.setLatitude(locationList.get(i-3).lat);
+			tempLoc3.setLongitude(locationList.get(i-3).lng);
+		
+			//Calculating average distance based on the last three locations
+			averageDistance = (tempLoc3.distanceTo(tempLoc2) + tempLoc2.distanceTo(tempLoc1)) / 2;
+			
+			if(tempDistance <= averageDistance*4)	//If distance between the two latest locations is within the probable threshold
+				return true;
+			else
+				return false;
+		}
+	}
+	
 	public void Interval(){
 		MediaPlayer mediaPlayerRun = MediaPlayer.create(this, R.raw.run);
 		Bundle extras = getIntent().getExtras();
@@ -651,21 +732,13 @@ LocationListener, SensorEventListener {
 	}
 	
 	public boolean verifyLocation(double distance) {
-		if(isMoving()) {
-			
+		if(averageAmp > 0) {
+			//Later work
 		}
 		else {
 			
 		}
 			return true;
-	}
-	
-	public boolean isMoving() {
-		if(amplitude > 0/*TOTAL_RUNNING_ACCELERATION*/) {
-			return true;
-		}
-		else
-			return false;
 	}
 
 	public int Calorie_math(float time, int weight) {
