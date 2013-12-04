@@ -8,12 +8,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#FF000000"
     tools:context=".History" >
+    
+    <TextView 
+        android:id="@+id/History"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/S_history"/>
 
 	<ListView
         android:id="@+id/listViewHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/History"
         android:layout_centerHorizontal="true"
         android:longClickable="true"
         android:layout_marginBottom="94dp" 

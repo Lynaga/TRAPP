@@ -12,6 +12,7 @@
         android:id="@+id/A_radiogroup_interval"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
         android:orientation="horizontal" >
         
         <RadioButton
@@ -30,88 +31,50 @@
         	android:text="@string/A_distance_display_string" />
 	</RadioGroup>
 
+    <EditText
+        android:id="@+id/editText_name_interval"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_below="@id/A_radiogroup_interval"
+        android:layout_centerHorizontal="true" />
+    
     <TextView 
         android:id="@+id/textView_name_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/A_radiogroup_interval"
-        android:layout_marginTop="25dp"
+        android:layout_alignBaseline="@id/editText_name_interval"
         android:text="@string/S_name"/>
-    
-    <TextView 
-        android:id="@+id/textView_time_run_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_name_interval"
-        android:layout_marginTop="25dp"
-        android:text="@string/Run_time" />
-    
-    <TextView 
-        android:id="@+id/textView_time_pause_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_time_run_interval"
-        android:layout_marginTop="25dp"
-        android:text="@string/Pause_time" />
-    
-    <TextView 
-        android:id="@+id/textView_distance_run_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_name_interval"
-        android:layout_marginTop="25dp"
-        android:visibility="gone"
-        android:text="@string/Run_distance" />
-        
-    <TextView 
-        android:id="@+id/textView_distance_pause_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_distance_run_interval"
-        android:layout_marginTop="25dp"
-        android:visibility="gone"
-        android:text="@string/Pause_distance" />
-    
-    <TextView 
-        android:id="@+id/textView_repetition_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView_name_interval"
-        android:layout_marginTop="110dp"
-        android:text="@string/repetition" />
-    
-    <EditText
-        android:id="@+id/editText_name_interval"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_toRightOf="@id/textView_name_interval"
-        android:layout_alignBaseline="@id/textView_name_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp"
-        android:ems="10" />
     
     <EditText
         android:id="@+id/editText_time_run_interval"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_toRightOf="@id/textView_time_run_interval"
-        android:layout_alignBaseline="@id/textView_time_run_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp"
-        android:ems="10" />
+        android:layout_below="@id/editText_name_interval"
+        android:layout_alignLeft="@id/editText_name_interval" />
+    
+    <TextView 
+        android:id="@+id/textView_time_run_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_time_run_interval"
+        android:text="@string/Run" />
     
     <EditText
         android:id="@+id/editText_time_pause_interval"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:layout_toRightOf="@id/textView_time_pause_interval"
-        android:layout_alignBaseline="@id/textView_time_pause_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp"
-        android:ems="10" />
+        android:layout_below="@id/editText_time_run_interval"
+        android:layout_alignLeft="@id/editText_time_run_interval" />
+    
+    <TextView 
+        android:id="@+id/textView_time_pause_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_time_pause_interval"
+        android:text="@string/Pause" />
     
     <EditText 
         android:id="@+id/editText_distance_run_interval"
@@ -119,10 +82,17 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:visibility="gone"
-        android:layout_toRightOf="@id/textView_distance_run_interval"
-        android:layout_alignBaseline="@id/textView_distance_run_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp" />
+        android:hint="meter"
+        android:layout_below="@id/editText_name_interval"
+        android:layout_alignLeft="@id/editText_name_interval" />
+    
+    <TextView 
+        android:id="@+id/textView_distance_run_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_distance_run_interval"
+        android:visibility="gone"
+        android:text="@string/Run" />
     
     <EditText 
         android:id="@+id/editText_distance_pause_interval"
@@ -130,22 +100,34 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:visibility="gone"
-        android:layout_toRightOf="@id/textView_distance_pause_interval"
-        android:layout_alignBaseline="@id/textView_distance_pause_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp" />
+        android:hint="meter"
+        android:layout_below="@id/editText_distance_run_interval"
+        android:layout_alignLeft="@id/editText_distance_run_interval" />
+        
+    <TextView 
+        android:id="@+id/textView_distance_pause_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_distance_pause_interval"
+        android:visibility="gone"
+        android:text="@string/Pause" />
     
-    <EditText
+   <EditText
         android:id="@+id/editText_repetition_interval"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:imeOptions="actionDone"
-        android:layout_toRightOf="@id/textView_repetition_interval"
-        android:layout_alignBaseline="@id/textView_repetition_interval"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp"
+        android:layout_alignLeft="@id/editText_time_pause_interval"
+        android:layout_marginTop="160dp"
         android:ems="10" />
+    
+    <TextView 
+        android:id="@+id/textView_repetition_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editText_repetition_interval"
+        android:text="@string/repetition" />
     
     <ToggleButton 
         android:id="@+id/ToggleButton_time_run_interval"
@@ -172,6 +154,7 @@
         android:layout_width="75dp"
 	    android:layout_height="50dp"
 	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
 	    android:text="@string/S_save"
 	    android:textSize="20sp"
 	    android:onClick="save" />
@@ -182,7 +165,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/textView_repetition_interval"
+        android:layout_below="@id/editText_repetition_interval"
         android:layout_above="@id/button_save_interval"
         android:layout_marginBottom="20dp"
         android:background="#FFFFFFFF"

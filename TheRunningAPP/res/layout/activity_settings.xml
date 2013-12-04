@@ -10,44 +10,42 @@
  
 	<EditText
         android:id="@+id/editText_name"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textView_name"
-        android:layout_alignBaseline="@+id/textView_name"
-        android:layout_alignLeft="@+id/editText_height"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="71dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/title_settings"
         android:ems="10"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editText_height"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textView_height"
-        android:layout_alignBaseline="@+id/textView_height"
+        android:layout_alignLeft="@id/editText_name"
+        android:layout_below="@id/editText_name"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="number"
         android:hint="@string/A_cm" />
 
     <EditText
         android:id="@+id/editText_weight"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textView_weight"
-        android:layout_alignBaseline="@+id/textView_weight"
-        android:layout_alignLeft="@id/editText_height"
+        android:layout_alignLeft="@id/editText_name"
+        android:layout_below="@id/editText_height"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="number"
         android:hint="@string/A_kilo" />
     
     <EditText
         android:id="@+id/editText_age"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/textView_age"
-        android:layout_alignBaseline="@+id/textView_age"
-        android:layout_alignLeft="@id/editText_height"
+        android:layout_alignLeft="@id/editText_name"
+        android:layout_below="@id/editText_weight"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="number" />
     
@@ -55,55 +53,36 @@
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title_settings"
-        android:layout_marginTop="25dp"
+        android:layout_alignBaseline="@id/editText_name"
         android:text="@string/S_name" />
 
     <TextView
         android:id="@+id/textView_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_name"
-        android:layout_below="@+id/textView_name"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_alignBaseline="@id/editText_height"
         android:text="@string/S_height" />
     
     <TextView
         android:id="@+id/textView_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_name"
-        android:layout_below="@+id/textView_height"
-        android:layout_marginTop="15dp"
+        android:layout_alignBaseline="@id/editText_weight"
         android:text="@string/S_weight" />
     
     <TextView
         android:id="@+id/textView_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_name"
-        android:layout_below="@+id/textView_weight"
-        android:layout_marginTop="15dp"
+        android:layout_alignBaseline="@id/editText_age"
         android:text="@string/Age" />
     
     <TextView
         android:id="@+id/textView_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_name"
-        android:layout_below="@+id/textView_age"
-        android:layout_marginTop="15dp"
+        android:layout_alignBaseline="@+id/spinner_gender"
         android:text="@string/S_sex" />
-    
-    <TextView
-        android:id="@+id/textView_talking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_name"
-        android:layout_below="@+id/textView_gender"
-        android:layout_marginTop="15dp"
-        android:text="@string/talking" />
     
 	<TextView
 	    android:id="@+id/title_language"
@@ -120,7 +99,6 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="20dp"
 	    android:text="@string/S_settings"
 	    android:textAppearance="?android:attr/textAppearanceLarge" />
 	
@@ -128,17 +106,10 @@
 	    android:id="@+id/spinner_gender"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@id/editText_height"
-	    android:layout_alignBaseline="@id/textView_gender"
+	    android:layout_alignLeft="@id/editText_name"
+	    android:layout_below="@id/editText_age"
+	    android:layout_marginTop="10dp"
 	    android:entries="@array/Gender_array" />
-	
-	<Spinner
-	    android:id="@+id/spinner_talking"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_toRightOf="@id/textView_talking"
-	    android:layout_alignBaseline="@id/textView_talking"
-	    android:entries="@array/Language_array" />
 	
 	<Button
 	    android:id="@+id/button_norwegian"
@@ -166,6 +137,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="50dp"
 	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
 	    android:onClick="save"
 	    android:text="@string/S_save"
 	    android:textSize="20sp" />
