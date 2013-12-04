@@ -19,10 +19,6 @@ import android.widget.Spinner;
 import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class Settings extends Activity {
-	private String talk;
-	private Spinner talkspinner;
-	private SharedPreferences pref;
-	public static String soundpackage = "en";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,32 +60,9 @@ public class Settings extends Activity {
 				genderspinner.setSelection(spinnerPosition);
 		}
 		db.close();
-		
-		talkspinner = (Spinner) findViewById(R.id.spinner_talking);
-		pref = getSharedPreferences(talk, MODE_PRIVATE);
-		talk = pref.getString("speech", "null");
-		
-		@SuppressWarnings("unchecked")
-		ArrayAdapter<String> myAdap = (ArrayAdapter<String>) talkspinner.getAdapter(); //cast to an ArrayAdapter
-		int spinnerPosition = myAdap.getPosition(talk);
-		//set the default according to value
-		talkspinner.setSelection(spinnerPosition);
 	}
 	
 	public void save(View view){
-		//spinner for speech
-		talk = String.valueOf(talkspinner.getSelectedItem());
-		SharedPreferences.Editor edit = pref.edit();
-        edit.putString("speech", talk);
-        edit.commit();
-		
-        if(talk.equals("English")||talk.equals("Engelsk"))
-        	soundpackage = "en";
-        else if(talk.equals("Norwegian")||talk.equals("Norsk"))
-        	soundpackage = "no";
-        else if(talk.equals("For fun")||talk.equals("For moro"))
-        	soundpackage = "funny";
-        
 		//get the DB
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
@@ -134,40 +107,5 @@ public class Settings extends Activity {
 		//db.update(TrappEntry.TABLE_NAMEPREF, values, selection, selectionArgs);
 		db.close();
 		finish();
-	}
-	
-	public void norwegian(View view){
-		language("no");
-	}
-	
-	public void english(View view){
-		language("en");
-	}
-	
-	public void language(String ch){
-		Locale mLocale = null;
-		
-		if(ch == "en")
-		{
-			mLocale = new Locale("");
-			soundpackage = "en";
-		}
-		else if(ch == "no")
-		{
-			mLocale = new Locale("no");
-			soundpackage = "no";
-		}
-		
-	    Locale.setDefault(mLocale); 
-	    Configuration config = getBaseContext().getResources().getConfiguration(); 
-	    if (!config.locale.equals(mLocale)) 
-	    { 
-	        config.locale = mLocale; 
-	        getBaseContext().getResources().updateConfiguration(config, null);
-	    }
-	    
-	    Intent intent = new Intent(this, MainActivity.class);
-	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    startActivity(intent);	
 	}
 }

@@ -519,6 +519,10 @@ public class WorkoutStart extends FragmentActivity implements
 	}
 
 	public void workoutEnd(View view) {
+		end();
+	}
+
+	public void end() {
 		// stop the loops if it's an Interval
 		if (TimerRunStart) {
 			run.cancel();
@@ -533,10 +537,6 @@ public class WorkoutStart extends FragmentActivity implements
 			TimerStopStart = false;
 		}
 
-		end();
-	}
-
-	public void end() {
 		// Get the database
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
@@ -645,7 +645,6 @@ public class WorkoutStart extends FragmentActivity implements
 			}).start();
 		} else
 			end();
-		workoutEnd(null);
 	}
 
 	public void Interval_distance(int RunDistance, int PauseDistance,
@@ -662,6 +661,7 @@ public class WorkoutStart extends FragmentActivity implements
 		}
 
 		sounds(4); // sound for stop
+		end();
 	}
 
 	public void Interval_distance(int Distance) {
@@ -765,7 +765,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 	public void sounds(int sound) {
 		MediaPlayer MP = null;
-		String soundpackage = Settings.soundpackage;
+		String soundpackage = MainActivity.soundpackage;
 
 		if (soundpackage.equals("en")) {
 			switch (sound) {
