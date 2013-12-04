@@ -277,7 +277,7 @@ public class WorkoutStart extends FragmentActivity implements
 		    }).start();
 		}
 		
-		if(averageAmp > 2.5) {	//If user is moving
+		if(averageAmp > 1) {	//If user is moving
 			newDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 			double tempLat = prevLocation.getLatitude();
 			double tempLng = prevLocation.getLongitude();
