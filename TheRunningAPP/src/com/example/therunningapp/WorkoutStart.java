@@ -102,7 +102,7 @@ public class WorkoutStart extends FragmentActivity implements
 	String testType = "0";
 	
 	//Variables for accelerometer data
-	double averageAmp = 0;
+	double averageAmp = 5;
 	boolean accUpdateList = true;
 	boolean accFillList = false;
 	int accFillListCounter = 1;
@@ -267,17 +267,18 @@ public class WorkoutStart extends FragmentActivity implements
 		
 		if(accUpdateList == true) {		//If it is time to update accelerometer
 			accUpdateList = false;		//Update variables and register listener
-			accFillList = true;
-			mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 			new Thread(new Runnable() {	//Starts a thread to sleep for x seconds (delay between updating accelerometer values)
 		        public void run() {
 		        	SystemClock.sleep(MILLISECONDS_PER_SECOND * 10);	//Sleep for x seconds
 		        	accUpdateList = true;								//Set bool to update list true after sleep is over
 		        }
 		    }).start();
+			
+			accFillList = true;
+			mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 		}
 		
-		if(averageAmp > 2.5) {	//If user is moving
+		if(averageAmp > 1) {	//If user is moving
 			newDistance = prevLocation.distanceTo(newLocation);	//Getting distance between last 2 locations
 			double tempLat = prevLocation.getLatitude();
 			double tempLng = prevLocation.getLongitude();
@@ -538,6 +539,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 	public void end() {
 		// Get the database
+		long nextDbId;
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
 		myTimer.stop();
@@ -580,15 +582,16 @@ public class WorkoutStart extends FragmentActivity implements
 			} catch (IOException ioe) {
 				Log.e("serializeObject", "error", ioe);
 			}
-
+			
 			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
 			values.put(TrappEntry.COLUMN_NAME_TIME, pauseTime);
 			values.put(TrappEntry.COLUMN_NAME_CALORIES, calories);
 			values.put(TrappEntry.COLUMN_NAME_LOCATIONS, buff);
-			db.insert(TrappEntry.TABLE_NAME, null, values);
+			nextDbId = db.insert(TrappEntry.TABLE_NAME, null, values);
 
-			Intent intent = new Intent(this, WorkoutEnd.class);
+			Intent intent = new Intent(this, WorkoutDisplay.class);
+			intent.putExtra("id", Long.toString(nextDbId));
 			startActivity(intent);
 		}
 		db.close();

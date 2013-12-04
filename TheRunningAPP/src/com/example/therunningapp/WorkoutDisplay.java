@@ -48,7 +48,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		
 		List<myLatLng> locationList = new ArrayList<myLatLng>();
 		Intent intent = getIntent();
-		String db_id = intent.getStringExtra("id");
+		String dbId = intent.getStringExtra("id");
 		//Setting the TextView
 		TextView viewDate = (TextView) findViewById(R.id.date_display);
 		TextView viewTime = (TextView) findViewById(R.id.time_display);
@@ -59,7 +59,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		//query the DB
 		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
 								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME, TrappEntry.COLUMN_NAME_LOCATIONS };
-		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { db_id }, null,null,null,null);
+		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { dbId }, null,null,null,null);
 		
 		//Display the workout
 		if(c.moveToFirst()){
