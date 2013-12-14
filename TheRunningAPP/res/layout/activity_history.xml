@@ -36,6 +36,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_marginTop="20dp"
 	    android:layout_centerHorizontal="true"
+	    android:layout_below="@id/History"
 	    android:text="@string/empty_history"
 	    android:textSize="20sp"
 	    android:textColor="#FFFFFFFF"	 />

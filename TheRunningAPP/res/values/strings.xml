@@ -46,8 +46,8 @@
     <string name="S_Time">Time</string>
     <string name="S_Distance">Distance</string>
     <string name="S_Value">Value</string>
-    <string name="A_cm">\t\tcm</string>
-    <string name="A_kilo">\t\tkg</string>
+    <string name="A_cm">\t\t\tcm</string>
+    <string name="A_kilo">\t\t\tkg</string>
     <string name="S_min">Min</string>
     <string name="S_sec">Sec</string>
     <string name="start">Start</string>
