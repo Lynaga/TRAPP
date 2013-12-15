@@ -1,4 +1,4 @@
-package com.example.therunningapp;
+package therunningapp;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,13 +1,13 @@
-package com.example.therunningapp;
+package therunningapp;
 
-import android.os.Bundle;
+import project.therunningapp.R;
+import project.therunningapp.R.string;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-import android.support.v4.app.NavUtils;
 
 public class SetupWorkout extends Activity {
 
@@ -53,7 +53,7 @@ public class SetupWorkout extends Activity {
 	
 	public void walk (View view){
 		Intent intent = new Intent(this, WorkoutStart.class);
-		String walk = "Walk";
+		String walk = "Walking";
 		intent.putExtra("workoutType", walk);
 		startActivity(intent);
 		finish();

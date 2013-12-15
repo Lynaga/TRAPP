@@ -1,31 +1,28 @@
-package com.example.therunningapp;
+package therunningapp;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
+import project.therunningapp.R;
+import project.therunningapp.R.string;
+import therunningapp.TrappContract.TrappEntry;
+import therunningapp.WorkoutStart.myLatLng;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
-import com.example.therunningapp.WorkoutStart.myLatLng;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,19 +48,21 @@ public class WorkoutDisplay extends FragmentActivity {
 		String dbId = intent.getStringExtra("id");
 		//Setting the TextView
 		TextView viewDate = (TextView) findViewById(R.id.date_display);
+	    TextView viewWorkouttype = (TextView) findViewById(R.id.workouttype_display);
 		TextView viewTime = (TextView) findViewById(R.id.time_display);
 		TextView viewDistance = (TextView) findViewById(R.id.distance_display);
 		TextView viewCalories = (TextView) findViewById(R.id.calories_display);
 		TextView viewSpeed = (TextView) findViewById(R.id.average_speed_display);
 		
 		//query the DB
-		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_CALORIES,
+		String[] projection = { TrappEntry._ID, TrappEntry.COLUMN_NAME_DATE, TrappEntry.COLUMN_NAME_WORKOUTTYPE ,TrappEntry.COLUMN_NAME_CALORIES,
 								TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_TIME, TrappEntry.COLUMN_NAME_LOCATIONS };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { dbId }, null,null,null,null);
 		
 		//Display the workout
 		if(c.moveToFirst()){
 			String date = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DATE));
+			String workouttype = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_WORKOUTTYPE));
 			String calories = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_CALORIES));
 			String distance = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE));
 			String time = c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_TIME));
@@ -116,6 +115,15 @@ public class WorkoutDisplay extends FragmentActivity {
 			viewDistance.setText(tempDistanceString + ": " + distance + " m");
 			viewCalories.setText(tempCaloriesString + ": " + calories);
 			viewSpeed.setText(tempSpeedString + ": " + String.format("%.2f", tempSpeed) + " m/s");
+			
+			if(workouttype.equals("Walking"))
+				viewWorkouttype.setText(string.walking);
+			else if(workouttype.equals("Running"))
+				viewWorkouttype.setText(string.running);
+			else if(workouttype.equals("Test"))
+				viewWorkouttype.setText(string.A_test);
+			else
+				viewWorkouttype.setText(workouttype);
 			
 			drawMap(locationList);	//Draw route on map
 			db.close();

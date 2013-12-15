@@ -1,4 +1,4 @@
-package com.example.therunningapp;
+package therunningapp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,16 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import project.therunningapp.R;
+import project.therunningapp.R.string;
+import therunningapp.TrappContract.TrappEntry;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -28,20 +29,17 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -122,8 +120,7 @@ public class WorkoutStart extends FragmentActivity implements
 	boolean TimerRunStart = false;
 	boolean TimerPauseStart = false;
 	boolean TimerStopStart = false;
-	String intervalType;
-	String workoutType;
+	String intervalType, workoutType, workoutname;
 	Bundle extras;
 
 	public static class myLatLng implements Serializable { // Class to
@@ -144,6 +141,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
+		workoutname = extras.getString("workoutname");
 
 		mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -172,27 +170,23 @@ public class WorkoutStart extends FragmentActivity implements
         // Connect the client.
         if(!myLocationClient.isConnected())
         	myLocationClient.connect();
-        Log.i("onStart called", "Niggah");
     }
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		//mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-		Log.i("onResume called", "Niggah");
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		//mySensorManager.unregisterListener(this, mySensor);
-		Log.i("onPause called", "Niggah");
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.i("onStop called", "Niggah");
     }
 	
 	@Override
@@ -202,7 +196,6 @@ public class WorkoutStart extends FragmentActivity implements
 		if (myLocationClient.isConnected())
         	myLocationClient.removeLocationUpdates(this);
         myLocationClient.disconnect();
-        Log.i("onDestroy called", "Niggah");
 	}
 
 	@Override
@@ -349,7 +342,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 		int value;
 		int set = 0;
-		sounds(1);
+		//sounds(1);
 		// The test checking happends as long as the distance/time is lower than
 		// the test value.
 		
@@ -364,29 +357,31 @@ public class WorkoutStart extends FragmentActivity implements
 			}
 
 			if (test == 1 || test == 2) {
-				int sound = rounds * 500;
-				if (value > sound) {
+				int sound = (rounds * 500);
+				if (value >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			if (test == 3 || test == 4) {
-				int sound = rounds * 1000;
-				if (value > sound) {
+				int sound = (rounds * 1000);
+				if (value >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			if (test == 5) {
-				int sound = rounds * 5;
-				if (value > sound) {
+				int sound = (rounds * 5);
+				int value1 = (value / 1000) / 60;
+				if (value1 >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			// sleeps the thread for a second as the gps updates dosn't happend
-			// more often.
+			// more often. and u can't select a time lower than 1 second
 			SystemClock.sleep(1000);
+			
 		}
 		// Ends the test when u have reached the value(time or distance)
 		while (value <= set);
@@ -437,8 +432,8 @@ public class WorkoutStart extends FragmentActivity implements
 			myLocationClient.requestLocationUpdates(myLocationRequest, this); // Starts location updates
 			sounds(1);			//start sound
 			
-			if (workoutType.equals("Walk")) {
-			} else if (workoutType.equals("Running")) {
+			if (workoutType.equals(getString(string.walking))) {
+			} else if (workoutType.equals(getString(string.running))) {
 			} else if (workoutType.equals("Interval")) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -545,9 +540,7 @@ public class WorkoutStart extends FragmentActivity implements
 		time = (float) pauseTime / 3600000;
 
 		Date cDate = new Date();
-		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate); // Set
-																			// the
-																			// dateformat
+		String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate); // Set the dateformat
 
 		if (w.moveToFirst()) { // Checks if the user has set the weight
 			int weight = w.getInt(w
@@ -571,6 +564,11 @@ public class WorkoutStart extends FragmentActivity implements
 			} catch (IOException ioe) {
 				Log.e("serializeObject", "error", ioe);
 			}
+			
+			if(workoutType.equals("Walking") || workoutType.equals("Running") || workoutType.equals("Test"))
+				values.put(TrappEntry.COLUMN_NAME_WORKOUTTYPE, workoutType);
+			else if(workoutType.equals("Interval"))
+				values.put(TrappEntry.COLUMN_NAME_WORKOUTTYPE, workoutname);
 			
 			values.put(TrappEntry.COLUMN_NAME_DATE, fDate);
 			values.put(TrappEntry.COLUMN_NAME_DISTANCE, (int) myDistance);
@@ -642,20 +640,11 @@ public class WorkoutStart extends FragmentActivity implements
 	public void Interval_distance(int RunDistance, int PauseDistance,
 			int Repetition) {
 		
-		String tallet;
-		tallet = Integer.toString(RunDistance);
-		Log.i("tallet", tallet);
-		
 		Interval_distance(RunDistance);
 		
 		for (int rep = 1; rep < Repetition; rep++) {
-			tallet = Integer.toString((RunDistance + PauseDistance) * rep);
-			Log.i("tallet", tallet);
 			sounds(3); // sound for pause
 			Interval_distance((RunDistance + PauseDistance) * rep);
-			tallet = Integer.toString(((RunDistance + PauseDistance) * rep)
-					+ RunDistance);
-			Log.i("tallet", tallet);
 			sounds(2); // sound for run
 			Interval_distance(((RunDistance + PauseDistance) * rep)
 					+ RunDistance);
@@ -692,7 +681,6 @@ public class WorkoutStart extends FragmentActivity implements
 
 					@Override
 					public void run() {
-							Log.i("lyd", "pause");
 							sounds(3); // sound for pause
 							DelayPause(PauseTime);
 							TimerRunStart = false;
@@ -715,7 +703,6 @@ public class WorkoutStart extends FragmentActivity implements
 
 					@Override
 					public void run() {
-							Log.i("lyd", "løp");
 							sounds(2); // sound for run
 							TimerPauseStart = false;
 							
@@ -740,7 +727,6 @@ public class WorkoutStart extends FragmentActivity implements
 						if (x == 1)
 							run.cancel();
 						else if (x == 2 && TimerStopStart == true) {
-							Log.i("lyd", "stop");
 							sounds(4); // sound for stop
 							TimerStopStart = false;
 							end();
@@ -795,6 +781,8 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.english_run); break;}
 			case 3: { MP = MediaPlayer.create(this, R.raw.english_pause); break;}
 			case 4: { MP = MediaPlayer.create(this, R.raw.english_stop); break; }
+			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.english_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.english_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.english_1500); break; }
@@ -815,6 +803,8 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.norwegian_run); break; }
 			case 3: { MP = MediaPlayer.create(this, R.raw.norwegian_pause); break; }
 			case 4: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.norwegian_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.norwegian_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.norwegian_1500); break; }

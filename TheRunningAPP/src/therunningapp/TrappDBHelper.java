@@ -1,11 +1,10 @@
-package com.example.therunningapp;
+package therunningapp;
 
+import therunningapp.TrappContract.TrappEntry;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class TrappDBHelper extends SQLiteOpenHelper {
 	
@@ -17,7 +16,8 @@ public class TrappDBHelper extends SQLiteOpenHelper {
 				+ TrappEntry.TABLE_NAME +
 				" (" + TrappEntry._ID + " INTEGER PRIMARY KEY, " + TrappEntry.COLUMN_NAME_DATE + " TEXT, "
 				+ TrappEntry.COLUMN_NAME_TIME + " FLOAT, " + TrappEntry.COLUMN_NAME_DISTANCE + " DOUBLE, " 
-				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER, " + TrappEntry.COLUMN_NAME_LOCATIONS + " BLOB)";
+				+ TrappEntry.COLUMN_NAME_CALORIES + " INTEGER, " + TrappEntry.COLUMN_NAME_WORKOUTTYPE + " TEXT, "
+				+ TrappEntry.COLUMN_NAME_LOCATIONS + " BLOB)";
 	
 	//table for storing preferances
 	private static final String SQL_CREATE_PREF = "CREATE TABLE " 
