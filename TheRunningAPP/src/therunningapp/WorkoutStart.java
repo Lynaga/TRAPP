@@ -132,8 +132,7 @@ public class WorkoutStart extends FragmentActivity implements
 		double lng;
 	}
 
-	List<myLatLng> locationList = new ArrayList<myLatLng>(); // List to store
-																// gps data
+	List<myLatLng> locationList = new ArrayList<myLatLng>(); // List to store gps data
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
