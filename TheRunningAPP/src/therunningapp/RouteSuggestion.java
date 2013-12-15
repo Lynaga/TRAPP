@@ -80,7 +80,8 @@ public class RouteSuggestion extends Activity {
 				      Intent intent = new Intent(RouteSuggestion.this, WorkoutDisplay.class);
 				      intent.putExtra("id", c.getString(c.getColumnIndex(TrappEntry._ID)));
 				      intent.putExtra("suggested", 1);
-				      startActivity(intent);          
+				      startActivity(intent); 
+				      finish();
 				                }
 				            }); 
 		}

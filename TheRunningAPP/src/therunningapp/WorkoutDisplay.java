@@ -135,7 +135,7 @@ public class WorkoutDisplay extends FragmentActivity {
 				findViewById(R.id.tablerow_3).setVisibility(View.GONE);
 				findViewById(R.id.tablerow_4).setVisibility(View.VISIBLE);
 				TextView suggestedDistance = (TextView) findViewById(R.id.suggested_distance_display);
-				suggestedDistance.setText(tempDistanceString + ": " + distance + " m");
+				suggestedDistance.setText(tempDistanceString + ":\n" + distance + " m");
 			}
 			drawMap(locationList);	//Draw route on map
 			db.close();
@@ -213,7 +213,8 @@ public class WorkoutDisplay extends FragmentActivity {
 	
 	public void startWorkout(View view) {
 		Intent intent = new Intent(this, WorkoutStart.class);
-	      intent.putExtra("suggestedId", dbId);
-	      startActivity(intent);
+	    intent.putExtra("suggestedId", Integer.parseInt(dbId));
+	    startActivity(intent);
+	    finish();
 	}
 }

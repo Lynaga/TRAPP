@@ -867,30 +867,30 @@ public class WorkoutStart extends FragmentActivity implements
 			      Log.e("deserializeObject", "io error", ioe); 
 			    }
 			
-			int numberOfElements = locationList.size();		//Get numbers in list
+			int numberOfElements = tempList.size();		//Get numbers in list
 			
 			if(numberOfElements > 0) {		//If locations in database for this workout
 				LatLng prevLatLng = null, newLatLng = null;
 				for(int i = 0; i < numberOfElements; i++) {			//Loop through all locations
 					
 					if(prevLatLng == null)	//Setting first location
-						prevLatLng = new LatLng(locationList.get(i).lat,
-												locationList.get(i).lng);
+						prevLatLng = new LatLng(tempList.get(i).lat,
+												tempList.get(i).lng);
 					
 					else {						//Updating new location
-						newLatLng = new LatLng(locationList.get(i).lat,
-											   locationList.get(i).lng);
+						newLatLng = new LatLng(tempList.get(i).lat,
+											   tempList.get(i).lng);
 						
 						//Draw polyline
 						myMap.addPolyline(new PolylineOptions()	
 					     .add(prevLatLng, newLatLng)
 					     .width(5)
 					     .color(Color.BLUE).geodesic(true));
-						
-						}
 						prevLatLng = newLatLng;			//Updating for next loop
+						}	
 				}
 			}
 		}
+		db.close();
 	}
 }
