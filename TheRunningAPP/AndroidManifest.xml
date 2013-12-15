@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.therunningapp"
+    package="project.therunningapp"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -23,80 +23,84 @@
         android:allowBackup="true"
         android:icon="@drawable/icon_running_man"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"  >
         <activity
-            android:name="com.example.therunningapp.MainActivity"
+            android:name="therunningapp.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.therunningapp.Settings"
+            android:name="therunningapp.Settings"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:parentActivityName="therunningapp.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.History"
+            android:name="therunningapp.History"
             android:label="@string/title_activity_history"
-            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:parentActivityName="therunningapp.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.WorkoutEnd"
-            android:label="@string/title_activity_workout_end"
+            android:name="therunningapp.RouteSuggestion"
+            android:label="@string/title_activity_route_suggestion"
+            android:parentActivityName="therunningapp.WorkoutSetup"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.TrappDBHelper"
+            android:name="therunningapp.TrappDBHelper"
             android:label="@string/title_activity_trapp_dbhelper" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.TrappContract"
+            android:name="therunningapp.TrappContract"
             android:label="@string/title_activity_trapp_contract" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.WorkoutStart"
+            android:name="therunningapp.WorkoutStart"
             android:label="@string/title_activity_workout_start"
-            android:parentActivityName="com.example.therunningapp.SetupWorkout"
+            android:parentActivityName="therunningapp.SetupWorkout"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.SetupWorkout"
+            android:name="therunningapp.SetupWorkout"
             android:label="@string/title_activity_setup_workout"
-            android:parentActivityName="com.example.therunningapp.MainActivity"
+            android:parentActivityName="therunningapp.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
-        
         <activity
-            android:name="com.example.therunningapp.Interval"
+            android:name="therunningapp.Interval"
             android:label="@string/title_activity_interval"
-            android:parentActivityName="com.example.therunningapp.SetupWorkout"
+            android:parentActivityName="therunningapp.SetupWorkout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="therunningapp.WorkoutDisplay"
+            android:label="@string/title_activity_workout_display"
+            android:parentActivityName="therunningapp.History"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.example.therunningapp.WorkoutDisplay"
-            android:label="@string/title_activity_workout_display"
-            android:parentActivityName="com.example.therunningapp.History"
-            android:screenOrientation="portrait" >
+            android:name="therunningapp.TestSetup"
+            android:label="@string/title_activity_test_setup"
+            android:parentActivityName="therunningapp.SetupWorkout"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         
-        <!-- Tron -->
+        <!-- Anders Release -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDBKGEnLnkE3qkE5jkKL6eL9RJ8kzP4Giw" />
-        <!-- Anders -->
+            android:value="AIzaSyACB3ZO3piNNwW3PJbt6ZmO456RB6XGjiE" /> 
+        <!-- Anders 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAYZwb5y6Ls_mfmaCOzjQ0E_-M9LZKgE1w" />
-        <!-- Stig -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAg71Fd-oUt9faNsdanOcskDcr9LrmqdLU" />
-    </application>
+            android:value="AIzaSyAYZwb5y6Ls_mfmaCOzjQ0E_-M9LZKgE1w" /> -->
+        	
+        </application>
 
 </manifest>
