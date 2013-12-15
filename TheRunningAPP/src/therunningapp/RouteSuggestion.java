@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +33,7 @@ public class RouteSuggestion extends Activity {
 	}
 	
 	public void suggestRoutes(View view) {
+		//Get text from EditTexts and change visibilities
 		final ListView displayRoutes = (ListView) findViewById(R.id.T_display_routes);
 		EditText minText = (EditText) findViewById(R.id.T_min_distance_input);
 		EditText maxText = (EditText) findViewById(R.id.T_max_distance_input);
@@ -48,7 +48,8 @@ public class RouteSuggestion extends Activity {
 		//Get the database
 		TrappDBHelper mDBHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDBHelper.getWritableDatabase();
-		/*Get values for minDistance, maxDistance and routesWithinDistance from user */
+		
+		//Querying the db
 		String sql = "SELECT * FROM " + TrappEntry.TABLE_NAME + " WHERE " + TrappEntry.COLUMN_NAME_DISTANCE
 							  + " > " + minDistance + " AND " + TrappEntry.COLUMN_NAME_DISTANCE + " < " + maxDistance
 							  + " ORDER BY " + TrappEntry.COLUMN_NAME_DISTANCE + " ASC";
@@ -56,31 +57,31 @@ public class RouteSuggestion extends Activity {
 		
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 		
-		if(c.moveToFirst()) {
+		if(c.moveToFirst()) {	//If any results from the db
 			do{
 				byte[] locations = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
 				
-				try { 
+				try { 	//Deserialize from blob to list
 				      ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(locations)); 
 				      locationList = (List<myLatLng>) in.readObject();
 				      in.close(); 
-				    } catch(ClassNotFoundException cnfe) { 
-				      Log.e("deserializeObject", "class not found error", cnfe); 
-				    } catch(IOException ioe) { 
-				      Log.e("deserializeObject", "io error", ioe); 
-				  } 
+				    } catch(ClassNotFoundException cnfe) { }
+				catch(IOException ioe) { } 
+				//Add new entry to the adapter, displayed by its distance
 				adapter.add(c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_DISTANCE)) + " m");
 			} while(c.moveToNext());
 			
+			//Adding content of adapter to ListView
 			displayRoutes.setAdapter(adapter);
 			
+			//Initiate onClickListener for the ListView
 			displayRoutes.setOnItemClickListener(new OnItemClickListener() {
 				  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					  c.moveToPosition(position);	
-				      Intent intent = new Intent(RouteSuggestion.this, WorkoutDisplay.class);
-				      intent.putExtra("id", c.getString(c.getColumnIndex(TrappEntry._ID)));
-				      intent.putExtra("suggested", 1);
-				      startActivity(intent); 
+					  c.moveToPosition(position);												//On item clicked;
+				      Intent intent = new Intent(RouteSuggestion.this, WorkoutDisplay.class);	//Get the position of the item,
+				      intent.putExtra("id", c.getString(c.getColumnIndex(TrappEntry._ID)));		//get the database id of the entry
+				      intent.putExtra("suggested", 1);											//and put as extra to retrieve
+				      startActivity(intent); 													//correct entry in next activity.
 				      finish();
 				                }
 				            }); 

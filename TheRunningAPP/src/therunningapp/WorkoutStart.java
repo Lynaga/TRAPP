@@ -125,9 +125,7 @@ public class WorkoutStart extends FragmentActivity implements
 	String intervalType, workoutType, workoutname;
 	Bundle extras;
 
-	public static class myLatLng implements Serializable { // Class to
-															// read/write lat
-															// /lng values
+	public static class myLatLng implements Serializable { // Class to store lat / lng values of locations
 		double lat;
 		double lng;
 	}
@@ -140,6 +138,7 @@ public class WorkoutStart extends FragmentActivity implements
 		setContentView(R.layout.activity_workout_start);
 		am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+		//Getting extras
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
 		workoutname = extras.getString("workoutname");
@@ -165,7 +164,7 @@ public class WorkoutStart extends FragmentActivity implements
 		myLocationRequest.setInterval(UPDATE_INTERVAL);
 		myLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 		
-		if(suggestedId != -1)
+		if(suggestedId != -1)	//If a route was suggested -> display the suggested route on map
 			drawSuggestedRoute(suggestedId);
 	}
 	
@@ -180,13 +179,11 @@ public class WorkoutStart extends FragmentActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//mySensorManager.unregisterListener(this, mySensor);
 	}
 
 	@Override
@@ -271,7 +268,7 @@ public class WorkoutStart extends FragmentActivity implements
 		        }
 		    }).start();
 			
-			accFillList = true;
+			accFillList = true;		//Set bool to fill list and register accelerometer
 			mySensorManager.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 		}
 		
@@ -331,7 +328,7 @@ public class WorkoutStart extends FragmentActivity implements
 	}
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			//Not needed (?)
+			
 	}
 
 	public void test_check(int test) {
@@ -846,29 +843,29 @@ public class WorkoutStart extends FragmentActivity implements
 	}
 	
 	public void drawSuggestedRoute(int dbId) {
+		//Get the db
 		TrappDBHelper mDbHelper = new TrappDBHelper(this);
 		SQLiteDatabase db = mDbHelper.getReadableDatabase();
 		
+		//Query the db
 		String[] projection = {TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_LOCATIONS };
 		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { Integer.toString(dbId) }, null,null,null,null);
-		if(c.moveToFirst()){
+		
+		if(c.moveToFirst()){	//If any results from db
 			List<myLatLng> tempList = new ArrayList<myLatLng>();
 			byte[] locations = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
 			
-			try { 
+			try { 	//Deserialize object
 			      ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(locations)); 
 			      tempList = (List<myLatLng>) in.readObject();
 			      in.close(); 
 
-			    } catch(ClassNotFoundException cnfe) { 
-			      Log.e("deserializeObject", "class not found error", cnfe); 
-			    } catch(IOException ioe) { 
-			      Log.e("deserializeObject", "io error", ioe); 
-			    }
+			    } catch(ClassNotFoundException cnfe) { }
+				  catch(IOException ioe) { }
 			
 			int numberOfElements = tempList.size();		//Get numbers in list
 			
-			if(numberOfElements > 0) {		//If locations in database for this workout
+			if(numberOfElements > 0) {		//If database contained locations for this workout
 				LatLng prevLatLng = null, newLatLng = null;
 				for(int i = 0; i < numberOfElements; i++) {			//Loop through all locations
 					
@@ -885,11 +882,12 @@ public class WorkoutStart extends FragmentActivity implements
 					     .add(prevLatLng, newLatLng)
 					     .width(5)
 					     .color(Color.BLUE).geodesic(true));
+						
 						prevLatLng = newLatLng;			//Updating for next loop
 						}	
 				}
 			}
 		}
-		db.close();
+		db.close();	//Close the db
 	}
 }
