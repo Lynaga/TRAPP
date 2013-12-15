@@ -58,6 +58,11 @@
     <string name="running">Løpe</string>
     <string name="talking">Lyd</string>
 	<string name="empty_history">Historien er tom</string>
+	<string name="route_suggestion">Foreslå rute</string>
+	<string name="T_get_routes_string">Hent ruteforslag</string>
+	<string name="T_min_distance_string">Min distanse</string>
+    <string name="T_max_distance_string">Max distanse</string>
+    <string name="T_m">m</string>
 	
     <string-array name="Gender_array">
         <item>Mann</item>

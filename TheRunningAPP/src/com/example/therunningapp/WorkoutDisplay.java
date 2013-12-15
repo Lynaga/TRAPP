@@ -83,9 +83,9 @@ public class WorkoutDisplay extends FragmentActivity {
 			//Formatting time from milliseconds to hh:mm:ss
 			double tempTime = Double.parseDouble(time);
 			int tempDistance = Integer.parseInt(distance);
-			double hours = (double) (tempTime / (1000 * 60 * 60));
-			double minutes = ((tempTime / (1000 * 60)) % 60);
-			double seconds = ((tempTime / 1000) % 60);
+			int hours = (int) (tempTime / (1000 * 60 * 60));
+			int minutes = (int) ((tempTime / (1000 * 60)) % 60);
+			int seconds = (int) ((tempTime / 1000) % 60);
 			tempTime = tempTime / 1000;	//Converting from milliseconds to seconds
 			
 			double tempSpeed = tempDistance / tempTime;	//Calculating average speed
@@ -95,13 +95,13 @@ public class WorkoutDisplay extends FragmentActivity {
 			//Adding a 0 before hours, minutes and seconds if their values < 10 (to keep format correct)
 			if(hours < 10)
 				sb.append("0");
-			sb.append(String.format("%.0f", hours) + ":");
+			sb.append(hours + ":");
 			if(minutes < 10)	
 				sb.append("0");
-			sb.append(String.format("%.0f", minutes) + ":");
+			sb.append(minutes + ":");
 			if(seconds < 10)
 				sb.append("0");
-			sb.append(String.format("%.0f", seconds));
+			sb.append(seconds);
 			time = sb.toString();
 			
 			//Fetch display strings

@@ -6,8 +6,84 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".RouteSuggestion" >
 
+	<TextView
+	    android:id="@+id/T_min_distance"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@+id/T_min_distance_input"
+        android:text="@string/T_min_distance_string" />
 	
+	<EditText 
+	    android:id="@id/T_min_distance_input"
+	    android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFFFF"
+        android:inputType="number"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="10dp" />
+	
+	<TextView
+	    android:id="@+id/T_min_distance_m"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/T_min_distance_input"
+        android:layout_toRightOf="@id/T_min_distance_input"
+        android:text="@string/T_m"/>
+	
+	<TextView
+	    android:id="@+id/T_max_distance"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@+id/T_max_distance_input"
+        android:text="@string/T_max_distance_string" />
+	
+	<EditText 
+	    android:id="@id/T_max_distance_input"
+	    android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/T_min_distance_input"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFFFF"
+        android:inputType="number"
+        android:layout_marginTop="14dp"
+        android:layout_marginRight="10dp" />
+	
+	<TextView
+	    android:id="@+id/T_max_distance_m"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/T_max_distance_input"
+        android:layout_toRightOf="@id/T_max_distance_input"
+        android:text="@string/T_m"/>
+
+	<ListView 
+	    android:id="@+id/T_display_routes"
+	    android:visibility="gone"
+	    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="94dp" 
+		android:background="#FF808080"
+        android:clickable="true" />
+	
+	<Button
+	    android:id="@+id/T_get_routes"
+	    android:layout_width="wrap_content"
+	    android:layout_height="50dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
+	    android:text="@string/T_get_routes_string"
+	    android:textSize="20sp"
+	    android:onClick="suggestRoutes" />
 
 </RelativeLayout>

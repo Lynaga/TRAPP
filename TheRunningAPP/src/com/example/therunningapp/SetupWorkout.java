@@ -45,6 +45,12 @@ public class SetupWorkout extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public void routeSuggestion (View view) {
+		Intent intent = new Intent(this, RouteSuggestion.class);
+		startActivity(intent);
+		finish();
+	}
+	
 	public void walk (View view){
 		Intent intent = new Intent(this, WorkoutStart.class);
 		String walk = "Walk";

@@ -210,7 +210,7 @@ public class WorkoutStart extends FragmentActivity implements
 		// Display the connection status
 		Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 
-		// Set map to users location and set initial text
+		// Set map to user location and set initial text
 		setCamera(myLocationClient.getLastLocation());
 		CameraUpdate zoom = CameraUpdateFactory.zoomTo(19);
 		myMap.animateCamera(zoom); // Set zoom

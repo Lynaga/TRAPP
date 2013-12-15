@@ -57,6 +57,11 @@
     <string name="running">Running</string>
     <string name="talking">Sound</string>
     <string name="empty_history">History is empty</string>
+    <string name="route_suggestion">Suggest route</string>
+    <string name="T_get_routes_string">Get routes</string>
+    <string name="T_min_distance_string">Min distance</string>
+    <string name="T_max_distance_string">Max distance</string>
+    <string name="T_m">m</string>
 
     <string-array name="Gender_array">
         <item>Male</item>
