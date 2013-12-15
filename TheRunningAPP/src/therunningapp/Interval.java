@@ -56,7 +56,7 @@ public class Interval extends Activity {
 					}while(c.moveToNext());
 					
 					workoutList.setAdapter(adapter);
-					
+					// when you push an item on listview, you get these intents
 					workoutList.setOnItemClickListener(new OnItemClickListener() {
 						  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 							  c.moveToPosition(position);	
@@ -119,6 +119,8 @@ public class Interval extends Activity {
 					findViewById(R.id.editText_distance_run_interval).setVisibility(View.GONE);
 					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.GONE);
 					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_run_meter).setVisibility(View.GONE);
+					findViewById(R.id.textView_distance_pause_meter).setVisibility(View.GONE);
 					intervalType = "time";
 				}break;
 			case R.id.A_radiobutton_distance:
@@ -133,6 +135,8 @@ public class Interval extends Activity {
 					findViewById(R.id.editText_distance_run_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.textView_distance_pause_interval).setVisibility(View.VISIBLE);
 					findViewById(R.id.editText_distance_pause_interval).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_run_meter).setVisibility(View.VISIBLE);
+					findViewById(R.id.textView_distance_pause_meter).setVisibility(View.VISIBLE);
 					intervalType = "distance";
 				}break;
 		}
@@ -176,7 +180,7 @@ public class Interval extends Activity {
 			if(!isEmpty(pause_distance))
 				pause = Integer.parseInt(pause_distance.getText().toString());
 		}
-		
+		// if something is empty, you will get a popup that you didn't enter all the info needed.
 		if(!isEmpty(repitition))
 			rep = Integer.parseInt(repitition.getText().toString());
 		if(!isEmpty(name1))
@@ -229,7 +233,7 @@ public class Interval extends Activity {
 	    } else 
 	        return true;
 	}
-	
+	// message you get when you didn't enter all the needed info
 	public void sintmelding(){
 		new AlertDialog.Builder(this)
 	    .setTitle("Error")

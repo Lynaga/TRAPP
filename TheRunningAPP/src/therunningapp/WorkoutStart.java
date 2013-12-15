@@ -642,6 +642,7 @@ public class WorkoutStart extends FragmentActivity implements
 			end();
 	}
 
+	//Function for interval distance
 	public void Interval_distance(int RunDistance, int PauseDistance,
 			int Repetition) {
 		
@@ -659,6 +660,7 @@ public class WorkoutStart extends FragmentActivity implements
 		end();
 	}
 
+	//when the value is the same as Distance, the loop is over.
 	public void Interval_distance(int Distance) {
 		int value;
 		int set = Distance;
@@ -668,11 +670,12 @@ public class WorkoutStart extends FragmentActivity implements
 			SystemClock.sleep(1000); // since the gps doesn't update more often
 		} while (value <= set);
 	}
-
+	
+	//starts three threads with different loops
 	public void Interval_time(int RunTime, int PauseTime, int Repetition) {
-		DelayRun(RunTime, PauseTime);
-		DelayStop((RunTime + PauseTime) * (Repetition - 1) + 1, 1);
-		DelayStop((RunTime * Repetition) + (PauseTime * (Repetition - 1)), 2);
+		DelayRun(RunTime, PauseTime);			//infinite loop
+		DelayStop((RunTime + PauseTime) * (Repetition - 1) + 1, 1);	//stops DelayRun loop
+		DelayStop((RunTime * Repetition) + (PauseTime * (Repetition - 1)), 2);	//stops the workout
 	}
 
 	public void DelayRun(final int RunTime, final int PauseTime) {

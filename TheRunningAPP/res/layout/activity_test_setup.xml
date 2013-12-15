@@ -58,8 +58,18 @@
 		android:background="#FFFFFFFF"
 		android:visibility="gone"
 		android:imeOptions="actionDone"
-        android:inputType="number"
-        android:hint="   meter" />
+        android:inputType="number" />
+	
+	<TextView 
+	    android:id="@+id/distance_m"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@id/Distance"
+	    android:layout_toRightOf="@id/distance"
+	    android:layout_marginLeft="5dp"
+	    android:textColor="#FFFFFFFF"
+	    android:visibility="gone"
+	    android:text="@string/T_m" />
 	
 	<TextView
         android:id="@+id/Time_Min"

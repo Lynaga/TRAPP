@@ -188,6 +188,7 @@ public class MainActivity extends FragmentActivity {
 		language("en");
 	}
 
+	//function for language, changes the default language on your phone
 	public void language(String ch) {
 		Locale mLocale = null;
 

@@ -29,8 +29,7 @@
         android:layout_below="@id/editText_name"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:inputType="number"
-        android:hint="@string/A_cm" />
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/editText_weight"
@@ -41,8 +40,7 @@
         android:layout_below="@id/editText_height"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:inputType="number"
-        android:hint="@string/A_kilo" />
+        android:inputType="number" />
     
     <EditText
         android:id="@+id/editText_age"
@@ -72,12 +70,32 @@
         android:text="@string/S_height" />
     
     <TextView
+    	android:id="@+id/textView_height_meter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/editText_height"
+        android:layout_toRightOf="@id/editText_height"
+        android:layout_marginLeft="5dp"
+        android:text="@string/T_m" />
+    
+    <TextView
         android:id="@+id/textView_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFFFF"
         android:layout_alignBaseline="@id/editText_weight"
         android:text="@string/S_weight" />
+    
+    <TextView
+    	android:id="@+id/textView_weight_kilo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/editText_weight"
+        android:layout_toRightOf="@id/editText_weight"
+        android:layout_marginLeft="5dp"
+        android:text="@string/T_kg" />
     
     <TextView
         android:id="@+id/textView_age"

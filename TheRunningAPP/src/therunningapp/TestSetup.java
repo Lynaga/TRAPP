@@ -114,12 +114,14 @@ public class TestSetup extends Activity {
 					findViewById(R.id.Time_Min).setVisibility(View.VISIBLE);
 					findViewById(R.id.distance).setVisibility(View.GONE);
 					findViewById(R.id.Distance).setVisibility(View.GONE);
+					findViewById(R.id.distance_m).setVisibility(View.GONE);
 					testType = "";
 				}break;
 			case R.id.Button_Distance:
 				if(checked){
 					findViewById(R.id.distance).setVisibility(View.VISIBLE);
 					findViewById(R.id.Distance).setVisibility(View.VISIBLE);
+					findViewById(R.id.distance_m).setVisibility(View.VISIBLE);
 					findViewById(R.id.sec).setVisibility(View.GONE);
 					findViewById(R.id.min).setVisibility(View.GONE);
 					findViewById(R.id.Time_sec).setVisibility(View.GONE);

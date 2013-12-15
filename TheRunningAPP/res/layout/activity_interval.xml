@@ -95,7 +95,6 @@
         android:inputType="number"
         android:layout_marginTop="14dp"
         android:visibility="gone"
-        android:hint="meter"
         android:layout_below="@id/editText_name_interval"
         android:layout_alignLeft="@id/editText_name_interval" />
     
@@ -108,6 +107,17 @@
         android:visibility="gone"
         android:text="@string/Run" />
     
+    <TextView
+    	android:id="@+id/textView_distance_run_meter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/editText_distance_run_interval"
+        android:layout_toRightOf="@id/editText_distance_run_interval"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:text="@string/T_m" />
+    
     <EditText 
         android:id="@+id/editText_distance_pause_interval"
         android:layout_width="100dp"
@@ -116,7 +126,6 @@
         android:inputType="number"
         android:layout_marginTop="14dp"
         android:visibility="gone"
-        android:hint="meter"
         android:layout_below="@id/editText_distance_run_interval"
         android:layout_alignLeft="@id/editText_distance_run_interval" />
         
@@ -128,6 +137,17 @@
         android:layout_alignBaseline="@id/editText_distance_pause_interval"
         android:visibility="gone"
         android:text="@string/Pause" />
+    
+    <TextView 
+        android:id="@+id/textView_distance_pause_meter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFFFF"
+        android:layout_alignBaseline="@id/editText_distance_pause_interval"
+        android:layout_toRightOf="@id/editText_distance_pause_interval"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:text="@string/T_m" />
     
    <EditText
         android:id="@+id/editText_repetition_interval"

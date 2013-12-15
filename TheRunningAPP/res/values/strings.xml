@@ -63,6 +63,7 @@
     <string name="T_min_distance_string">Min distance</string>
     <string name="T_max_distance_string">Max distance</string>
     <string name="T_m">m</string>
+    <string name="T_kg">kg</string>
     <string name="T_start_suggested_workout">Start this workout</string>
 
     <string-array name="Gender_array">
