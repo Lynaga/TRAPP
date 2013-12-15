@@ -376,7 +376,7 @@ public class WorkoutStart extends FragmentActivity implements
 				int sound = (rounds * 5);
 				int value1 = (value / 1000) / 60;
 				if (value1 >= sound) {
-					sounds(sound);
+					//sounds(sound);
 					rounds++;
 				}
 			}
@@ -786,8 +786,6 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.english_run); break;}
 			case 3: { MP = MediaPlayer.create(this, R.raw.english_pause); break;}
 			case 4: { MP = MediaPlayer.create(this, R.raw.english_stop); break; }
-			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
-			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.english_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.english_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.english_1500); break; }
@@ -808,8 +806,6 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.norwegian_run); break; }
 			case 3: { MP = MediaPlayer.create(this, R.raw.norwegian_pause); break; }
 			case 4: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
-			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
-			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.norwegian_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.norwegian_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.norwegian_1500); break; }
