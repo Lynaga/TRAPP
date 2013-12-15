@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">The Running App</string>
-        
     <string name="title_activity_workout_end">Workout End</string>
     <string name="title_activity_trapp_dbhelper">TrappDBHelper</string>
     <string name="title_activity_trapp_contract">Trapp Contract</string>
@@ -13,7 +12,7 @@
     <string name="title_activity_test_setup">Test Setup</string>
     <string name="title_activity_setup_workout">Workouttype</string>
     <string name="title_activity_history">History</string>
-    
+    <string name="title_activity_route_suggestion">Route Suggestion</string>
     <string name="action_settings">Settings</string>
     <string name="S_workout">Start new workout</string>
     <string name="S_settings">Settings</string>
@@ -58,15 +57,17 @@
     <string name="running">Running</string>
     <string name="talking">Sound</string>
     <string name="empty_history">History is empty</string>
-    
+
     <string-array name="Gender_array">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-    
     <string-array name="Language_array">
         <item>English</item>
         <item>Norwegian</item>
         <item>For fun</item>
     </string-array>
+
+    
+
 </resources>
