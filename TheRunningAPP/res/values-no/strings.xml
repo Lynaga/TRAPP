@@ -64,6 +64,7 @@
 	<string name="T_min_distance_string">Min distanse</string>
     <string name="T_max_distance_string">Max distanse</string>
     <string name="T_m">m</string>
+    <string name="T_start_suggested_workout">Start denne treningsøkten</string>
 	
     <string-array name="Gender_array">
         <item>Mann</item>

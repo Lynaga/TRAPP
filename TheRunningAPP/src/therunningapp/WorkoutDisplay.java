@@ -21,6 +21,7 @@ import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WorkoutDisplay extends FragmentActivity {
 
+	String dbId;
 	@SuppressWarnings("unchecked")		//Ignore warning when converting from Object to List<myLatLng>
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		
 		List<myLatLng> locationList = new ArrayList<myLatLng>();
 		Intent intent = getIntent();
-		String dbId = intent.getStringExtra("id");
+		dbId = intent.getStringExtra("id");
 		int suggested = intent.getIntExtra("suggested", 0);
 		//Setting the TextView
 		TextView viewDate = (TextView) findViewById(R.id.date_display);
@@ -128,7 +130,12 @@ public class WorkoutDisplay extends FragmentActivity {
 				viewWorkouttype.setText(workouttype);
 			}
 			else {
-				
+				findViewById(R.id.tablerow_1).setVisibility(View.GONE);
+				findViewById(R.id.tablerow_2).setVisibility(View.GONE);
+				findViewById(R.id.tablerow_3).setVisibility(View.GONE);
+				findViewById(R.id.tablerow_4).setVisibility(View.VISIBLE);
+				TextView suggestedDistance = (TextView) findViewById(R.id.suggested_distance_display);
+				suggestedDistance.setText(tempDistanceString + ": " + distance + " m");
 			}
 			drawMap(locationList);	//Draw route on map
 			db.close();
@@ -204,8 +211,9 @@ public class WorkoutDisplay extends FragmentActivity {
 		}
 	}
 	
-	public void back(View view){	//Back button to exit activity
-		finish();
+	public void startWorkout(View view) {
+		Intent intent = new Intent(this, WorkoutStart.class);
+	      intent.putExtra("suggestedId", dbId);
+	      startActivity(intent);
 	}
-
 }
