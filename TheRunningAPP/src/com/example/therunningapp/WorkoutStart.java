@@ -28,6 +28,7 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
@@ -139,9 +140,7 @@ public class WorkoutStart extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_workout_start);
-		am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-		am = (AudioManager) getApplicationContext().getSystemService(
-				Context.AUDIO_SERVICE);
+		am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
@@ -394,17 +393,6 @@ public class WorkoutStart extends FragmentActivity implements
 		end();
 	}
 
-	// Function to make the music duck while playing notification sounds..
-	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
-		public void onAudioFocusChange(int focusChange) {
-			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-
-			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-
-			}
-		}
-	};
-
 	// Function to center map on user
 	public void setCamera(Location camLocation) {
 		CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(
@@ -652,12 +640,21 @@ public class WorkoutStart extends FragmentActivity implements
 
 	public void Interval_distance(int RunDistance, int PauseDistance,
 			int Repetition) {
+		
+		String tallet;
+		tallet = Integer.toString(RunDistance);
+		Log.i("tallet", tallet);
+		
 		Interval_distance(RunDistance);
-
+		
 		for (int rep = 1; rep < Repetition; rep++) {
+			tallet = Integer.toString((RunDistance + PauseDistance) * rep);
+			Log.i("tallet", tallet);
 			sounds(3); // sound for pause
 			Interval_distance((RunDistance + PauseDistance) * rep);
-
+			tallet = Integer.toString(((RunDistance + PauseDistance) * rep)
+					+ RunDistance);
+			Log.i("tallet", tallet);
 			sounds(2); // sound for run
 			Interval_distance(((RunDistance + PauseDistance) * rep)
 					+ RunDistance);
@@ -694,11 +691,11 @@ public class WorkoutStart extends FragmentActivity implements
 
 					@Override
 					public void run() {
-
-						sounds(3); // sound for pause
-						TimerRunStart = false;
-						DelayPause(PauseTime);
-
+							Log.i("lyd", "pause");
+							sounds(3); // sound for pause
+							DelayPause(PauseTime);
+							TimerRunStart = false;
+							
 					}
 				}).start();
 			} // wait 'RunTime*1000' before it start, and loop every
@@ -717,8 +714,10 @@ public class WorkoutStart extends FragmentActivity implements
 
 					@Override
 					public void run() {
-						sounds(2); // sound for run
-						TimerPauseStart = false;
+							Log.i("lyd", "løp");
+							sounds(2); // sound for run
+							TimerPauseStart = false;
+							
 					}
 				}).start();
 			} // wait 'PauseTime*1000' before it does something (milliseconds)
@@ -739,7 +738,8 @@ public class WorkoutStart extends FragmentActivity implements
 
 						if (x == 1)
 							run.cancel();
-						else if (x == 2) {
+						else if (x == 2 && TimerStopStart == true) {
+							Log.i("lyd", "stop");
 							sounds(4); // sound for stop
 							TimerStopStart = false;
 							end();
@@ -766,10 +766,28 @@ public class WorkoutStart extends FragmentActivity implements
 		return calories;
 	}
 
+	// Function to make the music duck while playing notification sounds..
+	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+		public void onAudioFocusChange(int focusChange) {
+			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+				
+			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+			
+			}
+		}
+	};
+	
 	public void sounds(int sound) {
 		MediaPlayer MP = null;
 		String soundpackage = MainActivity.soundpackage;
-
+		// Request audio focus for playback
+	/*	int result = am.requestAudioFocus(afChangeListener,
+                	// Use the music stream.
+					AudioManager.STREAM_MUSIC,
+					// Request permanent focus.
+					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+		
+		*/
 		if (soundpackage.equals("en")) {
 			switch (sound) {
 			case 1: { MP = MediaPlayer.create(this, R.raw.english_start); break;}
@@ -810,26 +828,24 @@ public class WorkoutStart extends FragmentActivity implements
 			case 9000: { MP = MediaPlayer.create(this, R.raw.norwegian_9000); break; }
 			} 
 		}
-		else if (soundpackage.equals("funny")) {
-			switch (sound) {
-			case 1: { MP = MediaPlayer.create(this, R.raw.funny_start); break; }
-			case 2: { MP = MediaPlayer.create(this, R.raw.funny_run); break; }
-			case 3: { MP = MediaPlayer.create(this, R.raw.funny_pause); break; }
-			case 4: { MP = MediaPlayer.create(this, R.raw.funny_stop); break; }
-			case 500: { MP = MediaPlayer.create(this, R.raw.funny_500); break; }
-			case 1000: { MP = MediaPlayer.create(this, R.raw.funny_1000); break; }
-			case 1500: { MP = MediaPlayer.create(this, R.raw.funny_1500); break; }
-			case 2000: { MP = MediaPlayer.create(this, R.raw.funny_2000); break; }
-			case 2500: { MP = MediaPlayer.create(this, R.raw.funny_2500); break; }
-			case 3000: { MP = MediaPlayer.create(this, R.raw.funny_3000); break; }
-			case 4000: { MP = MediaPlayer.create(this, R.raw.funny_4000); break; }
-			case 5000: { MP = MediaPlayer.create(this, R.raw.funny_5000); break; }
-			case 6000: { MP = MediaPlayer.create(this, R.raw.funny_6000); break; }
-			case 7000: { MP = MediaPlayer.create(this, R.raw.funny_7000); break; }
-			case 8000: { MP = MediaPlayer.create(this, R.raw.funny_8000); break; } 
-			case 9000: { MP = MediaPlayer.create(this, R.raw.funny_9000); break; }
-			}
-		}
-		MP.start();
+	
+	// int volume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+	// Skru ned lyd på all lyd
+	// Skru opp lyd til volume MP stream id. 	(id: MP.getAudioSessionId()) 
+	// Skru opp all lyd til volume
+	
+	//	if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+			try{
+				MP.start();
+				}catch(Exception e)
+				{Log.e("MusicBug", e.getMessage(), e);}
+			
+			MP.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+			    public void onCompletion(MediaPlayer player) {
+			    	player.stop();
+			    	player.release();
+			    }
+			});
+	//	}
 	}
 }
