@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +16,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -28,13 +26,11 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -349,7 +345,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 		int value;
 		int set = 0;
-		sounds(1);
+		//sounds(1);
 		// The test checking happends as long as the distance/time is lower than
 		// the test value.
 		
@@ -364,29 +360,31 @@ public class WorkoutStart extends FragmentActivity implements
 			}
 
 			if (test == 1 || test == 2) {
-				int sound = rounds * 500;
-				if (value > sound) {
+				int sound = (rounds * 500);
+				if (value >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			if (test == 3 || test == 4) {
-				int sound = rounds * 1000;
-				if (value > sound) {
+				int sound = (rounds * 1000);
+				if (value >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			if (test == 5) {
-				int sound = rounds * 5;
-				if (value > sound) {
+				int sound = (rounds * 5);
+				int value1 = (value / 1000) / 60;
+				if (value1 >= sound) {
 					sounds(sound);
 					rounds++;
 				}
 			}
 			// sleeps the thread for a second as the gps updates dosn't happend
-			// more often.
+			// more often. and u can't select a time lower than 1 second
 			SystemClock.sleep(1000);
+			
 		}
 		// Ends the test when u have reached the value(time or distance)
 		while (value <= set);
@@ -795,6 +793,8 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.english_run); break;}
 			case 3: { MP = MediaPlayer.create(this, R.raw.english_pause); break;}
 			case 4: { MP = MediaPlayer.create(this, R.raw.english_stop); break; }
+			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.english_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.english_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.english_1500); break; }
@@ -815,6 +815,8 @@ public class WorkoutStart extends FragmentActivity implements
 			case 2: { MP = MediaPlayer.create(this, R.raw.norwegian_run); break; }
 			case 3: { MP = MediaPlayer.create(this, R.raw.norwegian_pause); break; }
 			case 4: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 5: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
+			case 10: { MP = MediaPlayer.create(this, R.raw.norwegian_stop); break; }
 			case 500: { MP = MediaPlayer.create(this, R.raw.norwegian_500); break; }
 			case 1000: { MP = MediaPlayer.create(this, R.raw.norwegian_1000); break; }
 			case 1500: { MP = MediaPlayer.create(this, R.raw.norwegian_1500); break; }
