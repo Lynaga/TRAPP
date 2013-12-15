@@ -13,7 +13,7 @@
     <string name="title_activity_test_setup">Test instillinger</string>
     <string name="title_activity_setup_workout">Treningstype</string>
     <string name="title_activity_history">Historie</string>
-        
+    <string name="title_activity_route_suggestion">Ruteforslag</string>    
     <string name="action_settings">Innstillinger</string>
     <string name="S_workout">Start ny økt</string>
     <string name="S_settings">Innstillinger</string>

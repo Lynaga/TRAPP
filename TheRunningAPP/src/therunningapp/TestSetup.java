@@ -160,7 +160,7 @@ public class TestSetup extends Activity {
 			    .setMessage("You did not enter a distance, do you want to start a plain workout?")
 			    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			        public void onClick(DialogInterface dialog, int which) { 
-			            // continue with delete
+			        	running();
 			        }
 			     })
 			    .setNegativeButton("No", new DialogInterface.OnClickListener() {
