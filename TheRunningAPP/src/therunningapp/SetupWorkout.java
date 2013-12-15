@@ -43,13 +43,13 @@ public class SetupWorkout extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void routeSuggestion (View view) {
+	public void routeSuggestion (View view) {	//Starts the activity to suggest route
 		Intent intent = new Intent(this, RouteSuggestion.class);
 		startActivity(intent);
 		finish();
 	}
 	
-	public void walk (View view){
+	public void walk (View view){		//Starts a walking workout-session
 		Intent intent = new Intent(this, WorkoutStart.class);
 		String walk = "Walking";
 		intent.putExtra("workoutType", walk);
@@ -57,7 +57,7 @@ public class SetupWorkout extends Activity {
 		finish();
 	}
 	
-	public void running (View view) { 
+	public void running (View view) {	//Starts a running workout-session
 		Intent intent = new Intent(this, WorkoutStart.class);
 		String running = "Running";
 		intent.putExtra("workoutType", running);
@@ -65,13 +65,13 @@ public class SetupWorkout extends Activity {
 		finish();
 	}
 	
-	public void intervalSetup (View view){
+	public void intervalSetup (View view){		//Starts the activity to setup an interval session
 		Intent intent = new Intent(this, Interval.class);
 		startActivity(intent);
 		finish();
 	}
 	
-	public void testStart (View view){
+	public void testStart (View view){			//Starts the activity to setup an test session
 		Intent intent = new Intent(this, TestSetup.class);
 		startActivity(intent);
 		finish();

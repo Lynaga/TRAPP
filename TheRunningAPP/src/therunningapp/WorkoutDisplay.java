@@ -112,15 +112,15 @@ public class WorkoutDisplay extends FragmentActivity {
 			String tempCaloriesString = getString(R.string.A_calories_display_string);
 			String tempSpeedString = getString(R.string.A_speed_display_string);
 			
-			if(suggested == 0) {
-			//Set text
+			if(suggested == 0) {	//If not displaying a suggested route
+			//Set correct text
 			viewDate.setText(date);
 			viewTime.setText(tempTimeString + ": " + time);
 			viewDistance.setText(tempDistanceString + ": " + distance + " m");
 			viewCalories.setText(tempCaloriesString + ": " + calories);
 			viewSpeed.setText(tempSpeedString + ": " + String.format("%.2f", tempSpeed) + " m/s");
 			
-			if(workouttype.equals("Walking"))
+			if(workouttype.equals("Walking"))	//Setting tag of the workout session
 				viewWorkouttype.setText(string.walking);
 			else if(workouttype.equals("Running"))
 				viewWorkouttype.setText(string.running);
@@ -129,13 +129,13 @@ public class WorkoutDisplay extends FragmentActivity {
 			else
 				viewWorkouttype.setText(workouttype);
 			}
-			else {
-				findViewById(R.id.tablerow_1).setVisibility(View.GONE);
-				findViewById(R.id.tablerow_2).setVisibility(View.GONE);
+			else {		//If displaying a route suggestion -> Hide data from the workout, and
+				findViewById(R.id.tablerow_1).setVisibility(View.GONE);	//display a button to start workout,
+				findViewById(R.id.tablerow_2).setVisibility(View.GONE);	//and the workout distance instead.
 				findViewById(R.id.tablerow_3).setVisibility(View.GONE);
 				findViewById(R.id.tablerow_4).setVisibility(View.VISIBLE);
 				TextView suggestedDistance = (TextView) findViewById(R.id.suggested_distance_display);
-				suggestedDistance.setText(tempDistanceString + ": " + distance + " m");
+				suggestedDistance.setText(tempDistanceString + ":\n" + distance + " m");
 			}
 			drawMap(locationList);	//Draw route on map
 			db.close();
@@ -211,9 +211,11 @@ public class WorkoutDisplay extends FragmentActivity {
 		}
 	}
 	
-	public void startWorkout(View view) {
+	public void startWorkout(View view) {	//Starting workout with suggested route's db-id as extra
 		Intent intent = new Intent(this, WorkoutStart.class);
-	      intent.putExtra("suggestedId", dbId);
-	      startActivity(intent);
+	    intent.putExtra("suggestedId", Integer.parseInt(dbId));
+	    intent.putExtra("workoutType", "Running");
+	    startActivity(intent);
+	    finish();
 	}
 }
