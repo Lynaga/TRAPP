@@ -46,6 +46,7 @@ public class WorkoutDisplay extends FragmentActivity {
 		List<myLatLng> locationList = new ArrayList<myLatLng>();
 		Intent intent = getIntent();
 		String dbId = intent.getStringExtra("id");
+		int suggested = intent.getIntExtra("suggested", 0);
 		//Setting the TextView
 		TextView viewDate = (TextView) findViewById(R.id.date_display);
 	    TextView viewWorkouttype = (TextView) findViewById(R.id.workouttype_display);
@@ -109,6 +110,7 @@ public class WorkoutDisplay extends FragmentActivity {
 			String tempCaloriesString = getString(R.string.A_calories_display_string);
 			String tempSpeedString = getString(R.string.A_speed_display_string);
 			
+			if(suggested == 0) {
 			//Set text
 			viewDate.setText(date);
 			viewTime.setText(tempTimeString + ": " + time);
@@ -124,7 +126,10 @@ public class WorkoutDisplay extends FragmentActivity {
 				viewWorkouttype.setText(string.A_test);
 			else
 				viewWorkouttype.setText(workouttype);
-			
+			}
+			else {
+				
+			}
 			drawMap(locationList);	//Draw route on map
 			db.close();
 	}

@@ -6,9 +6,9 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
-import com.example.therunningapp.WorkoutStart.myLatLng;
-
+import project.therunningapp.R;
+import therunningapp.TrappContract.TrappEntry;
+import therunningapp.WorkoutStart.myLatLng;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
