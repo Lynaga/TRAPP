@@ -43,6 +43,7 @@
 	<string name="A_Setup_workout">Trening</string>
 	<string name="A_interval">Interval</string>
 	<string name="S_test">Start ny test</string>
+	<string name="A_test">Test</string>
 	<string name="S_Time">Tid</string>
     <string name="S_Distance">Distanse</string>
     <string name="S_Value">Verdi</string>

@@ -1,5 +1,6 @@
-package com.example.therunningapp;
+package therunningapp;
 
+import therunningapp.TrappContract.TrappEntry;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,7 +16,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
+import project.therunningapp.R;
 
 public class History extends Activity {
 

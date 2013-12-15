@@ -1,11 +1,8 @@
-package com.example.therunningapp;
+package therunningapp;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import com.example.therunningapp.TrappContract.TrappEntry;
-
-import android.os.Bundle;
+import project.therunningapp.R;
+import project.therunningapp.R.string;
+import therunningapp.TrappContract.TrappEntry;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -13,18 +10,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.Menu;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ToggleButton;
-import android.support.v4.app.NavUtils;
 
 
 public class Interval extends Activity {
@@ -70,6 +66,7 @@ public class Interval extends Activity {
 							  intent.putExtra("rep", c.getInt(c.getColumnIndex(TrappEntry.COLUMN_NAME_REPETITION)));
 							  intent.putExtra("intervalType", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_INTERVALTYPE)));
 							  intent.putExtra("workoutType", Interval);
+							  intent.putExtra("workoutname", c.getString(c.getColumnIndex(TrappEntry.COLUMN_NAME_NAME)));
 						      startActivity(intent);
 						      finish();          
 						  }
@@ -204,6 +201,7 @@ public class Interval extends Activity {
 				intent.putExtra("rep", rep);
 				intent.putExtra("workoutType", Interval);
 				intent.putExtra("intervalType", intervalType);
+				intent.putExtra("workoutname", name);
 				startActivity(intent);
 				finish(); 
 			}

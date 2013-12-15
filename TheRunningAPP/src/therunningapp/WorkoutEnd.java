@@ -1,14 +1,12 @@
-package com.example.therunningapp;
+package therunningapp;
 
-import com.example.therunningapp.TrappContract.TrappEntry;
-
-import android.os.Bundle;
+import project.therunningapp.R;
+import therunningapp.TrappContract.TrappEntry;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.Menu;
-import android.view.View;
+import android.os.Bundle;
 import android.widget.TextView;
 
 public class WorkoutEnd extends Activity {

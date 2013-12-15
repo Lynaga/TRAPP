@@ -1,5 +1,8 @@
-package com.example.therunningapp;
+package therunningapp;
 
+import project.therunningapp.R;
+import project.therunningapp.R.string;
+import therunningapp.TrappContract.TrappEntry;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,8 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
-
-import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class TestSetup extends Activity {
 	String testType;

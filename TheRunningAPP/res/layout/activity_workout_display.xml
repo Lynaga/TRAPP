@@ -24,8 +24,16 @@
             <TextView
                 android:id="@+id/date_display"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFFFF" />
+            
+            <TextView 
+                android:id="@+id/workouttype_display" 
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF"	/>
         </TableRow>
 
         <TableRow android:layout_width="match_parent" >

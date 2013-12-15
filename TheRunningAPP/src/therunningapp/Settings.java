@@ -1,22 +1,16 @@
-package com.example.therunningapp;
+package therunningapp;
 
-import java.util.Locale;
-
+import project.therunningapp.R;
+import therunningapp.TrappContract.TrappEntry;
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import com.example.therunningapp.TrappContract.TrappEntry;
 
 public class Settings extends Activity {
 	
