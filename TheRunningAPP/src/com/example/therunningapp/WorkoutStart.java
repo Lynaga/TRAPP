@@ -349,6 +349,7 @@ public class WorkoutStart extends FragmentActivity implements
 
 		int value;
 		int set = 0;
+		sounds(1);
 		// The test checking happends as long as the distance/time is lower than
 		// the test value.
 		
