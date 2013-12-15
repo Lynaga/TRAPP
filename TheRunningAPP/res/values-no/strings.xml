@@ -13,7 +13,7 @@
     <string name="title_activity_test_setup">Test instillinger</string>
     <string name="title_activity_setup_workout">Treningstype</string>
     <string name="title_activity_history">Historie</string>
-        
+    <string name="title_activity_route_suggestion">Ruteforslag</string>    
     <string name="action_settings">Innstillinger</string>
     <string name="S_workout">Start ny økt</string>
     <string name="S_settings">Innstillinger</string>
@@ -46,16 +46,14 @@
 	<string name="S_Time">Tid</string>
     <string name="S_Distance">Distanse</string>
     <string name="S_Value">Verdi</string>
-    <string name="A_cm">\t\ti centimeter</string>
-    <string name="A_kilo">\t\ti kilo</string>
+    <string name="A_cm">\t\t\tcm</string>
+    <string name="A_kilo">\t\t\tkg</string>
     <string name="S_min">Min</string>
-    <string name="S_sec">Sec</string>
+    <string name="S_sec">Sek</string>
     <string name="start">Start</string>
     <string name="repetition">Repetisjon</string>
-    <string name="Run_time">Løpe tid</string>
-    <string name="Pause_time">Pause tid</string>
-    <string name="Run_distance">Løpe distanse</string>
-    <string name="Pause_distance">Pause distanse</string>
+    <string name="Run">Løpe</string>
+    <string name="Pause">Pause</string>
     <string name="walking">Spasere</string>
     <string name="running">Løpe</string>
     <string name="talking">Lyd</string>

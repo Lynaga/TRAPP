@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF000000"
     tools:context=".TestSetup" >
 
     
@@ -13,102 +14,105 @@
         android:id="@+id/A_radiogroup"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal" >
         
-    <RadioButton
-        android:id="@+id/Button_Time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="31dp"
-        android:onClick="onRadioButtonClicked"
-        android:text="@string/S_Time" />
+    	<RadioButton
+     	   	android:id="@+id/Button_Time"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       	 	android:textColor="#FFFFFFFF"
+       	 	android:checked="true"
+        	android:onClick="onRadioButtonClicked"
+    	    android:text="@string/S_Time" />
     
-    <RadioButton
-        android:id="@+id/Button_Distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onRadioButtonClicked"
-        android:text="@string/S_Distance" />
+    	<RadioButton
+       	 	android:id="@+id/Button_Distance"
+       	 	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textColor="#FFFFFFFF"
+        	android:onClick="onRadioButtonClicked"
+        	android:text="@string/S_Distance" />
+	
 	</RadioGroup>
-
-    <TextView
+    
+	<TextView
         android:id="@+id/Distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/A_radiogroup"
-        android:layout_marginTop="22dp"
+        android:layout_below="@id/A_radiogroup"
+        android:layout_marginTop="20dp"
         android:text="@string/S_Distance"
+        android:textColor="#FFFFFFFF"
 		android:visibility="gone"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
+	
+	<EditText
         android:id="@+id/distance"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+		android:layout_alignBaseline="@id/Distance"
 		android:layout_toRightOf="@id/Distance"
-        android:layout_alignBaseline="@id/Distance"
+		android:layout_marginLeft="5dp"
+		android:background="#FFFFFFFF"
 		android:visibility="gone"
 		android:imeOptions="actionDone"
-        android:layout_alignRight="@+id/A_radiogroup"
         android:inputType="number"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
+        android:hint="   meter" />
+	
+	<TextView
         android:id="@+id/Time_Min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/A_radiogroup"
+        android:layout_below="@id/A_radiogroup"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
+       	android:textColor="#FFFFFFFF"
         android:text="@string/S_min"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+	
+    <EditText
+        android:id="@+id/min"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/Time_Min"
+        android:layout_toRightOf="@id/Time_Min"
+        android:layout_marginLeft="5dp"
+        android:background="#FFFFFFFF"
+        android:inputType="number" />
+    
     <TextView
         android:id="@+id/Time_sec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Time_Min"
+        android:layout_below="@id/Time_Min"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
+        android:textColor="#FFFFFFFF"
         android:text="@string/S_sec"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    
     <EditText
         android:id="@+id/sec"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-		android:layout_toRightOf="@id/Time_sec"
         android:layout_alignBaseline="@id/Time_sec"
-        android:ems="10"
-        android:visibility="gone"
-        android:hint="sec"
+        android:layout_toRightOf="@id/Time_sec"
+        android:layout_marginLeft="5dp"
+        android:background="#FFFFFFFF"
         android:imeOptions="actionDone"
-        android:inputType="number" />
-
-    <EditText
-        android:id="@+id/min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Time_Min"
-        android:layout_toRightOf="@+id/Time_Min"
-        android:ems="10"
-        android:visibility="gone"
-        android:hint="min"
         android:inputType="number" />
 
     <Button
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/A_radiogroup"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="28dp"
+        android:background="#FF808080"
+	    android:textColor="#FFFFFF00"
         android:onClick="starttest"
-        android:text="@string/start" 
-        />
+        android:text="@string/start" />
 
     <ListView
         android:id="@+id/listView1"
@@ -118,7 +122,7 @@
         android:layout_marginTop="20dp"
         android:layout_above="@id/start"
         android:layout_marginBottom="20dp"
-        android:background="#FFFFFFFF"
+        android:background="#FF808080"
         android:clickable="true" />
 
 </RelativeLayout>

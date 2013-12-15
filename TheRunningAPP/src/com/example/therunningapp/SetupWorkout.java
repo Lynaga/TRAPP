@@ -50,22 +50,26 @@ public class SetupWorkout extends Activity {
 		String walk = "Walk";
 		intent.putExtra("workoutType", walk);
 		startActivity(intent);
+		finish();
 	}
 	
 	public void running (View view) { 
 		Intent intent = new Intent(this, WorkoutStart.class);
 		String running = "Running";
 		intent.putExtra("workoutType", running);
-		startActivity(intent);									
+		startActivity(intent);
+		finish();
 	}
 	
 	public void intervalSetup (View view){
 		Intent intent = new Intent(this, Interval.class);
 		startActivity(intent);
+		finish();
 	}
 	
 	public void testStart (View view){
 		Intent intent = new Intent(this, TestSetup.class);
 		startActivity(intent);
+		finish();
 	}
 }
