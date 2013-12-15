@@ -1,7 +1,9 @@
 package therunningapp;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -142,6 +144,7 @@ public class WorkoutStart extends FragmentActivity implements
 		extras = getIntent().getExtras();
 		workoutType = extras.getString("workoutType");
 		workoutname = extras.getString("workoutname");
+		int suggestedId = extras.getInt("suggestedId", -1);
 
 		mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mySensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -162,6 +165,9 @@ public class WorkoutStart extends FragmentActivity implements
 		myLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		myLocationRequest.setInterval(UPDATE_INTERVAL);
 		myLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+		
+		if(suggestedId != -1)
+			drawSuggestedRoute(suggestedId);
 	}
 	
 	@Override
@@ -838,5 +844,53 @@ public class WorkoutStart extends FragmentActivity implements
 			    }
 			});
 	//	}
+	}
+	
+	public void drawSuggestedRoute(int dbId) {
+		TrappDBHelper mDbHelper = new TrappDBHelper(this);
+		SQLiteDatabase db = mDbHelper.getReadableDatabase();
+		
+		String[] projection = {TrappEntry.COLUMN_NAME_DISTANCE, TrappEntry.COLUMN_NAME_LOCATIONS };
+		final Cursor c = db.query(TrappEntry.TABLE_NAME, projection, "_ID=?", new String[] { Integer.toString(dbId) }, null,null,null,null);
+		if(c.moveToFirst()){
+			List<myLatLng> tempList = new ArrayList<myLatLng>();
+			byte[] locations = c.getBlob(c.getColumnIndex(TrappEntry.COLUMN_NAME_LOCATIONS));
+			
+			try { 
+			      ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(locations)); 
+			      tempList = (List<myLatLng>) in.readObject();
+			      in.close(); 
+
+			    } catch(ClassNotFoundException cnfe) { 
+			      Log.e("deserializeObject", "class not found error", cnfe); 
+			    } catch(IOException ioe) { 
+			      Log.e("deserializeObject", "io error", ioe); 
+			    }
+			
+			int numberOfElements = locationList.size();		//Get numbers in list
+			
+			if(numberOfElements > 0) {		//If locations in database for this workout
+				LatLng prevLatLng = null, newLatLng = null;
+				for(int i = 0; i < numberOfElements; i++) {			//Loop through all locations
+					
+					if(prevLatLng == null)	//Setting first location
+						prevLatLng = new LatLng(locationList.get(i).lat,
+												locationList.get(i).lng);
+					
+					else {						//Updating new location
+						newLatLng = new LatLng(locationList.get(i).lat,
+											   locationList.get(i).lng);
+						
+						//Draw polyline
+						myMap.addPolyline(new PolylineOptions()	
+					     .add(prevLatLng, newLatLng)
+					     .width(5)
+					     .color(Color.BLUE).geodesic(true));
+						
+						}
+						prevLatLng = newLatLng;			//Updating for next loop
+				}
+			}
+		}
 	}
 }

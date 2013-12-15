@@ -18,8 +18,8 @@
         android:layout_alignParentTop="true" >
 
         <TableRow
-            android:layout_width="match_parent"
-            android:gravity="center" >
+            android:id="@+id/tablerow_1"
+            android:layout_width="match_parent" >
 
             <TextView
                 android:id="@+id/date_display"
@@ -27,16 +27,18 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFFFF" />
-            
-            <TextView 
-                android:id="@+id/workouttype_display" 
+
+            <TextView
+                android:id="@+id/workouttype_display"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFFFF"	/>
+                android:textColor="#FFFFFFFF" />
         </TableRow>
 
-        <TableRow android:layout_width="match_parent" >
+        <TableRow
+            android:id="@+id/tablerow_2"
+            android:layout_width="match_parent" >
 
             <TextView
                 android:id="@+id/time_display"
@@ -55,7 +57,9 @@
                 android:textColor="#FFFFFFFF" />
         </TableRow>
 
-        <TableRow android:layout_width="match_parent" >
+        <TableRow
+            android:id="@+id/tablerow_3"
+            android:layout_width="match_parent" >
 
             <TextView
                 android:id="@+id/calories_display"
@@ -73,13 +77,39 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFFFF" />
         </TableRow>
+
+        <TableRow
+            android:id="@+id/tablerow_4"
+            android:layout_width="match_parent"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/T_start_suggested_workout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#FF808080"
+                android:onClick="startWorkout"
+                android:text="@string/T_start_suggested_workout"
+                android:textColor="#FFFFFF00"
+                android:textSize="20sp" />
+            
+            <TextView
+                android:id="@+id/suggested_distance_display"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFFFF" />
+            
+        </TableRow>
     </TableLayout>
 
     <fragment
         android:id="@+id/map"
-        android:layout_below="@id/T_workout_display_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/T_workout_display_table"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         class="com.google.android.gms.maps.SupportMapFragment" />
