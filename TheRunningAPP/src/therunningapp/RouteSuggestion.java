@@ -82,7 +82,6 @@ public class RouteSuggestion extends Activity {
 				      intent.putExtra("id", c.getString(c.getColumnIndex(TrappEntry._ID)));		//get the database id of the entry
 				      intent.putExtra("suggested", 1);											//and put as extra to retrieve
 				      startActivity(intent); 													//correct entry in next activity.
-				      finish();
 				                }
 				            }); 
 		}

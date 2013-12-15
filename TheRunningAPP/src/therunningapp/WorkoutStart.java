@@ -434,8 +434,8 @@ public class WorkoutStart extends FragmentActivity implements
 			myLocationClient.requestLocationUpdates(myLocationRequest, this); // Starts location updates
 			sounds(1);			//start sound
 			
-			if (workoutType.equals(getString(string.walking))) {
-			} else if (workoutType.equals(getString(string.running))) {
+			if (workoutType.equals(getString(string.walking))) {	//For further development
+			} else if (workoutType.equals(getString(string.running))) {	//For further development
 			} else if (workoutType.equals("Interval")) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -740,7 +740,7 @@ public class WorkoutStart extends FragmentActivity implements
 		}, Time * 1000);
 	}
 
-	public int Calorie_math(float time, int weight) {
+	public int Calorie_math(float time, int weight) {	//For further development
 		int caloriemath = 0;
 		if (workoutType.equals("Walk"))
 			caloriemath = 9;

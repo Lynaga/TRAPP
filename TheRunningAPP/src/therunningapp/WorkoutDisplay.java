@@ -214,6 +214,7 @@ public class WorkoutDisplay extends FragmentActivity {
 	public void startWorkout(View view) {	//Starting workout with suggested route's db-id as extra
 		Intent intent = new Intent(this, WorkoutStart.class);
 	    intent.putExtra("suggestedId", Integer.parseInt(dbId));
+	    intent.putExtra("workoutType", "Running");
 	    startActivity(intent);
 	    finish();
 	}
