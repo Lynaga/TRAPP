@@ -180,7 +180,7 @@ public class Interval extends Activity {
 			if(!isEmpty(pause_distance))
 				pause = Integer.parseInt(pause_distance.getText().toString());
 		}
-		// if something is empty, you will get a popup that you didn't enter all the info needed.
+		// if something is empty, you will get a popup that you didn't enter all the info needed..
 		if(!isEmpty(repitition))
 			rep = Integer.parseInt(repitition.getText().toString());
 		if(!isEmpty(name1))
